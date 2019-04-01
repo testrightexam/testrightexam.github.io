@@ -27,16 +27,15 @@
 
         <style>
         .h{
-            background : blue;
+            background : #1E90FF;
             padding:40px;
-            color: aliceblue;
-            font: 100;
-
+            font-family: roboto;
+            margin-left:20px;
         }
         .d1{
             font-size:35px;
             font-weight:bold;
-             font-family: Roboto;
+             
 
         }
         .d2{
@@ -75,50 +74,65 @@
         }
       #roundbutton{
         border-radius: 25px;
-            background:blue;
+            background-color:#87CEEB;
             padding: 15px; 
             width: 180px;
             height: 50px;
       }
-      hr{
+      #hr{
+            background-color: #87CEEB;
 
-          width:90%;
-          outline-style: initial;
-          color:rgb(73, 73, 224);
+         
       }
         </style>
     </head>
     <body >
+	
+		
+<!--Navigation bar-->
+      <nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+        <a class="navbar-brand" href="/"><img src="logo.png" height="50px;"/></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="/login">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/register">register</a>
+              </li> 
+
+            </ul>
+          </div>  
+      </nav>
 
            
-        <header class="h"></header>
-        <br>
-        <div class="d1">Dashboard</div>
-        <hr>
-        Triangle Corporation<br><br>
-        TestRight<br>
-        India<br>
-        8989898989<br>
-        <br>
-        <div class="d21">Examined Test History :     
-            <button>&plus;</button> 
-           
+       
+        <div class="d1" style="margin:20px;">Dashboard</div>
+        <hr style="width:96%; color: blue; ">
+        <span style="font-style:italic; margin: 20px;"><b>Triangle Corporation</b></span><br>
+       <p style="margin:20px;" >TestRight <br>INDIA<br>8989898980</p>
+
+        <div class="d21" style="font-family:roboto; font-style: oblique; margin-left: 20px;"><b>Examined Test History :</b>     
+            <button style="border-radius:90%; color: #1E90FF">&plus;</button>     
         </div>
         <br>
-        <div class="card bg-primary text-white" style="margin-right: 20px; margin-left: 20px;"  >
+        <div class="card bg-info text-white"  style="margin-right: 20px; margin-left: 20px; background-color: #87CEEB;">
             <div class="card-column"> CAT
-            <br>2019-2020<br>
-            Appeared : 5000000<br>
-            Average Score:180
-             <input class="right" id="roundbutton" type="button" name="viewresult" style="background-color:blue" value="View Result"/> 
+            <br>2018-2019<br>
+            Appeared :<span style="color:black"> 5000000</span><br>
+           Average Score:<span style="color:black">180</span>
+             <input class="right" id="roundbutton" type="button" name="viewresult" style="background-color:#1E90FF	" value="View Result"/> 
            </div>  </div>
         <br>
-        <div  class="card bg-primary text-white" style="margin-right: 20px; margin-left: 20px;">
+        <div  class="card bg-info text-white" style="margin-right: 20px; margin-left: 20px;  background-color: #87CEEB;">
                 <div class="card-column">CMAT 
             <br>2019-2020
-            <br>Appeared: 80000<br>
-            Average Score:150
-            <input class="right" id="roundbutton" type="button" name="viewresult" style="background-color:blue" value="View Result"/> 
+            <br>Appeared:<span style="color:black"> 80000</span><br>
+            Average Score:<span style="color:black">150</span>
+            <input class="right" id="roundbutton" type="button" name="viewresult" style="background-color:#1E90FF" value="View Result"/> 
             </div>
         </div>
         <div></div>

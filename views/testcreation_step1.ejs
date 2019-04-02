@@ -46,24 +46,25 @@
 </head>
 
 <body>
+	
     <div class="container" style="margin-top:4vh;">
         <div class="row">
             <div class="col-s-12">
                 <h1>Enter Test Details</h1>
                 <h3>Please enter the details of your test in the following fields.</h3>
                 <br>
-                <form action="" method="">
+                <form action="TestCreate" method="post">
                     <div class="form-group">
                         <label for="TestTitle">
                             <h5>Test Title</h5>
                         </label>
-                        <input type="text" class="form-control" id="TestTitle" />
+                        <input type="text" class="form-control" id="TestTitle" name="TestTitle"/>
                     </div>
                     <div class="form-group">
                         <label for="TestSubject">
                             <h5>Test Subject</h5>
                         </label>
-                        <input type="text" class="form-control" id="TestSubject" />
+                        <input type="text" class="form-control" id="TestSubject" name="TestSubject" />
                     </div>
                     <div class="form-group">
                         <label for="TestType">
@@ -71,12 +72,12 @@
                         </label>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="TestType" checked> Open </label>
+                                <input type="radio" value="Open" name="TestType" checked> Open </label>
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="TestType"> Close </label>
+                                <input type="radio" value="Close" name="TestType"> Close </label>
                             </label>
                         </div>
                     </div>
@@ -84,25 +85,25 @@
                         <label for="TestTags">
                             <h5>Test Tags</h5>
                         </label>
-                        <input type="text" class="form-control" id="TestTags" data-role="tagsinput" />
+                        <input type="text" class="form-control" id="TestTags"  name="TestTags" data-role="tagsinput" />
                     </div>
                     <div class="form-group">
                         <label for="TestDate">
                             <h5>Test Date</h5>
                         </label>
-                        <input type="date" class="form-control" id="TestDate" />
+                        <input type="date" class="form-control" id="TestDate" name="TestDate" />
                     </div>
                     <div class="form-group">
                         <label for="TestTime">
-                            <h5>Test Date</h5>
+                            <h5>Test Time</h5>
                         </label>
-                        <input type="time" class="form-control" id="TestTime" />
+                        <input type="time" class="form-control" id="TestTime" name="TestTime" />
                     </div>
                     <div class="form-group">
                         <label for="TestDuration">
                             <h5>Test Duration (in minutes)</h5>
                         </label>
-                        <input type="text" class="form-control" id="TestDuration" />
+                        <input type="text" class="form-control" id="TestDuration" name="TestDuration"  />
                     </div>
                     <div class="form-group">
                         <input type="submit" id="testsubmit" class="btn btn-primary" width="100%" value="Next">
@@ -111,6 +112,7 @@
             </div>
         </div>
     </div>
+
 </body>
 
 </html>

@@ -15,18 +15,12 @@ app.use(bodyParser());
 //const MongoClient = require('mongodb').MongoClient;
 
 //URL Of MongoDB Server.
-const uri = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
+//const uri = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
 const url = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
 
 const MongoClient = require('mongodb').MongoClient;
 //const uri = "mongodb+srv://testright:<password>@cluster0-grnvl.mongodb.net/test?retryWrites=true";
-const client = new MongoClient(uri, { useNewUrlParser: true });
-client.connect(err => {
-  const collection = client.db("TestRight").collection("test");
-  // perform actions on the collection object
-  collection.insertOne({'Vishal':'Tanwani'});
-  client.close();
-});
+
 
 
 //Database Name.
@@ -46,7 +40,12 @@ app.get('/register',(req,res)=>{
 app.get('/RegisterExaminer',(req,res)=>{
 	res.render('register');
 });
-
+app.get('/TestCreate',(req,res)=>{
+	res.render('testcreation_step1');
+});
+app.get('/AddQuestions',(req,res)=>{
+	res.render('testcreation_step2');
+});
 
 
 
@@ -67,6 +66,52 @@ app.post('/RegisterExaminer',(req,res)=>{
 				res.redirect('/MemberRecordsExaminers');
 		});
 		
+	
+	});
+
+});
+
+app.post('/TestCreate',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("server is connected");
+		
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		collection.insertOne(
+			{
+				//Name: req.param('ExmUsrName', null),
+			
+				Examiner_id:"mohitmurlidhar@gmail.com",
+				Test_title:req.param('TestTitle', null),
+				Subject:req.param('TestSubject', null),
+				Date:req.param('TestDate', null),
+				Time:req.param('TestTime', null),
+				Duration:req.param('TestDuration', null),
+				tags:req.param('TestTags', null),
+				private:req.param('TestType', null)
+				/*"questions":{
+					"question":{"value":"What is Html ?",
+					"options":{
+						"A":{
+							"value":"Something",
+							"correct":false
+							},
+						"B":{
+							"value":"More",
+							"correct":true
+							}
+						}
+					}
+				}*/
+					
+				
+			},function(err,result){
+				res.redirect('/AddQuestions');
+		});
+		collection.find({}).toArray(function(err,docs)
+		{
+			console.log(docs);
+		});
 	
 	});
 
@@ -187,6 +232,21 @@ app.get('/MemberRecordsStudents',(req,res)=>{
 			console.log(docs);
 			res.render('MemberRecordsStudents',{data:docs});
 		
+		});	
+		client.close();
+	});
+})
+
+//Showing Data on Terminal...
+app.get('/showtests',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Showing tests");
+		
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		collection.find({}).toArray(function(err,docs)
+		{
+			console.log(docs);
 		});	
 		client.close();
 	});

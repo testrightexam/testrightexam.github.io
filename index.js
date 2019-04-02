@@ -33,7 +33,7 @@ client.connect(err => {
 const dbName = 'TestRight';
 
 app.get('/', (req, res) => {
-	res.render('login');
+	res.render('homepage');
 });
 app.get('/login', (req, res) => {
 	res.render('login');
@@ -46,6 +46,8 @@ app.get('/register',(req,res)=>{
 app.get('/RegisterExaminer',(req,res)=>{
 	res.render('register');
 });
+
+
 
 
 app.post('/RegisterExaminer',(req,res)=>{

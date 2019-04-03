@@ -5,35 +5,70 @@ const express = require('express');
 //To Get Value Of Any Control Body-Parser Is Compulsory.
 var bodyParser = require('body-parser');
 
+//Node Session and cookies
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+
 //Object Of Express.
 const app = express();
 app.use(express.static('views'))
 //Express Object Uses Body-Parser Object.
-app.use(bodyParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//MongoClient Object - To Connect MongoDB.
-//const MongoClient = require('mongodb').MongoClient;
+// initialize cookie-parser to allow us access the cookies stored in the browser. 
+app.use(cookieParser());
+
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(session({
+    key: 'user_sid',
+    secret: 'somerandonstuffs',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: 600000
+    }
+}));
+
+
+// This middleware will check if user's cookie is still saved in browser and user is not set, then automatically log the user out.
+// This usually happens when you stop your express server after login, your cookie still remains saved in the browser.
+app.use((req, res, next) => {
+    if (req.cookies.user_sid && !req.session.user) {
+        res.clearCookie('user_sid');        
+    }
+    next();
+});
+
+
+// middleware function to check for logged-in users
+var sessionChecker = (req, res, next) => {
+    if (req.session.user && req.cookies.user_sid) {
+        res.redirect('/Dashboard');
+		
+    } else {
+        next();
+    }    
+};
+
 
 //URL Of MongoDB Server.
-//const uri = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
 const url = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
 
+//Mongo Client Variable
 const MongoClient = require('mongodb').MongoClient;
 //const uri = "mongodb+srv://testright:<password>@cluster0-grnvl.mongodb.net/test?retryWrites=true";
-
-
 
 //Database Name.
 const dbName = 'TestRight';
 
-app.get('/', (req, res) => {
+app.get('/', sessionChecker, (req, res) => {
 	res.render('homepage');
 });
-app.get('/login', (req, res) => {
+app.get('/login', sessionChecker, (req, res) => {
 	res.render('login');
 });
 
-app.get('/register',(req,res)=>{
+app.get('/register', sessionChecker,(req,res)=>{
 	res.render('register');
 });
 
@@ -47,7 +82,24 @@ app.get('/AddQuestions',(req,res)=>{
 	res.render('testcreation_step2');
 });
 app.get('/Dashboard',(req,res)=>{
-	res.render('dashboard');
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('dashboard');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
+
+
+// route for user logout
+app.get('/logout', (req, res) => {
+    if (req.session.user && req.cookies.user_sid) {
+        res.clearCookie('user_sid');
+        res.redirect('/');
+    } else {
+        res.redirect('/login');
+    }
 });
 
 
@@ -84,7 +136,7 @@ app.post('/TestCreate',(req,res)=>{
 			{
 				//Name: req.param('ExmUsrName', null),
 			
-				Examiner_id:"mohitmurlidhar@gmail.com",
+				Examiner_id:req.session.user.Email,
 				Test_title:req.param('TestTitle', null),
 				Subject:req.param('TestSubject', null),
 				Date:req.param('TestDate', null),
@@ -120,7 +172,7 @@ app.post('/TestCreate',(req,res)=>{
 
 });
 
-app.get('/LoginExaminer',(req,res)=>{
+app.get('/LoginExaminer', sessionChecker,(req,res)=>{
 	res.render('login');
 });
 
@@ -142,8 +194,10 @@ app.post('/LoginExaminer',(req,res)=>{
                res.end("Login invalid");
 			   console.log("Login Invaild");
             } else {
-            console.log(user);
-            res.end("Login valid");
+            
+			req.session.user = user;
+			console.log(req.session.user);
+            res.redirect('/Dashboard');
           }
 	});
 			

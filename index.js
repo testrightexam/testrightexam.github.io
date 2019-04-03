@@ -46,6 +46,9 @@ app.get('/TestCreate',(req,res)=>{
 app.get('/AddQuestions',(req,res)=>{
 	res.render('testcreation_step2');
 });
+app.get('/Dashboard',(req,res)=>{
+	res.render('dashboard');
+});
 
 
 

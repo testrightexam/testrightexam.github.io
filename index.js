@@ -76,10 +76,24 @@ app.get('/RegisterExaminer',(req,res)=>{
 	res.render('register');
 });
 app.get('/TestCreate',(req,res)=>{
-	res.render('testcreation_step1');
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('testcreation_step1');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
 });
 app.get('/AddQuestions',(req,res)=>{
-	res.render('testcreation_step2');
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('testcreation_step2');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+	
+	
 });
 app.get('/Dashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {

@@ -87,7 +87,7 @@ app.get('/TestCreate',(req,res)=>{
 app.get('/AddQuestions',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"]) {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Inside Add Questions \n Adding Data to :- \n");
+		console.log("Inside Add Questions \nAdding Data to :- \n");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('tests');
@@ -361,10 +361,9 @@ app.post('/AddQuestions',(req,res)=>{
 		for(var i=0;i<=qns;i++)
 		{
 			console.log("Loop Started");
-			var yop='question_'+i;
-			var finals=yop.concat(i);
+			
 			var select =req.param('select_'+i, null);
-			console.log("Adding Question with options "+selsct);
+			console.log("Adding Question with options "+select);
 			if(select==null)
 			{
 				continue;
@@ -437,8 +436,9 @@ app.post('/AddQuestions',(req,res)=>{
 		}
 		
 		console.log("Questions Added redirected to Dashboard !!");
-		res.redirect('/Dashboard');
 		res.clearCookie("id");
+		res.redirect('/Dashboard');
+		
 		
 		client.close();
 	});

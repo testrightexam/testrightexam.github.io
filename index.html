@@ -1,12 +1,92 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>TestRight</title>
+	<link rel="icon" sizes="192x192" href="views/icon.png">
+	<style>
+		h1{
+  font-family: Oak,sans-serif;
+  color: rgba(0,0,0,0.7);
+  position:relative;
+  top:calc(50% - 80px);
+  left:calc(50% - 100px);
+}
+
+
+.loader {
+  position:fixed;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  filter:hue-rotate(0deg);
+  background:linear-gradient(45deg,#0f8,#08f);
+  animation:hue 10000ms infinite linear;
+ 
+}
+.loader .b1 {
+  left:42%;
+}
+.loader .b2 {
+  left:50%;
+  animation-delay:100ms;
+}
+.loader .b3 {
+  left:58%;
+  animation-delay:200ms
+}
+.loader .b1, 
+.loader .b2,
+.loader .b3 {
+  width:10px;
+  height:30px;
+  background-color:rgba(256,256,256,0.8);
+  position:absolute;
+  top:50%;
+  transform:rotate(0);
+  animation-name:spinify;
+  animation-duration:1600ms;
+  animation-iteration-count:infinite;
+}
+@keyframes spinify {
+  0% {
+    transform: translate(0px,0px);
+    
+  }
+  33% {
+    transform: translate(0px,24px);
+    border-radius:100%;
+    width:10px;
+    height:10px;
+ 
+  }
+   66% {
+    transform:translate(0px,-16px);
+  }
+  
+   88% {
+    transform:translate(0px,4px);
+     
+  }
+  100% {
+    transform:translate(0px,0px);
+  }
+}
+@keyframes hue{
+  0%{filter: hue-rotate(0deg);}
+  100%{filter:hue-rotate(360deg);}
+  
+}
+	</style>
 </head>
 <body onLoad="myFunction()">
-
-<h2>Redirect to Main Webpage - TestRight</h2>
-
+<div class="loader">
+  <h1>Redirecting .... </h1>
+  <div class="b1"></div>
+  <div class="b2"></div>
+  <div class="b3"></div>
+</div> 
 <script>
 function myFunction() {
   location.replace("https://testright.herokuapp.com/")

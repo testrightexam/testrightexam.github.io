@@ -1,7 +1,7 @@
 <html>
 <head>
 		<script>
-			let Qno = 0;
+            let Qno = -1;
 		</script>
 
 		<title>Test Creation</title>
@@ -31,7 +31,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
 </head>
-<body>
+<body onload="addbox();getLangs()">
 <!--Navigation bar-->
       <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
         <a class="navbar-brand" href="/"><img src="logo.png" height="50px;"/></a>
@@ -49,74 +49,61 @@
 <center>
 <h1 style="margin:20px; color:red;">Pop Quiz</h1>
 <div id="BigBox" style="margin-top:10px;">
-    <div id="question0">
-    <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
-        <div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select  id = "opSelect0"class="form-control" onchange="opsf(0)">
-            <option value="4" id= "4o0" selected>4-options</option>
-            <option value="2" id="2o0">2-options</option>
-        </select></div>
-        <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
-            <div class="input-group mb-3">
-                
-                <textarea name = "question" class="form-control" placeholder="Write the Question here..."></textarea>
-            </div>
-            <div id = "options">
-                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" name="ACorrect" aria-label="Checkbox for following text input">
-                            <b style="margin-left: 5px ">A</b>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Option A">
-                </div>
-                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" name="BCorrect" aria-label="Checkbox for following text input">
-                            <b style="margin-left: 5px">B</b>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Option B">
-                </div>
-        </div>
-            <div id = "extra_options0">
-                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" name="CCorrect" aria-label="Checkbox for following text input">
-                            <b style="margin-left: 5px">C</b>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Option C">
-                </div>
-                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
-                    <div class="input-group-prepend">
-                        <div class="input-group-text">
-                            <input type="checkbox" name="DCorrect" aria-label="Checkbox for following text input">
-                            <b style="margin-left: 5px">D</b>
-                        </div>
-                    </div>
-                    <input type="text" class="form-control" placeholder="Option D">
-                </div>
-            </div>
-            
-        </div>
-</div>
-    </div>
 </div>
 <button class="btn btn-warning" onclick="addbox()" style="color:white; font-weight:bold; margin-bottom:10px;"/>Add New Question<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
     </center>
         <script>
+            function getLangs()
+            { 
+                let url = "https://api.judge0.com/languages"
+                let langs = [];
+                fetch(url) // Call the fetch function passing the url of the API as a parameter
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(myJson) {
+                    myJson.forEach(element => {
+                        console.log(element)
+                        langs.push(element.name);
+                    });
+                })
+                .then(()=>{
+                    let lang_lists = document.getElementById("CL");
+                langs.forEach((element)=>{
+                    let O = document.createElement("option");
+                    O.value = element;
+                    O.textContent = element;
+                    lang_lists.appendChild(O);
+                })
+                });                
+            }
+            function CodeIt(id)
+            {
+                document.getElementById(`extra_options${id}`).style.display = "none";
+                document.getElementById(`options${id}`).style.display = "none";
+                document.getElementById(`codeBox${id}`).style.display = "";
+            }
+            function Uncodeit(id)
+            {
+                document.getElementById(`codeBox${id}`).style.display = "none";
+                document.getElementById(`extra_options${id}`).style.display = "";
+                document.getElementById(`options${id}`).style.display = "";
+            }
            function opsf(id)
            {
                if(document.getElementById(`2o${id}`).selected)
                {
+                   Uncodeit(id)
                    document.getElementById(`extra_options${id}`).style.display = "none";
                }
                else if(document.getElementById("4o"+id).selected)
                {
+                   Uncodeit(id)
                    document.getElementById(`extra_options${id}`).style.display = "";
+               }
+               else if(document.getElementById("code_"+id).selected)
+               {
+                CodeIt(id)
                }
            }
            function addbox()
@@ -126,12 +113,16 @@
                let functioncall ="opsf("+Qno+")";
                let op2 = "2o"+Qno;
                let op4 = "4o"+Qno;
-               let options ="extra_options"+Qno;
+               let codeop = "code_"+Qno;
+               let codeBox = "codeBox"+Qno;
+               let options = "options"+Qno
+               let options2 ="extra_options"+Qno;
                let card = `  <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
 				 <button  class="btn btn-warning"  onclick="this.parentElement.remove();" style=" width: 200px; font-weight:bold; border-width:0px; color:white;">Remove X</button>
 		<div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select  id = ${selectid} class="form-control" onchange=${functioncall}>
             <option value="4" id= ${op4} selected>4-options</option>
             <option value="2" id= ${op2}>2-options</option>
+            <option valude="C" id = ${codeop}>Coding Question</option>
         </select></div>
         
         <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
@@ -139,7 +130,7 @@
                 
                 <textarea name = "question" class="form-control" placeholder="Write the Question here..."></textarea>
             </div>
-            <div id = "options">
+            <div id = "${options}">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
@@ -159,7 +150,7 @@
                     <input type="text" class="form-control" placeholder="Option B">
                 </div>
         </div>
-            <div id = "${options}">
+            <div id = "${options2}">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
@@ -179,8 +170,17 @@
                     <input type="text" class="form-control" placeholder="Option D">
                 </div>
             </div>
-            
+            <div id = ${codeBox} style="display: none"> 
+                <textarea type="text" name = "input" class="form-control" placeholder="Input for the Problem...."></textarea>
+                <br>
+                
+                <select id = "CL" class = "form-control">
+                    <option selected>Select the programming Language you want to allow for this question</option>
+                </select>
+                <br>
+                <textarea type="text" name = "output" class="form-control" placeholder="Expected output...."></textarea>
         </div>
+    </div>
 </div>`;
                let  div = document.createElement("div");
                div.setAttribute("id", "question"+Qno);

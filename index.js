@@ -3,11 +3,11 @@ const express = require('express');
 
 //Express Only Get Data If Body-Parser Is Worked.
 //To Get Value Of Any Control Body-Parser Is Compulsory.
-var bodyParser = require('body-parser');
+let bodyParser = require('body-parser');
 
 //Node Session and cookies
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+let cookieParser = require('cookie-parser');
+let session = require('express-session');
 
 //Object Of Express.
 const app = express();
@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 
 // middleware function to check for logged-in users
-var sessionChecker = (req, res, next) => {
+let sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_sid) {
         res.redirect('/Dashboard');
 		
@@ -54,7 +54,7 @@ var sessionChecker = (req, res, next) => {
 //URL Of MongoDB Server.
 const url = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
 
-//Mongo Client Variable
+//Mongo Client letiable
 const MongoClient = require('mongodb').MongoClient;
 //const uri = "mongodb+srv://testright:<password>@cluster0-grnvl.mongodb.net/test?retryWrites=true";
 
@@ -158,21 +158,6 @@ app.post('/TestCreate',(req,res)=>{
 				Duration:req.param('TestDuration', null),
 				tags:req.param('TestTags', null),
 				private:req.param('TestType', null)
-				/*"questions":{
-					"question":{"value":"What is Html ?",
-					"options":{
-						"A":{
-							"value":"Something",
-							"correct":false
-							},
-						"B":{
-							"value":"More",
-							"correct":true
-							}
-						}
-					}
-				}*/
-					
 				
 			},function(err,result){
 				res.redirect('/AddQuestions');
@@ -204,7 +189,7 @@ app.post('/LoginExaminer',(req,res)=>{
 				]
 				
 			}, function(err, user) {
-             if(user ===null){
+             if(user === null){
                res.end("Login invalid");
 			   console.log("Login Invaild");
             } else {
@@ -226,7 +211,6 @@ app.get('/RegisterStudent',(req,res)=>{
 app.post('/RegisterStudent',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("server is connected");
-		
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
 		collection.insertOne(
@@ -261,7 +245,7 @@ app.post('/LoginStudent',(req,res)=>{
 				]
 				
 			}, function(err, user) {
-             if(user ===null){
+             if(user === null){
                res.end("Login invalid");
 			   console.log("Login Invaild");
             } else {

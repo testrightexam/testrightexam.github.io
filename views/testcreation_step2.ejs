@@ -3,7 +3,7 @@
 		<script>
 			let Qno = 0;
 		</script>
-
+		<link rel="icon" sizes="192x192" href="icon.png">
 		<title>Test Creation</title>
 	<meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -31,7 +31,7 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
 </head>
-<body>
+<body onload="gett()">
 <!--Navigation bar-->
       <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
         <a class="navbar-brand" href="/"><img src="logo.png" height="50px;"/></a>
@@ -40,78 +40,86 @@
         </button>
           <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="/login" >Login</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
-              </li> 
- 			  
-            </ul>
+				<li class="nav-item">
+				<a class="nav-link" href="/logout">Logout</a>
+				</li>
+			</ul>
           </div>  
       </nav>
 <center>
-<h1 style="margin:20px; color:red;">Pop Quiz</h1>
+
+<h1 style="margin:20px; color:red;"><%= data[0].Test_title %></h1>
+<form action="" method="post" id="addques">
 <div id="BigBox" style="margin-top:10px;">
+
     <div id="question0">
+	
     <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
-        <div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select  id = "opSelect0"class="form-control" onchange="opsf(0)">
+        <div class="card-header" style="background:#4FC3F7; border:0px solid white;">
+		<select  id = "opSelect0" name="select_0" class="form-control" onchange="opsf(0)">
             <option value="4" id= "4o0" selected>4-options</option>
             <option value="2" id="2o0">2-options</option>
         </select></div>
         <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
             <div class="input-group mb-3">
                 
-                <textarea name = "question" class="form-control" placeholder="Write the Question here..."></textarea>
+                <textarea name = "question_0" class="form-control" placeholder="Write the Question here..." required></textarea>
             </div>
             <div id = "options">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="ACorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name="ACorrect_0"  aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px ">A</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option A">
+                    <input type="text" name="option_1_0" class="form-control" placeholder="Option A">
                 </div>
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="BCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name="BCorrect_0" aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">B</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option B">
+                    <input type="text" name="option_2_0" class="form-control" placeholder="Option B">
                 </div>
         </div>
             <div id = "extra_options0">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="CCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name="CCorrect_0" aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">C</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option C">
+                    <input type="text" name="option_3_0" class="form-control" placeholder="Option C">
                 </div>
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="DCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name="DCorrect_0" aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">D</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option D">
+                    <input type="text" name="option_4_0" class="form-control" placeholder="Option D">
                 </div>
             </div>
             
         </div>
-</div>
+	</div>
     </div>
 </div>
-<button class="btn btn-warning" onclick="addbox()" style="color:white; font-weight:bold; margin-bottom:10px;"/>Add New Question<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
-    </center>
+
+<button type="button" class="btn btn-warning" onclick="addbox()" style="color:white; font-weight:bold; margin-bottom:10px;"/>Add New Question<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
+    <br>
+	
+<button  class="btn btn-warning" style="color:white; font-weight:bold; margin-bottom:10px;"/>Make test<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
+</form>
+	</center>
         <script>
+		
+			
            function opsf(id)
            {
                if(document.getElementById(`2o${id}`).selected)
@@ -123,17 +131,32 @@
                    document.getElementById(`extra_options${id}`).style.display = "";
                }
            }
+		   function gett()
+		   {
+				document.getElementById("addques").action = "/AddQuestions?qns="+Qno;
+		   }
            function addbox()
            {
                Qno++;
+			   gett();
                let selectid= "opselect"+Qno;
                let functioncall ="opsf("+Qno+")";
                let op2 = "2o"+Qno;
                let op4 = "4o"+Qno;
+			   let qname = "question_"+Qno;
+			   let sname = "select_"+Qno;
+			   let opchk1 = "ACorrect_"+Qno;
+			   let opchk2 = "BCorrect_"+Qno;
+			   let opchk3 = "CCorrect_"+Qno;
+			   let opchk4 = "DCorrect_"+Qno;
+			   let opvalu1 = "option_1_"+Qno;
+			   let opvalu2 = "option_2_"+Qno;
+			   let opvalu3 = "option_3_"+Qno;
+			   let opvalu4 = "option_4_"+Qno;
                let options ="extra_options"+Qno;
                let card = `  <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
-			   <button  class="btn btn-warning"  onclick="this.parentElement.remove();" style=" width: 200px; font-weight:bold; border-width:0px; color:white;">Remove X</button>
-        <div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select  id = ${selectid} class="form-control" onchange=${functioncall}>
+				 <button  class="btn btn-warning"  onclick="this.parentElement.remove();" style=" width: 200px; font-weight:bold; border-width:0px; color:white;">Remove X</button>
+		<div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select name=${sname} id = ${selectid} class="form-control" onchange=${functioncall}>
             <option value="4" id= ${op4} selected>4-options</option>
             <option value="2" id= ${op2}>2-options</option>
         </select></div>
@@ -141,46 +164,46 @@
         <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
             <div class="input-group mb-3">
                 
-                <textarea name = "question" class="form-control" placeholder="Write the Question here..."></textarea>
+                <textarea name = ${qname} class="form-control" placeholder="Write the Question here..." required></textarea>
             </div>
             <div id = "options">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="ACorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name=${opchk1} aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px ">A</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option A">
+                    <input type="text" name=${opvalu1} class="form-control" placeholder="Option A">
                 </div>
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="BCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name=${opchk2} aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">B</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option B">
+                    <input type="text" name=${opvalu2} class="form-control" placeholder="Option B">
                 </div>
         </div>
             <div id = "${options}">
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="CCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name=${opchk3} aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">C</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option C">
+                    <input type="text" name=${opvalu3} class="form-control" placeholder="Option C">
                 </div>
                 <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
                     <div class="input-group-prepend">
                         <div class="input-group-text">
-                            <input type="checkbox" name="DCorrect" aria-label="Checkbox for following text input">
+                            <input type="checkbox" name=${opchk4} aria-label="Checkbox for following text input">
                             <b style="margin-left: 5px">D</b>
                         </div>
                     </div>
-                    <input type="text" class="form-control" placeholder="Option D">
+                    <input type="text" name=${opvalu4} class="form-control" placeholder="Option D">
                 </div>
             </div>
             

@@ -157,6 +157,42 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 });
 
+app.get('/SaveExaminerProfile',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid) {
+		res.clearCookie("id");
+		res.render('register_examiner');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
+
+app.post('/SaveExaminerProfile',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Edit Profile of Examiner...");
+		const db = client.db(dbName);
+		const collection = db.collection('Examiners');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.session.user._id);
+		console.log(req.session.user._id);
+		collection.updateOne(
+				{_id: id},
+				{$set:{
+					InstituteName: req.param('InstName', null),
+					InstituteType: req.param('insttype', null),
+					InstituteAddress: req.param('Address', null),
+					InstituteCountry: req.param('conttype', null),
+					ExaminerContact: req.param('Contact',null)
+				}}
+			, function(err, result){
+				if(err)	throw error;
+			});
+		res.redirect('/Dashboard');
+	});
+
+});
+
 app.post('/TestCreate',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside test Creation...");

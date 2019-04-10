@@ -2,7 +2,6 @@
 <html>
     <head>
         <title>Dashboard</title>
-		<link rel="icon" sizes="192x192" href="icon.png">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1">
 
@@ -30,7 +29,7 @@
 
   <!--Navigation bar-->
   <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
-    <a class="navbar-brand" href="/"><img src="logo.png" height="50px;"/></a>
+    <a class="navbar-brand" href="/"><img src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png" height="50px;"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -51,20 +50,25 @@
   <h2>Dashboard</h2>
   <hr>
 
-  <h4 style="max-width:100%;">Dr. Asim Banerjee (asim.banerjee@daiict.ac.in)</h4>
-  <address>Daiict,Gandhinagar, Gujarat
-   <br> INDIA
-    <br>8989898989
+  <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
+  <address><%= data.InstituteName %>, <%= data.InstituteAddress %>
+   <br> <%= data.InstituteCountry %>
+    <br> <% data.ExaminerContact %>
   </address>
 
   <hr>
- <h4>Examined Test History <button type="button" onclick="location.href = '/TestCreate';" class="btn btn-primary float-md-right">Create Test</button>
+ <h4>Examined Test History <button type="button" class="btn btn-primary float-md-right">Create Test</button>
     </h4> 
     <br>
     
-  <div class="card list-group-item-primary text-dark">
-    <div class="card-body"><h4>MS.c.IT - pop Quiz</h4>
-      Date:20/05/2018<br>
+  
+      <% var date=new Date(); for(var i=0; i<data1.length; i++) { if(data1[i].Date>date_1){%>
+          <div class="card list-group-item-primary text-dark">
+          <% } else { %>
+          <div class="card bg-dark text-white">
+          <% } %>
+    <div class="card-body"><h4><%= data1[i].Test_title %></h4>
+      <%= data1[i].Date %><br>
       <a href="#" class="alert-link"> (View tags)</a><br>
       Average score : 150
       <button type="button" class="btn btn-primary float-sm-right">View Results</button>
@@ -72,8 +76,9 @@
   </div>
 
   <br>
+  <% } %>
 
-  <div class="card bg-dark text-white">
+  <!--<div class="card bg-dark text-white">
     <div class="card-body"><h4>MS.c.IT - pop Quiz</h4>
       Date:20/05/2018<br>
       <a href="#" class="alert-link"> (View tags)</a><br>
@@ -103,7 +108,7 @@
       <button type="button" class="btn btn-primary float-md-right">View Results</button>
     </div>
   </div>
-
+-->
   </div>
 
 </body>

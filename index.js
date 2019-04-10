@@ -85,34 +85,19 @@ app.get('/TestCreate',(req,res)=>{
 	}
 });
 app.get('/AddQuestions',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid && req.cookies["id"]) {
-		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Inside Add Questions \nAdding Data to :- \n");
-		
-		const db = client.db(dbName);
-		const collection = db.collection('tests');
-		var mongo = require('mongodb');
-		var id=new mongo.ObjectID(req.cookies["id"]);
-		collection.find({_id:id}).toArray(function(err,docs)
-		{
-			console.log(docs);
-			res.render('testcreation_step2',{data:docs});
-		
-		});	
-		client.close();
-	});
-		
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('testcreation_step2');
 	}
 	else
 	{
-		 res.redirect('/Dashboard');
+		 res.redirect('/login');
 	}
 	
 	
 });
 app.get('/Dashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {
-		res.clearCookie("id");
+		
 		res.render('dashboard');
 	}
 	else
@@ -136,7 +121,7 @@ app.get('/logout', (req, res) => {
 
 app.post('/RegisterExaminer',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Registration of Examiner...");
+		console.log("server is connected");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('Examiners');
@@ -148,8 +133,7 @@ app.post('/RegisterExaminer',(req,res)=>{
 				/*EmailId : req.param('TxtEmailId', null),
 				Password : req.param('TxtPassword', null)*/
 			},function(err,result){
-				
-				res.redirect('/login');
+				res.redirect('/MemberRecordsExaminers');
 		});
 		
 	
@@ -157,51 +141,16 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 });
 
-app.get('/SaveExaminerProfile',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid) {
-		res.clearCookie("id");
-		res.render('register_examiner');
-	}
-	else
-	{
-		 res.redirect('/login');
-	}
-});
-
-app.post('/SaveExaminerProfile',(req,res)=>{
-	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Edit Profile of Examiner...");
-		const db = client.db(dbName);
-		const collection = db.collection('Examiners');
-		var mongo = require('mongodb');
-		var id=new mongo.ObjectID(req.session.user._id);
-		console.log(req.session.user._id);
-		collection.updateOne(
-				{_id: id},
-				{$set:{
-					InstituteName: req.param('InstName', null),
-					InstituteType: req.param('insttype', null),
-					InstituteAddress: req.param('Address', null),
-					InstituteCountry: req.param('conttype', null),
-					ExaminerContact: req.param('Contact',null)
-				}}
-			, function(err, result){
-				if(err)	throw error;
-			});
-		res.redirect('/Dashboard');
-	});
-
-});
-
 app.post('/TestCreate',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Inside test Creation...");
+		console.log("server is connected");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('tests');
 		collection.insertOne(
 			{
 				//Name: req.param('ExmUsrName', null),
+			
 				Examiner_id:req.session.user.Email,
 				Test_title:req.param('TestTitle', null),
 				Subject:req.param('TestSubject', null),
@@ -227,28 +176,26 @@ app.post('/TestCreate',(req,res)=>{
 					
 				
 			},function(err,result){
-				//console.log(result.insertedId);
-				res.cookie("id",result.insertedId);
 				res.redirect('/AddQuestions');
 		});
 		collection.find({}).toArray(function(err,docs)
 		{
-			//console.log(docs);
+			console.log(docs);
 		});
 	
 	});
 
 });
 
-
 app.get('/LoginExaminer', sessionChecker,(req,res)=>{
-	res.clearCookie("id");
 	res.render('login');
 });
 
+
+
 app.post('/LoginExaminer',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Trying to Login..");
+		console.log("Trying to Login");
 		
 		const db = client.db(dbName);
 		
@@ -267,7 +214,35 @@ app.post('/LoginExaminer',(req,res)=>{
             
 			req.session.user = user;
 			console.log(req.session.user);
-            res.redirect('/Dashboard');
+			var email=req.param('ExmUsrEmail',null);
+			var data=[];
+			console.log(email);
+				var d = new Date(),
+					month = '' + (d.getMonth() + 1),
+					day = '' + d.getDate(),
+					year = d.getFullYear();
+			
+				if (month.length < 2) month = '0' + month;
+				if (day.length < 2) day = '0' + day;
+			
+				var date_1=[year, month, day].join('-');
+				console.log(date_1);
+			
+			db.collection('Examiners').findOne({Email: req.param('ExmUsrEmail',null)},
+				function(err,docs)
+				{
+					console.log(docs);
+					data=docs;
+				});
+			
+				db.collection('tests').find({Examiner_id: req.param('ExmUsrEmail',null)}).toArray
+				(function(err,docs)
+				{
+					console.log(docs);
+					res.render('dashboard',{data,data1:docs,date_1});
+				});
+			//res.render('dashboard',{email});
+			//res.redirect('/Dashboard',{email});
           }
 	});
 			
@@ -281,7 +256,7 @@ app.get('/RegisterStudent',(req,res)=>{
 
 app.post('/RegisterStudent',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Inside Registration of Student..");
+		console.log("server is connected");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
@@ -292,7 +267,7 @@ app.post('/RegisterStudent',(req,res)=>{
 				Password : req.param('StdUsrPass', null),
 				
 			},function(err,result){
-				res.redirect('/login');
+				res.redirect('/MemberRecordsStudents');
 		});
 		
 	
@@ -305,7 +280,7 @@ app.get('/LoginStudent',(req,res)=>{
 
 app.post('/LoginStudent',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Trying to Login...");
+		console.log("Trying to Login");
 		
 		const db = client.db(dbName);
 		
@@ -333,7 +308,7 @@ app.post('/LoginStudent',(req,res)=>{
 
 app.get('/MemberRecordsExaminers',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Printing Data of Member Records Examiners");
+		console.log("server is connected");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('Examiners');
@@ -350,7 +325,7 @@ app.get('/MemberRecordsExaminers',(req,res)=>{
 
 app.get('/MemberRecordsStudents',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Printing Data of Member Records Students");
+		console.log("server is connected");
 		
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
@@ -363,6 +338,8 @@ app.get('/MemberRecordsStudents',(req,res)=>{
 		client.close();
 	});
 })
+
+
 
 //Showing Data on Terminal...
 app.get('/showtests',(req,res)=>{
@@ -378,110 +355,6 @@ app.get('/showtests',(req,res)=>{
 		client.close();
 	});
 })
-
-
-
-app.post('/AddQuestions',(req,res)=>{
-	
-	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		console.log("Inside Adding Questions");
-		//var yo=
-		//console.log(req.param('question_0', null));
-		const db = client.db(dbName);
-		const collection = db.collection('tests');
-		var mongo = require('mongodb');
-		var id=new mongo.ObjectID(req.cookies["id"]);
-		var qns=parseInt(req.query.qns);
-		//var qns=2;
-		console.log(qns);
-		for(var i=0;i<=qns;i++)
-		{
-			console.log("Loop Started");
-			
-			var select =req.param('select_'+i, null);
-			console.log("Adding Question with options "+select);
-			if(select==null)
-			{
-				continue;
-			}
-			else if(select==2)
-			{
-				
-				collection.updateOne({_id:id}, {$push:{
-					
-					questions:
-					{
-						question:
-						{
-							value:req.param('question_'+i, null),
-							options:
-							{
-								A:
-								{
-									value:req.param('option_1_'+i, null),
-									correct:req.param('ACorrect_'+i, null)
-								},
-								B:
-								{
-									value:req.param('option_2_'+i, null),
-									correct:req.param('BCorrect_'+i, null)
-								}
-							}
-						}
-					}
-					
-				}});
-			}
-			else
-			{
-				collection.updateOne({_id:id}, {$push:{
-					
-					questions:
-					{
-						question:
-						{
-							value:req.param('question_'+i, null),
-							options:
-							{
-								A:
-								{
-									value:req.param('option_1_'+i, null),
-									correct:req.param('ACorrect_'+i, null)
-								},
-								B:
-								{
-									value:req.param('option_2_'+i, null),
-									correct:req.param('BCorrect_'+i, null)
-								},
-								C:
-								{
-									value:req.param('option_3_'+i, null),
-									correct:req.param('CCorrect_'+i, null)
-								},
-								D:
-								{
-									value:req.param('option_4_'+i, null),
-									correct:req.param('DCorrect_'+i, null)
-								}
-							}
-						}
-					}
-
-				}});
-			}
-		}
-		
-		console.log("Questions Added redirected to Dashboard !!");
-		res.clearCookie("id");
-		res.redirect('/Dashboard');
-		
-		
-		client.close();
-	});
-	
-});
-
-
 
 
 //Httpserver Port Number 3000.

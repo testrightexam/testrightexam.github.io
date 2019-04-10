@@ -2,6 +2,8 @@
 <html>
     <head>
         <title>Dashboard</title>
+		<link rel="icon" sizes="192x192" href="icon.png">
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1">
 
@@ -51,13 +53,20 @@
   <hr>
 
   <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
-  <address><%= data.InstituteName %>, <%= data.InstituteAddress %>
+	<address>
+ <% if(data.InstituteName) { %>
+  <%=  data.InstituteName %>, <%= data.InstituteAddress  %>
    <br> <%= data.InstituteCountry %>
     <br> <% data.ExaminerContact %>
+  
+ 
+  <% } else { %>
+  <button type="button" onclick="location.href = '/SaveExaminerProfile';" class="btn btn-primary float-md-left">Complete Your Profile</button>
+  <br><br>
+  <% } %>
   </address>
-
   <hr>
- <h4>Examined Test History <button type="button" class="btn btn-primary float-md-right">Create Test</button>
+ <h4>Examined Test History <button type="button" onclick="location.href = '/TestCreate';" class="btn btn-primary float-md-right">Create Test</button>
     </h4> 
     <br>
     

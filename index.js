@@ -43,8 +43,10 @@ app.use((req, res, next) => {
 // middleware function to check for logged-in users
 var sessionChecker = (req, res, next) => {
     if (req.session.user && req.cookies.user_sid) {
-        res.redirect('/Dashboard');
-
+		if(req.session.user.type=="Faculty")
+			res.redirect('/Dashboard');
+		else
+			res.redirect('/StudentDashboard');
     } else {
         next();
     }    
@@ -85,7 +87,7 @@ app.get('/TestCreate',(req,res)=>{
 	}
 });
 app.get('/AddQuestions',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid && req.cookies["id"]) {
+	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Add Questions \nAdding Data to :- \n");
 
@@ -111,8 +113,19 @@ app.get('/AddQuestions',(req,res)=>{
 
 
 });
+
+app.get('/StudentDashboard',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
+	res.render('StudentDashboard');
+	}
+	else
+	{
+		res.redirect('/login');
+	}
+});
+
 app.get('/Dashboard',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid) {
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Opening Dashboard...");
 		res.clearCookie("id");
@@ -191,7 +204,7 @@ app.post('/RegisterExaminer',(req,res)=>{
 });
 
 app.get('/SaveExaminerProfile',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid) {
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		res.clearCookie("id");
 		res.render('register_examiner');
 	}
@@ -306,6 +319,7 @@ app.post('/LoginExaminer',(req,res)=>{
             } else {
             
 			req.session.user = user;
+			req.session.user.type = "Faculty";
 			console.log(req.session.user);
 			/*var email=req.param('ExmUsrEmail',null);
 			var data=[];
@@ -359,7 +373,7 @@ app.post('/RegisterStudent',(req,res)=>{
 				Password : req.param('StdUsrPass', null),
 
 			},function(err,result){
-				res.redirect('/login');
+				res.redirect('/StudentDashboard');
 		});
 
 
@@ -388,8 +402,11 @@ app.post('/LoginStudent',(req,res)=>{
                res.end("Login invalid");
 			   console.log("Login Invaild");
             } else {
-            console.log(user);
-            res.end("Login valid");
+				req.session.user = user;
+			req.session.user.type = "Student";
+			console.log(req.session.user);
+            console.log(req.session.user.type);
+            res.redirect('StudentDashboard');
           }
 	});
 

@@ -102,7 +102,7 @@ app.get('/AddQuestions',(req,res)=>{
 
 		});	
 		client.close();
-		res.clearCookie("id");
+		
 	});
 
 	}
@@ -147,14 +147,14 @@ app.get('/Dashboard',(req,res)=>{
 			db.collection('Examiners').findOne({Email: req.session.user.Email},
 				function(err,docs)
 				{
-					console.log(docs);
+					//console.log(docs);
 					data=docs;
 				});
 			
 				db.collection('tests').find({Examiner_id: req.session.user.Email}).toArray
 				(function(err,docs)
 				{
-					console.log(docs);
+					//console.log(docs);
 					res.render('dashboard',{data,data1:docs,date_1});
 				});
 				
@@ -205,7 +205,7 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 app.get('/SaveExaminerProfile',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
-		res.clearCookie("id");
+		
 		res.render('register_examiner');
 	}
 	else
@@ -478,10 +478,13 @@ app.post('/AddQuestions',(req,res)=>{
 		var qns=parseInt(req.query.qns);
 		//var qns=2;
 		console.log(qns);
+		console.log(id);
+		console.log(req.cookies["id"]);
 		for(var i=0;i<=qns;i++)
 		{
 			console.log("Loop Started");
-
+			var yop='question_'+i;
+			var finals=yop.concat(i);
 			var select =req.param('select_'+i, null);
 			console.log("Adding Question with options "+select);
 			if(select==null)
@@ -497,6 +500,7 @@ app.post('/AddQuestions',(req,res)=>{
 					{
 						question:
 						{
+							type:"o2",
 							value:req.param('question_'+i, null),
 							options:
 							{
@@ -524,6 +528,7 @@ app.post('/AddQuestions',(req,res)=>{
 					{
 						question:
 						{
+							type:"o4",
 							value:req.param('question_'+i, null),
 							options:
 							{
@@ -556,14 +561,14 @@ app.post('/AddQuestions',(req,res)=>{
 		}
 
 		console.log("Questions Added redirected to Dashboard !!");
-		res.clearCookie("id");
 		res.redirect('/Dashboard');
-
+		//res.clearCookie("id");
 
 		client.close();
 	});
 
 });
+
 
 
 

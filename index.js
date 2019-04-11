@@ -147,14 +147,14 @@ app.get('/Dashboard',(req,res)=>{
 			db.collection('Examiners').findOne({Email: req.session.user.Email},
 				function(err,docs)
 				{
-					console.log(docs);
+					//console.log(docs);
 					data=docs;
 				});
 			
 				db.collection('tests').find({Examiner_id: req.session.user.Email}).toArray
 				(function(err,docs)
 				{
-					console.log(docs);
+					//console.log(docs);
 					res.render('dashboard',{data,data1:docs,date_1});
 				});
 				
@@ -500,6 +500,7 @@ app.post('/AddQuestions',(req,res)=>{
 					{
 						question:
 						{
+							type:"o2",
 							value:req.param('question_'+i, null),
 							options:
 							{
@@ -527,6 +528,7 @@ app.post('/AddQuestions',(req,res)=>{
 					{
 						question:
 						{
+							type:"o4",
 							value:req.param('question_'+i, null),
 							options:
 							{

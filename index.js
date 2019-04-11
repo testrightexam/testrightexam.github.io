@@ -102,7 +102,7 @@ app.get('/AddQuestions',(req,res)=>{
 
 		});	
 		client.close();
-		res.clearCookie("id");
+		
 	});
 
 	}
@@ -205,7 +205,7 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 app.get('/SaveExaminerProfile',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
-		res.clearCookie("id");
+		
 		res.render('register_examiner');
 	}
 	else
@@ -478,10 +478,13 @@ app.post('/AddQuestions',(req,res)=>{
 		var qns=parseInt(req.query.qns);
 		//var qns=2;
 		console.log(qns);
+		console.log(id);
+		console.log(req.cookies["id"]);
 		for(var i=0;i<=qns;i++)
 		{
 			console.log("Loop Started");
-
+			var yop='question_'+i;
+			var finals=yop.concat(i);
 			var select =req.param('select_'+i, null);
 			console.log("Adding Question with options "+select);
 			if(select==null)
@@ -556,14 +559,14 @@ app.post('/AddQuestions',(req,res)=>{
 		}
 
 		console.log("Questions Added redirected to Dashboard !!");
-		res.clearCookie("id");
 		res.redirect('/Dashboard');
-
+		//res.clearCookie("id");
 
 		client.close();
 	});
 
 });
+
 
 
 

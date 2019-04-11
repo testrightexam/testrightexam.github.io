@@ -100,6 +100,7 @@ app.get('/AddQuestions',(req,res)=>{
 
 		});	
 		client.close();
+		res.clearCookie("id");
 	});
 
 	}
@@ -114,7 +115,7 @@ app.get('/Dashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Opening Dashboard...");
-		
+		res.clearCookie("id");
 		const db = client.db(dbName);
 		var email=req.session.user.Email;
 			var data=[];
@@ -143,7 +144,7 @@ app.get('/Dashboard',(req,res)=>{
 					console.log(docs);
 					res.render('dashboard',{data,data1:docs,date_1});
 				});
-		
+				
 		
 	});
 	}
@@ -223,6 +224,13 @@ app.post('/SaveExaminerProfile',(req,res)=>{
 		res.redirect('/Dashboard');
 	});
 
+});
+
+
+app.post('/AddQuestionRedirect',(req,res)=>{
+	res.cookie("id",req.param('test_id',null));
+	console.log(req.param('test_id',null));
+	res.redirect('/AddQuestions');
 });
 
 app.post('/TestCreate',(req,res)=>{

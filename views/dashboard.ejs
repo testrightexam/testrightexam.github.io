@@ -55,9 +55,8 @@
   <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
 	<address>
  <% if(data.InstituteName) { %>
-  <%=  data.InstituteName %>, <%= data.InstituteAddress  %>
-   <br> <%= data.InstituteCountry %>
-    <br> <% data.ExaminerContact %>
+   <%=  data.InstituteName %>, <br><b>Address: </b><%= data.InstituteAddress  %>, <%= data.InstituteCountry %>
+    <br><b>Contact: </b><%= data.ExaminerContact %>
   
  
   <% } else { %>
@@ -70,19 +69,27 @@
     </h4> 
     <br>
     
-  
+	  
       <% var date=new Date(); for(var i=0; i<data1.length; i++) { if(data1[i].Date>date_1){%>
+	  <form action="/AddQuestionRedirect" method="post">
           <div class="card list-group-item-primary text-dark">
           <% } else { %>
           <div class="card bg-dark text-white">
           <% } %>
     <div class="card-body"><h4><%= data1[i].Test_title %></h4>
-      <%= data1[i].Date %><br>
-      <a href="#" class="alert-link"> (View tags)</a><br>
-      Average score : 150
-      <button type="button" class="btn btn-primary float-sm-right">View Results</button>
+	<input type="text" value="<%= data1[i]._id %>" name="test_id" style="display:none"/>
+      <b >TestID :- <%= data1[i]._id %></b> <br>
+      Date : <%= data1[i].Date %><br>
+      Average score :
+		<br>
+      
+      <% if(data1[i].Date>date_1) { %><button type="submit" class="btn btn-primary float-sm-right ">Add Questions</button><% } else { %>
+	  <button type="button" class="btn btn-primary float-sm-right">View Results</button><% } %>
+	  <button type="button" class="btn btn-primary float-sm-right mr-1">Edit Test</button>
     </div>
+	
   </div>
+  </form>
 
   <br>
   <% } %>

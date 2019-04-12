@@ -479,10 +479,10 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
         let ExamId = req.query.ExamId.trim();
         console.log(ExamId);
 		var mongo = require('mongodb');
-		var id = new mongo.ObjectId(ExamId);
+		//var id = new mongo.ObjectId(ExamId);
         const db = client.db(dbName);
         const collection = db.collection('tests');
-        collection.find({"_id": id}).toArray((err,docs)=>{
+        collection.find({"t_id": ExamId}).toArray((err,docs)=>{
             docs[0].questions.forEach(element => {
                 if(element.question.type == "o4")
                 {

@@ -57,18 +57,25 @@
 
   <hr>
   <div class="h-100 row align-items-center">
-  <input type="text" placeholder="Enter Test Id" class="form-control w-50 ml-auto"/>
-   <button type="button"  class="btn btn-primary mr-auto ml-1">Start Test</button>
+  
+  <input type="text" placeholder="Enter Test Id" id="examid" class="form-control w-50 ml-auto"/>
+   <button type="button" onclick="opentest()" class="btn btn-primary mr-auto ml-1">Enroll Yourself</button>
    </div>
    
    <hr>
  <h4>Examined Test History
     </h4> 
     <br>
-    
-	  
- 
-  </div>
 
+  </div>
+<script>
+
+function opentest()
+{
+	var url='/ExamInAction?ExamId='+document.getElementById('examid').value;
+	location.replace(url);
+}
+
+</script>
 </body>
 </html>

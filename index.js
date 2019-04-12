@@ -53,6 +53,22 @@ var sessionChecker = (req, res, next) => {
     }    
 };
 
+var checkFaculty = (req, res, next) => {
+    if(req.session.user && req.session.user.type=="Faculty") {
+		next();
+    } else {
+        res.redirect('/login');
+    }    
+};
+
+var checkStudent = (req, res, next) => {
+    if(req.session.user && req.session.user.type=="Student") {
+		next();
+    } else {
+        res.redirect('/login');
+    }  
+};
+
 
 //URL Of MongoDB Server.
 const url = 'mongodb+srv://testright:Triangle@3@cluster0-grnvl.mongodb.net/test?retryWrites=true';
@@ -79,16 +95,8 @@ app.get('/register', sessionChecker,(req,res)=>{
 app.get('/RegisterExaminer',(req,res)=>{
 	res.render('register');
 });
-app.get('/TestCreate',(req,res)=>{
-	if (req.session.user && req.cookies.user_sid) {
-		res.render('testcreation_step1');
-	}
-	else
-	{
-		 res.redirect('/login');
-	}
-});
-app.get('/TestCreate',(req,res)=>{
+
+app.get('/TestCreate', checkFaculty ,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {
 		res.render('testcreation_step1');
 	}
@@ -106,7 +114,7 @@ app.get('/exam',(req,res)=>{
 		 res.redirect('/login');
 	}
 });
-app.get('/AddQuestions',(req,res)=>{
+app.get('/AddQuestions',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Add Questions \nAdding Data to :- \n");
@@ -222,7 +230,7 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 });
 
-app.get('/SaveExaminerProfile',(req,res)=>{
+app.get('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		
 		res.render('register_examiner');
@@ -233,7 +241,7 @@ app.get('/SaveExaminerProfile',(req,res)=>{
 	}
 });
 
-app.post('/SaveExaminerProfile',(req,res)=>{
+app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Edit Profile of Examiner...");
 		const db = client.db(dbName);
@@ -259,11 +267,12 @@ app.post('/SaveExaminerProfile',(req,res)=>{
 });
 
 
-app.post('/AddQuestionRedirect',(req,res)=>{
+app.post('/AddQuestionRedirect',checkFaculty,(req,res)=>{
 	res.cookie("id",req.param('test_id',null));
 	console.log(req.param('test_id',null));
 	res.redirect('/AddQuestions');
 });
+
 
 function createTestId(testtitle){
 	var newid = testtitle.trim().substring(0,2).toUpperCase();
@@ -275,7 +284,8 @@ function createTestId(testtitle){
 	return newid;
 }
 
-app.post('/TestCreate',(req,res)=>{
+
+app.post('/TestCreate',checkFaculty,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside test Creation...");
 
@@ -285,8 +295,8 @@ app.post('/TestCreate',(req,res)=>{
 			{
 				//Name: req.param('ExmUsrName', null),
 				Examiner_id:req.session.user.Email,
-				t_id:createTestId(req.param('TestTitle', "Title")),
 				Test_title:req.param('TestTitle', null),
+				t_id:createTestId(req.param('TestTitle', "Title")),
 				Subject:req.param('TestSubject', null),
 				Date:req.param('TestDate', null),
 				Time:req.param('TestTime', null),
@@ -464,7 +474,7 @@ app.get('/MemberRecordsExaminers',(req,res)=>{
 });
 
 
-app.get('/ExamInAction',(req,res)=>{
+app.get('/ExamInAction',checkStudent,(req,res)=>{
     MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
         let ExamId = req.query.ExamId.trim();
         console.log(ExamId);
@@ -574,7 +584,7 @@ app.get('/showtests',(req,res)=>{
 
 
 
-app.post('/AddQuestions',(req,res)=>{
+app.post('/AddQuestions',checkFaculty,(req,res)=>{
 
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Adding Questions");

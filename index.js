@@ -267,11 +267,149 @@ app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 });
 
 
-app.post('/AddQuestionRedirect',checkFaculty,(req,res)=>{
+app.post('/AddQuestionRedirect',(req,res)=>{
 	res.cookie("id",req.param('test_id',null));
 	console.log(req.param('test_id',null));
-	res.redirect('/AddQuestions');
+	res.redirect('/AddEditQuestions');
 });
+
+
+app.get('/AddEditQuestions',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
+		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Inside Add Edit Questions \n Editing Data to :- \n");
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.cookies["id"]);
+		collection.find({_id:id}).toArray(function(err,docs)
+		{
+			console.log(docs);
+			res.render('AddEditQuestions',{data:docs});
+
+		});	
+		client.close();
+		
+	});
+
+	}
+	else
+	{
+		 res.redirect('/Dashboard');
+	}
+
+
+});
+
+app.post('/AddEditQuestions',(req,res)=>{
+
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Inside Adding Questions");
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.cookies["id"]);
+		var qns=parseInt(req.query.qns);
+		//var qns=2;
+		console.log(qns);
+		console.log(id);
+		console.log(req.cookies["id"]);
+		collection.updateOne({_id:id},{$set:{questions:[]}},function(err,affected){ 
+		//console.log('affected: ', affected);
+		});
+		for(var i=0;i<=qns;i++)
+		{
+			console.log("Loop Started");
+			var yop='question_'+i;
+			var finals=yop.concat(i);
+			var select =req.param('Eselect_'+i, null);
+			console.log("Adding Question with options "+select);
+			if(select==null)
+			{
+				continue;
+			}
+			else if(select==2)
+			{
+
+				collection.updateOne({_id:id}, {$push:{
+
+					questions:
+					{
+						question:
+						{
+							type:"o2",
+
+							value:req.param('Equestion_'+i, null),
+							options:
+							{
+								A:
+								{
+									value:req.param('Eoption_1_'+i, null),
+									correct:req.param('EACorrect_'+i, null)
+								},
+								B:
+								{
+									value:req.param('Eoption_2_'+i, null),
+									correct:req.param('EBCorrect_'+i, null)
+								}
+							}
+						}
+					}
+
+				}});
+			}
+			else
+			{
+				collection.updateOne({_id:id}, {$push:{
+
+					questions:
+					{
+						question:
+						{
+
+							type:"o4",
+							value:req.param('Equestion_'+i, null),
+							options:
+							{
+								A:
+								{
+									value:req.param('Eoption_1_'+i, null),
+									correct:req.param('EACorrect_'+i, null)
+								},
+								B:
+								{
+									value:req.param('Eoption_2_'+i, null),
+									correct:req.param('EBCorrect_'+i, null)
+								},
+								C:
+								{
+									value:req.param('Eoption_3_'+i, null),
+									correct:req.param('ECCorrect_'+i, null)
+								},
+								D:
+								{
+									value:req.param('Eoption_4_'+i, null),
+									correct:req.param('EDCorrect_'+i, null)
+								}
+							}
+						}
+					}
+
+				}});
+			}
+		}
+
+		console.log("Questions Added redirected to Dashboard !!");
+		res.redirect('/Dashboard');
+		//res.clearCookie("id");
+
+		client.close();
+	});
+
+});
+
+
+
 
 
 function createTestId(testtitle){

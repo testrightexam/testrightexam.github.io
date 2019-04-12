@@ -265,6 +265,16 @@ app.post('/AddQuestionRedirect',(req,res)=>{
 	res.redirect('/AddQuestions');
 });
 
+function createTestId(testtitle){
+	var newid = testtitle.trim().substring(0,2).toUpperCase();
+	var seed = (new Date()).getTime();
+	var l = seed.toString().length;
+	var s = seed.toString().substring(l-3, l+1);
+	newid = newid + s;
+	console.log("just created "+newid);
+	return newid;
+}
+
 app.post('/TestCreate',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside test Creation...");
@@ -275,6 +285,7 @@ app.post('/TestCreate',(req,res)=>{
 			{
 				//Name: req.param('ExmUsrName', null),
 				Examiner_id:req.session.user.Email,
+				t_id:createTestId(req.param('TestTitle', "Title")),
 				Test_title:req.param('TestTitle', null),
 				Subject:req.param('TestSubject', null),
 				Date:req.param('TestDate', null),

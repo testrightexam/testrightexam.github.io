@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        var data = <%- JSON.stringify(data) %>;
+        var buttonVisited = {};
+
+
+        function setButtons()
+        {
+            let numberOfButtons = data.Questions.length;
+            //console.log(numberOfButtons);
+            let col1  = document.createElement('div');
+            col1.setAttribute("class","col");
+            let col2  = document.createElement('div');
+            col2.setAttribute("class","col");
+            let col3  = document.createElement('div');
+            col3.setAttribute("class","col");
+            for(i = 1; i <= numberOfButtons; i++)
+            {
+                let button = document.createElement('button');
+                button.setAttribute('class','btn btn-secondary');
+                button.setAttribute('id',`Q${i}`);
+                button.textContent = `Q${i}`;
+                button.setAttribute('onclick', `displayq(${i-1})`);
+                let wrapDiv = document.createElement('div');
+                wrapDiv.setAttribute('class','form-group');
+                wrapDiv.appendChild(button);
+                if(i%3 == 0)col3.appendChild(wrapDiv);
+                if(i%3 == 1)col1.appendChild(wrapDiv);
+                if(i%3 == 2)col2.appendChild(wrapDiv);
+            }
+            document.getElementById("ButtonBox").appendChild(col1);
+            document.getElementById("ButtonBox").appendChild(col2);
+            document.getElementById("ButtonBox").appendChild(col3);
+
+        }
+        function displayq(number,buttonid)
+        {
+            if(buttonid != undefined)
+            {
+                buttonVisited[buttonid] = true;
+
+            }
+            document.getElementById('QCard').innerHTML = getQcard(number);
+            console.log(buttonVisited);
+        }
+
+    </script>
+    <!--Navigation bar-->
+    <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
+        <a class="navbar-brand" href="/"><img src="logo.png" height="50px;" /></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Register</a>
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+    <title>TestRight</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- jQuery library -->
+
+    <!-- Popper JS -->
+
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</head>
+
+<body onload="displayq(0); setButtons()">
+
+<div class="container" style="margin-top:4vh">
+    <div class="row">
+        <div class="col">
+            <label for="TestTopic" id="testtopic">
+                <h1><%= data.info.Test_title%></h1>
+            </label>
+        </div>
+    </div>
+    <div class="row" style="margin-top:4vh">
+        <div class="col-sm-8">
+            <div class="card" id = "QCard">
+
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-block" style="padding:2vh">
+                    <div class="card-title">
+                        <h5>Questions</h5>
+                    </div>
+                    <div class="container">
+                        <div class="row" id="ButtonBox">
+
+                        </div>
+                        <button class="btn btn-danger">Submit Test</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+
+    //data.Questions[0].question.value
+    function getQcard(number) {
+        console.log(data.Questions.length - 1)
+        let card_content = '';
+        let buttons = '';
+        if (data.Questions[number].question.type === 'o4')
+        {
+             card_content = `<div class="card-block" style="padding: 2vh">
+                <div class="card-title">
+                    <label for="QuestionNumber" id="questionnumber">
+                        <h3>Q${number+1}</h3>
+                    </label>
+                    <label for="Question" id="questiontext">
+                        <h4>${data.Questions[number].question.value}</h4>
+                    </label>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option1"> ${data.Questions[number].question.options.A.value} </label>
+                            </div>
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option2"> ${data.Questions[number].question.options.B.value} </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option3"> ${data.Questions[number].question.options.C.value}</label>
+                            </div>
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option4"> ${data.Questions[number].question.options.D.value}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+        }
+        else if (data.Questions[number].question.type === 'o2')
+        {
+             card_content = `<div class="card-block" style="padding: 2vh">
+                <div class="card-title">
+                    <label for="QuestionNumber" id="questionnumber">
+                        <h3>Q${number+1}</h3>
+                    </label>
+                    <label for="Question" id="questiontext">
+                        <h4>${data.Questions[number].question.value}</h4>
+                    </label>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col">
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option1"> ${data.Questions[number].question.options.A.value} </label>
+                            </div>
+                            <div class="radio" style="padding:2vh">
+                                <label>
+                                    <input type="radio" name="options" id="option2"> ${data.Questions[number].question.options.B.value} </label>
+                            </div>
+                        </div>
+                </div>
+                `;
+            
+        }
+        if(number === 0)
+        {
+            buttons = `<div class="container">
+                <div class="row">
+                    <div class="col">
+                        <button id="prevquestion" value="Previous Question" class="btn btn-secondary" disabled      >prevquestion</button>
+                    </div>
+                    <div class="col">
+                        <button id="nextquestion" value="Next Question" class="btn btn-success" onclick="displayq(${number + 1})">nextquestion</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+
+        }
+        else if (number === data.Questions.length - 1)
+        {
+            buttons = `<div class="container">
+                <div class="row">
+                    <div class="col">
+                        <button id="prevquestion" value="Previous Question" class="btn btn-secondary"  onclick="displayq(${number - 1})">prevquestion</button>
+                    </div>
+                    <div class="col">
+                        <button id="nextquestion" value="Next Question" class="btn btn-success" onclick="displayq(${number + 1})" disabled>nextquestion</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;   
+        }
+        else 
+        {
+            buttons = `<div class="container">
+                <div class="row">
+                    <div class="col">
+                        <button id="prevquestion" value="Previous Question" class="btn btn-secondary"  onclick="displayq(${number - 1})">prevquestion</button>
+                    </div>
+                    <div class="col">
+                        <button id="nextquestion" value="Next Question" class="btn btn-success" onclick="displayq(${number + 1})">nextquestion</button>
+                    </div>
+                </div>
+            </div>
+        </div>`;   
+        }
+        return card_content + buttons;
+    }
+
+
+    
+    
+</script>
+
+<script>
+
+</script>
+
+</html>
+

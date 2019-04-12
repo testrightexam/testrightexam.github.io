@@ -1,6 +1,6 @@
 //Routing Mechanism - URL Define Here.
 const express = require('express');
-
+var ObjectId = require('mongodb').ObjectID;
 //Express Only Get Data If Body-Parser Is Worked.
 //To Get Value Of Any Control Body-Parser Is Compulsory.
 var bodyParser = require('body-parser');
@@ -8,12 +8,13 @@ var bodyParser = require('body-parser');
 //Node Session and cookies
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
-
+//var Url = require('url');
 //Object Of Express.
 const app = express();
 app.use(express.static('views'))
 //Express Object Uses Body-Parser Object.
 app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.json());
 
 // initialize cookie-parser to allow us access the cookies stored in the browser. 
 app.use(cookieParser());
@@ -67,6 +68,7 @@ app.get('/', sessionChecker, (req, res) => {
 	res.render('homepage');
 });
 app.get('/login', sessionChecker, (req, res) => {
+//	console.log("hello");
 	res.render('login');
 });
 
@@ -86,11 +88,28 @@ app.get('/TestCreate',(req,res)=>{
 		 res.redirect('/login');
 	}
 });
+app.get('/TestCreate',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('testcreation_step1');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
+app.get('/exam',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('exam');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
 app.get('/AddQuestions',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Add Questions \nAdding Data to :- \n");
-
 		const db = client.db(dbName);
 		const collection = db.collection('tests');
 		var mongo = require('mongodb');
@@ -415,6 +434,8 @@ app.post('/LoginStudent',(req,res)=>{
 });
 
 
+
+
 app.get('/MemberRecordsExaminers',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Printing Data of Member Records Examiners");
@@ -429,7 +450,84 @@ app.get('/MemberRecordsExaminers',(req,res)=>{
 		});	
 		client.close();
 	});
-})
+});
+
+
+app.get('/ExamInAction',(req,res)=>{
+    MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+        let ExamId = req.query.ExamId.trim();
+        console.log(ExamId);
+		var mongo = require('mongodb');
+		var id = new mongo.ObjectId(ExamId);
+        const db = client.db(dbName);
+        const collection = db.collection('tests');
+        collection.find({"_id": id}).toArray((err,docs)=>{
+            docs[0].questions.forEach(element => {
+                if(element.question.type == "o4")
+                {
+                    delete element.question.options.A.correct;
+                    delete element.question.options.B.correct;
+                    delete element.question.options.C.correct;
+                    delete element.question.options.D.correct;
+                }
+                else if(element.question.type == "o2")
+                {
+                    delete element.question.options.A.correct;
+                    delete element.question.options.B.correct;
+                }
+            });
+            let Q_list = docs[0].questions;
+            delete docs[0].questions;
+            let exam_info = docs[0];
+            let ExamData = {
+                info : exam_info,
+                Questions : Q_list
+            };
+            //console.log(ExamData);
+
+            res.render('exam',{data:ExamData})
+        });
+    });
+
+
+	
+	
+});
+
+app.post('/getExam',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		//console.log("Printing Data of Member Records Students");
+		
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		collection.find({"_id" : ObjectId('5cad023b7c41c361c5fdddc5')}).toArray(function(err,docs)
+		{
+		// 	app.use(bodyParser.urlencoded({ extended: false }));
+		// 	app.use(bodyParser.json()); 
+		// let some = docs[0].questions[0].question.options
+		// delete some.A.correct;
+
+		docs[0].questions.forEach(element => {
+			if(element.question.type == "o4")
+			{
+				delete element.question.options.A.correct
+				delete element.question.options.B.correct
+				delete element.question.options.C.correct
+				delete element.question.options.D.correct
+			}
+			else if(element.question.type == "o2")
+			{
+				delete element.question.options.A.correct
+				delete element.question.options.B.correct				
+			}
+		});
+			
+			res.json(docs[0])
+
+		});	
+		client.close();
+	});
+});
 
 
 app.get('/MemberRecordsStudents',(req,res)=>{
@@ -448,14 +546,14 @@ app.get('/MemberRecordsStudents',(req,res)=>{
 	});
 })
 
-//Showing Data on Terminal...
+
 app.get('/showtests',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Showing tests");
 
 		const db = client.db(dbName);
 		const collection = db.collection('tests');
-		collection.find({}).toArray(function(err,docs)
+		collection.find().toArray(function(err,docs)
 		{
 			console.log(docs);
 		});	
@@ -501,6 +599,7 @@ app.post('/AddQuestions',(req,res)=>{
 						question:
 						{
 							type:"o2",
+
 							value:req.param('question_'+i, null),
 							options:
 							{
@@ -528,6 +627,7 @@ app.post('/AddQuestions',(req,res)=>{
 					{
 						question:
 						{
+
 							type:"o4",
 							value:req.param('question_'+i, null),
 							options:

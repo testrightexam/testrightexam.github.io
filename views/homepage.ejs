@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-
+<html xmlns="https://www.w3.org/1999/xhtml">
 <head>
 <!--Orignal-->
-	<link rel="icon" sizes="192x192" href="icon.png">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="icon" sizes="192x192" href="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/icon.png">
+    <meta http-equiv="Content-Type" content="text/html, charset=utf-8" />
+	<meta name="viewport"  content=" width=device-width initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
     <title>Home Page</title>
     <meta name="author" content="Pratibha Hotwani" />
     <meta name="Resource-type" content="Document" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="assets/fullpage.js"></script>
-	<script type="text/javascript" src="assets/examples.js"></script>
-	<link rel="stylesheet" type="text/css" href="assets/fullpage.css" />
-    <link rel="stylesheet" type="text/css" href="assets/examples.css" />
+    <script type="text/javascript" src="homepage/fullpage.js"></script>
+	<script type="text/javascript" src="homepage/examples.js"></script>
+	<link rel="stylesheet" type="text/css" href="homepage/fullpage.css" />
+    <link rel="stylesheet" type="text/css" href="homepage/examples.css" />
     <script type="text/javascript">
         $(document).ready(function(){
             $('#fullpage').fullpage({
-                sectionsColor: ['white', '#58B792'],
+                sectionsColor: ['white', 'fafafa'],
                 navigation: true,
                 slidesNavigation: true,
             });
@@ -34,7 +36,9 @@
 <!--From Our Template-->
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--Custom css -->
+		<!--Custom css -->
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
         <link rel="stylesheet" href="assets/css/style.css">
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -45,58 +49,252 @@
         <!-- Latest compiled JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
         <!--Roboto Font-->
-        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+		
 <!--From Our Template-->
 <style>
-    .reviews
-    {
-        display:flex;
-		flex-direction:column;
-		align-items:center;
-		text-align:center;
-       padding:30px;
-	   
-    }
-    	
-	.reviews .mains
-	{
-		width:60%;
-		font-size:22px;
-		color:#e45212;
-	}
-	.reviews .name
-	{
-		font-size:12px;
-		color:#a3aaae;
-		font-weight:bold;
-		line-height:0px;
-	}
-	.reviews .pos
-	{
-		font-size:15px;
-		line-height:0px;
-		color:#a3aaae;
-	}
-	@media screen and (max-width:750px)
-	{
-		.reviews .mains
-		{
-			width:90%;
-			font-size:15px;
-		}
-		.reviews .pos
-		{
-			font-size:12px;
-			line-height:0px;
-			color:#a3aaae;
-		}
-	}
-#actions{
+    
+#actions
+{
         position:relative;
 		z-index:1000 !important;
-       
     }
+.imgone
+{
+	 margin-top:-400px;
+	 height:35vh;
+	 width:48vw;
+}
+.imgtwo
+{
+	
+}
 
+.divtexttwo
+{
+	margin-top: 15px;
+	font-size:9.5px;
+	text-align:justify;
+	font-family: 'East Sea Dokdo', cursive; 
+
+}
+.divtextone
+{
+	font-family: 'East Sea Dokdo', cursive; font-size:20px;
+	margin-bottom:-200px;
+	font-size:20px; 
+	width: 95vw;
+	text-align: justify;
+}
+.twoorig
+{
+	display:block;
+}
+.divtexttwohead
+{
+
+
+font-family: 'East Sea Dokdo', cursive; 
+font-size:20px;
+
+
+}
+.divtexttwohead h3
+{
+	margin-top:150px;
+	color:white;
+}
+.twoalt
+{
+	display:none;
+}
+
+.reviews .mains
+{
+	font-family: 'East Sea Dokdo', cursive;
+	font-size: 20px;
+	margin-top : -200px;
+	color:coral
+}
+.reviews .name
+{
+	font-family: 'East Sea Dokdo', cursive;
+	font-size: 15px;
+	margin-bottom: 10px;
+}
+.reviews .pos
+{
+	font-size: 10px;
+	margin-top: -10px;
+	margin-bottom:80px;
+}
+.reviews img
+{
+	font-family: 'East Sea Dokdo', cursive;
+	margin-bottom: 10px;
+}
+.thirdfooter{
+	font-family: 'East Sea Dokdo', cursive;
+	font-size: 9px;
+}
+.thirdfooter h4
+{
+	color:white;
+	
+}
+.bottom-bar {
+    background:#000;
+	
+  }
+#usersalt
+{
+	display: none;
+}
+
+.footerstick
+{
+	position : relative;
+	margin-bottom: 0px;
+	background-color:transparent;
+	margin-top: 92px;
+	font-family: 'Open Sans', sans-serif;
+
+}
+.footerstick p
+{
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+}
+.footerimg img
+{
+	height : 50px;
+	width: 60px;
+	margin-left:20px;
+	margin-top : 5px;
+	border: 2px solid #007bff;
+	padding: 8px;
+	margin-right: 5px;
+}
+.footeralt
+{
+	display:none;
+}
+@media screen and (max-width:450px)
+{
+.footerimg
+{
+	height : 60px;
+	width: 60px;
+	margin-left:0px;
+	margin-top : 8px;
+	border: 0px solid red;
+	padding:8px;
+	
+
+}
+#altre
+{
+	display: none;
+}
+#usersalt
+{
+	display: block;
+}
+.reviews .mains
+{
+	margin-top:-200px;
+	font-size: 16px;
+	color:coral;
+	text-align:justify;
+	margin-bottom: 10px; 
+	font-family: 'East Sea Dokdo';
+}
+.reviews .name
+{
+	font-size: 15px;
+	font-family: 'East Sea Dokdo';
+}
+.reviews .pos
+{
+	
+	font-size: 15px;
+	margin-bottom: 50px;
+	font-family: 'East Sea Dokdo';
+}
+
+#twoorig
+{
+	display: none;
+}
+
+.divtextone
+{
+	font-family: 'East Sea Dokdo'; 
+	font-size:13px; 
+	width: 95vw;
+	text-align: justify;
+}
+.imgone
+{
+	 height:20vh;
+	 width:82vw;
+}
+.twoalt
+{
+	display:block;
+}
+
+.imgtwo
+{
+	margin-bottom:5px;
+}
+.divtexttwo
+{
+	font-size:10px;
+	font-family: 'East Sea Dokdo'; 
+	text-align:justify;
+	margin-bottom:35px;
+}
+.divtexttwohead
+{
+margin-top: -220px;
+margin-bottom: 25px;
+font-family: 'East Sea Dokdo'; 
+font-size:20px;
+}
+.divtexttwohead h3
+{
+	color:white;
+}
+.divtexttwo p
+{
+	margin:12px;
+}
+.footerorig
+{
+	display:none;
+}
+.footeralt
+{
+	font-family: 'Open Sans', sans-serif;
+	margin-bottom: 0px;
+	
+}
+.footerstickalt
+{
+	margin-bottom: 0px;
+	
+	
+}
+.footerstick
+{
+	display:flex;
+	flex-direction: column;
+	justify-content: center;
+}
+}
+@import url('https://fonts.googleapis.com/css?family=East+Sea+Dokdo');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 </style>
 </head>
 <body>
@@ -107,12 +305,12 @@
           <span class="navbar-toggler-icon"></span>
         </button>
           <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
+             <ul class="navbar-nav">
               <li class="nav-item">
                 <a class="nav-link" href="/login">Login</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
+                    <a class="nav-link" href="/register">Register</a>
               </li> 
 
             </ul>
@@ -120,81 +318,264 @@
       </nav>
 </div>
 <div id="fullpage">
-    <div class="section">
-         <center> <div class="img-fluid img-responsive mx-auto center-block"><img src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo_final_v1.png"  height="200vh" width="500vw"></img></div></center>
+<div class="section"style="background: linear-gradient(to top,white 55%,#007bff 5% )";>
+          <div class="col-md-12">
+		  <img src="logo_final_v1_backgroundless.png" class="imgone"/>
+		  </div>
+		  <center>
+        <div class="divtextone col-md-8">
+		<div style="text-align:center; ">
+        " We aim to inspire! "<br/>Triangle Corporation was established by keeping the requirments of the people in mind.
+       We are fully focused and dedicated to deliver.
         <br/>
         <br/>
-        <br/>
-        <br/>
-        <center>
-        <div class="text-center text-justify" style=" font-family: 'Roboto', sans-serif; font-size:28px; text-align: justify; width: 95vw">
-        We aim to inspire!<br/>Triangle Corporation was established by keeping the requirments and <br/>interests of the people in mind.
-        We are fully focused and dedicated to deliver.
-        <br/>
-        <br/>
-        With the single goal in mind, we do not just create code; we create experience. <br/> Our software suites are<span style="font-weight: bold; color:dodgerblue;"> minimilistic, innovative and ready-to-use. </span>out of the box.
+        With the single goal in mind, we do not just create code; we create experience. Our software suites are<span style="font-weight: bold; color:dodgerblue;"> minimilistic, innovative and ready-to-use </span>out of the box.
         </div>
-        </center>
-            <br/>
-            <br/>
-            <br/>
-            
-    </div>
-    <div class="section">
-     <span style=" font-family: 'Roboto', sans-serif; font-size:30px; text-align: justify; width: 95vw; font-style: italic; color:#fafafa">Enters the ultimate, simplistic and intuitive Testing.</span>
-    <br/>
-    <br/>
-    <br/>
-    
-     <center> <div class="img-fluid img-responsive mx-auto center-block"><img src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png"  height="200vh" width="500vw"></img></div></center>
-    <div class="text-center text-justify">
-    <br/>
-    <br/>
-    <br/>
-     <br/> 
-  <span style=" font-family: 'Roboto', sans-serif; font-size:30px; text-align: justify; width: 95vw; color:#fafafa;">
-    Weather you are an examiner or a student, TestRight has you covered!
-    <br/>With TestRight creating, administrating and taking a test becomes easy as 1-2-3 (Literally!).
-    
-    
-  
-</span>
+		</div>
+		</center>
 </div>
-<br/>
-<button href="#" style="background-color: #faC408; border-radius: 6px ; border: 0px; font-size:25px; color:#fafafa; width:200px; height:39px">Join Now</button>
-<br/>
-<br/>
-<br/>
-<br/>
-<br/>
-
+<div class="section" >
+	<!--Mobile Second-->
+	<div class="twoalt">
+				<div class="slide" style="background: linear-gradient(to top,white 58%,#007bff 40% );">
+						<div class="divtexttwohead">
+								<h3>Create</h3>
+						</div>
+					<div class="imgtwo">
+					<img src="https://www.flexiquiz.com/Images/compose.png" />
+					</div>
+					
+					<div class="divtexttwo">
+					<p style="text-align:center;" >
+							Quickly create great looking tests using multiple question types and formatting options.
+					</p>
+					</div>
+				</div>
+				<div class="slide" style="background: linear-gradient(to top,white 58%,#007bff 20% );">
+						<div class="divtexttwohead">
+								<h3>Test</h3>
+								</div>
+					<div class="imgtwo">
+					<img src="https://www.flexiquiz.com/Images/upload.png" />
+					</div>
+					
+					<div class="divtexttwo">
+					<p style="text-align:center;">
+							Tests can either be published privately to a selected group or open
+							them up to everyone with a link.
+					</p>
+					</div>
+				</div>
+				<div class="slide" style="background: linear-gradient(to top,white 58%,#007bff 20% );">
+						<div class="divtexttwohead">
+								<h3>Examine</h3>
+								</div>
+				<div class="imgtwo">
+					<img src="https://www.flexiquiz.com/Images/trends.png"/>
+				</div>
+					
+					<div class="divtexttwo">
+					<p style="text-align:center;">See Your marks instantly and grades of your tests.Watch 
+							your performance with depth analysis across all responses.
+					</p>
+					</div>
+				</div>
+	</div>
+	<!--Desktop Second-->
+	<div class="twoorig" id="twoorig" style="background: linear-gradient(to top,white 20%,#007bff 80% );">
+    <div class="row">
+		<div class="col-sm-4">
+				<div class="divtexttwohead" >
+						<h3>Create</h3>
+				</div>
+		<div class="imgtwo">
+		<img src="https://www.flexiquiz.com/Images/compose.png" />
+		</div>
+		<div class="divtexttwo">
+		<p style="text-align:center">Quickly create great looking tests using multiple question types and formatting options.</p>
+		</div>
+		</div>
+		<div class="imgtwo col-sm-4">
+				<div class="divtexttwohead">
+						<h3>Test</h3>
+						</div>
+		<div class="imgtwo">
+		<img src="https://www.flexiquiz.com/Images/upload.png" />
+		</div>
+		
+		<div class="divtexttwo">
+		<p style="text-align:center">Tests can either be published privately to a selected group or open
+		them up to everyone with a link.</p>
+		</div>
+		</div>
+		<div class="imgtwo col-sm-4">
+				<div class="divtexttwohead">
+						<h3>Examine</h3>
+				</div>
+		<div class="imgtwo">
+		<img src="https://www.flexiquiz.com/Images/trends.png"/>
+		</div>
+		
+		<div class="divtexttwo">
+		<p style="text-align:center; ">See Your marks instantly and grades of your tests.Watch 
+				your performance with depth analysis across all responses.
+		</p>
+		</div>
+		</div>
+	</div>
+	</div>
+</div>	
+<div class="section" style="background: linear-gradient(to bottom,white 60%,#007bff 40% );">
+	
+<!--<div id="altre">
+		<div class="row thirdfooter mt-5">
+			<div class="col-md-4 ">
+					<i class="fa fa-user fa-4x"></i>
+					<h4>Individuals</h4>
+					<p class="justify-content mt-2">
+						Individuals who are required to do assessments on small level in their classess can use our system.
+					</p>
+			</div>
+			<div class="col-md-4">
+					<i class="fa fa-graduation-cap fa-4x"></i>
+					<h4>Teachers</h4>
+					<p class="justify-content mt-2">
+						Teachers can make any kind of test and do assessments based on the features in our system. It makes the grading system easy.
+					</p>
+	
+			</div>
+			<div class="col-md-4">
+					<i class="fa fa-users fa-4x"></i>
+					<h4>Businesses</h4>
+					<p class="justify-content mt-2">
+						Companies who want their employess to give feedback or any such kind of evaluation needed can use our system.
+					</p>
+			</div>
+			
+		
+		</div>
+</div>-->
+<!--for desktop-->	
+<div class="h-50" style="margin-bottom: 0px;">
+<div class="reviews slide">
+		<center>
+			<div class="col-md-8" >
+            <p class="mains" style="text-align: center;">
+                "Test Right provides me with the insights I need for all my social channels to build robust monthly reports and optimize my social marketing."
+			</p>
+            <img src="https://tanwanimohit.github.io/bitly/review.png"/>
+            <br/>
+            <p class="name"> Joshua	Karpf</p>
+			<p class="pos">Global Director, Social Marketing, Spotify</p>
+			
+			</div>
+		</center>
+		
 </div>
-    <div class="section" style="background: linear-gradient(to bottom,white 50%,#337ab7 50% );">
-        <div class="reviews" >
-            <p class="mains">
+<div class="reviews slide">
+				<center>
+		<div class="col-md-8">
+			<p class="mains" style="text-align: center;" >
                 "Test Right provides me with the insights I need for all my social channels to build robust monthly reports and optimize my social marketing."
             </p>
             <img src="https://tanwanimohit.github.io/bitly/review.png"/>
             <br/>
             <p class="name"> Joshua	Karpf</p>
-            <p class="pos">Global Director, Social Marketing, Spotify</p>
-        </div>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-    </div>
+			<p class="pos">Global Director, Social Marketing, Spotify</p>
+			<div>	
+			</div>
+		</div>
+		</center>
+</div>
+<div class="reviews slide" >
+				<center>
+			<div class="col-md-8">
+            <p class="mains" style="text-align: center;">
+                "Test Right provides me with the insights I need for all my social channels to build robust monthly reports and optimize my social marketing."
+            </p>
+            <img src="https://tanwanimohit.github.io/bitly/review.png"/>
+            <br/>
+            <p class="name"> Joshua	Karpf</p>
+			<p class="pos">Global Director, Social Marketing, Spotify</p>
+			
+			</div>
+		</center>
+		
+</div>
+</div>
+<div class="footerorig">
+		<div class="footerstick col-lg-12">
+				<div class="center">
+					
+								
+						<span style="font-size:20px;color:white"> Follow Us On </span>
+								<br/>
+						<img src="https://tanwanimohit.github.io/bitly/social1.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social2.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social3.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social4.png" width="32px" height="32px"/>
+						<br/>
+						<div style="margin-top: 12px;"><span style="font-size:30px;color:white; margin-top:00px; margin-right:5px;">
+							<i class="large material-icons">phone</i></span>  <span style="font-size:20px; color:white">1213456789 </span>
+							<span style="color:white; font-size:30px;margin-left:15px; margin-right:5px;"><i class="large material-icons">email</i> </span>
+							<span style="font-size:20px;color:white;">info@testright.com </span>
+							<span style="color:white; margin-right:5px; font-size:30px;margin-left:20px"><i class="large material-icons">map</i></span>
+							<span style="font-size:20px; color:white">Ahmedabad, Gujarat </span>
+							<br/>
+							<div style="margin-top:10px; font-size: 20px"><span style="font-size:20px; color:white;">&#169;</span><span style="color:white"> 2019 TestRight<span style="color:white">™</span></div>
+						</div>
+						<br/>	
+						<br/>
+						
+						
+				
+				</div>
+		</div>
+</div>
+<div class="footeralt footerstickalt footerstick footerstick">
+		
+			<center>
+						<div style="font-size:20px; color:white; align-self: flex-start"  class="center"> Follow Us On </div>
+						
+						<div class="">
+						<img src="https://tanwanimohit.github.io/bitly/social1.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social2.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social3.png" width="32px" height="32px"/>
+						<img src="https://tanwanimohit.github.io/bitly/social4.png" width="32px" height="32px"/>
+						</div>
+						<br/>
+						<div  class="" style="align-self: center;font-size:20px;color:white;"><i class="large material-icons" style="font-size:20px;color:white; ">phone</i> | 
+						
+						 <span ><i class="large material-icons" style="font-size:20px;color:white; margin-right:6px;">email</i>| </span>
+						<span style="color:white; margin-right:5px; font-size:20px;"><i class="large material-icons" style="font-size:20px;color:white; ">map</i></span> 
+	
+						</div>
+						
+						<div class="" style="align-self: flex-end;color:white; font-size: 20px;"><span style="font-size:20px; color:white;">&#169</span> 2019 Triangle Corporation<span style="color:black">™</span></div>
+			</center>
+	
+		
+</div>
 
 </div>
+
 </body>
+<script>
+$(document).ready(function(){
+	$(document).keydown(function(event) {
+	    	    if (event.ctrlKey==true && (event.which == '61' || event.which == '107' || event.which == '173' || event.which == '109'  || event.which == '187'  || event.which == '189'  ) ) {
+         
+		event.preventDefault();
+	
+	     }
+	});
+
+	$(window).bind('mousewheel DOMMouseScroll', function (event) {
+	       if (event.ctrlKey == true) {
+           
+		   event.preventDefault();
+	       }
+	});
+});
+</script>
 </html>

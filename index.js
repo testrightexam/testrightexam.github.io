@@ -143,7 +143,67 @@ app.get('/AddQuestions',checkFaculty,(req,res)=>{
 
 app.get('/StudentDashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
-	res.render('StudentDashboard');
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Opening Dashboard...");
+		res.clearCookie("id");
+		const db = client.db(dbName);
+		var email=req.session.user.Email;
+			var data=[];
+			var chk=0;
+			console.log(email);
+			var d = new Date(),
+				month = '' + (d.getMonth() + 1),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
+		
+			if (month.length < 2) month = '0' + month;
+			if (day.length < 2) day = '0' + day;
+		
+			var date_1=[year, month, day].join('-');
+			console.log(date_1);
+			const collection = db.collection('Students');
+			collection.findOne({"Email": email},function(err,docs){
+				data=docs;
+				var data2=[];
+				var i=0;
+				console.log(data);
+				var j=0;
+				if(data.RegisteredTests!=null)
+				{
+				for(var i=0; i<data.RegisteredTests.length; i++)
+				{
+					console.log("run");
+					db.collection('tests').findOne({t_id: data.RegisteredTests[i].test_id},
+					function(err,docs)
+					{
+						delete docs.questions;
+						data2[j++]=docs
+						console.log(data2[j-1]);
+						console.log(j);
+						if(j==(data.RegisteredTests.length))
+						{
+							res.render('StudentDashboard',{data,data2,date_1});	
+						}
+						else
+						{
+							
+						}
+						
+					});
+					
+					
+					
+				}
+				}
+				else
+				{
+					res.render('StudentDashboard',{data,data2,date_1});	
+				}
+				
+			});	
+				
+				
+	});	
 	}
 	else
 	{
@@ -183,6 +243,7 @@ app.get('/Dashboard',(req,res)=>{
 				{
 					//console.log(docs);
 					res.render('dashboard',{data,data1:docs,date_1});
+					console.log(data);
 				});
 				
 		
@@ -241,6 +302,17 @@ app.get('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	}
 });
 
+app.get('/SaveStudentProfile',checkStudent,(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
+		
+		res.render('register_student');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
+
 app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Edit Profile of Examiner...");
@@ -266,6 +338,61 @@ app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 
 });
 
+
+app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Edit Profile of Student...");
+		const db = client.db(dbName);
+		const collection = db.collection('Students');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.session.user._id);
+		console.log(req.session.user._id);
+		collection.updateOne(
+				{_id: id},
+				{$set:{
+					InstituteName: req.param('stdinstname', null),
+					InstituteType: req.param('stdinsttype', null),
+					InstituteAddress: req.param('stdadress', null),
+					InstituteCountry: req.param('stdconttype', null),
+					StudentContact: req.param('StuContact',null)
+				}}
+			, function(err, result){
+				if(err)	throw error;
+			});
+		res.redirect('/StudentDashboard');
+	});
+
+});
+
+
+app.post('/RegisterTest',(req,res)=>{
+	console.log("Registering Test id...");
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		
+		const db = client.db(dbName);
+		const collection = db.collection('Students');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.session.user._id);
+		console.log(req.session.user._id);
+		
+		collection.updateOne(
+							{_id: id},
+							{$push:{
+								RegisteredTests:
+								{
+									test_id:req.param('examid',null)
+								}
+							}}
+						, function(err, result){
+							if(err)	throw error;
+						});
+		
+		
+		
+		res.redirect('/StudentDashboard');
+	});
+
+});
 
 app.post('/AddQuestionRedirect',(req,res)=>{
 	res.cookie("id",req.param('test_id',null));

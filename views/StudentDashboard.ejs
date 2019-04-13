@@ -53,26 +53,61 @@
   <hr>
 
 
-  <h4 style="max-width:100%;">Mohit Tanwani</h4>
-
-  <hr>
-  <div class="h-100 row align-items-center">
+  <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
+  <address>
+ <% if(data.InstituteName) { %>
+   <%=  data.InstituteName %>, <br><b>Address: </b><%= data.InstituteAddress  %>, <%= data.InstituteCountry %>
+    <br><b>Contact: </b><%= data.StudentContact %>
   
-  <input type="text" placeholder="Enter Test Id" id="examid" class="form-control w-50 ml-auto"/>
-   <button type="button" onclick="opentest()" class="btn btn-primary mr-auto ml-1">Enroll Yourself</button>
-   </div>
+ 
+  <% } else { %>
+  <button type="button" onclick="location.href = '/SaveStudentProfile';" class="btn btn-primary float-left">Complete Your Profile</button>
+  <br><br>
+  <% } %>
+  </address>
+  <hr>
+ 
+  <form action="/RegisterTest" class="w-100 h-100 row align-items-center"method="post">
+  <input type="text" placeholder="Enter Test Id" id="examid" name="examid" class="form-control w-50 ml-auto"/>
+   <button type="submit" class="btn btn-primary mr-auto ml-1">Enroll Yourself</button>
+   </form>
+	
    
    <hr>
- <h4>Examined Test History
+ <h4>Your Exams
     </h4> 
     <br>
-
+	
+	 <% var date=new Date(); for(var i=0; i<data2.length; i++) {if(data2[i].Date>date_1){%>
+	  <form action="/" method="post">
+          <div class="card list-group-item-primary text-dark">
+          <% } else { %>
+          <div class="card bg-dark text-white">
+          <% } %>
+    <div class="card-body"><h4><%= data2[i].Test_title %></h4>
+	<input type="text" value="<%= data2[i]._id %>" name="test_id" style="display:none"/>
+      <b >TestID :- <%= data2[i].t_id %></b> <br>
+      Date : <%= data2[i].Date %><br>
+     
+		<br>
+      
+      <% if(data2[i].Date>date_1) { %><button type="submit" class="btn btn-primary float-sm-right ">De-Register</button><% } else { %>
+	  <button type="button" class="btn btn-primary float-sm-right">View Results</button><% } %>
+	 
+    </div>
+	</div>
+  </form>
+<br>
+ 
+  <% } %>
+	
+	
   </div>
 <script>
 
 function opentest()
 {
-	var url='/ExamInAction?ExamId='+document.getElementById('examid').value;
+	var url='RegisterTest';
 	location.replace(url);
 }
 

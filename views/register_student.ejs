@@ -44,7 +44,7 @@
       </nav>
    
       <!--Register Student-->
-      <form action="MemberRecordsStudents" method="post">
+      <form action="SaveStudentProfile" method="post">
 			<center style="color: #007bff; font-size: 6vh; font-style:bold; font-family: 'Product Sans'; margin-top:20px;">Register as Student</center>  
 			<div class="container col-sm-6">
 			<!-- Register div -->
@@ -53,7 +53,7 @@
 			<hr>
 			<div class="form-group">
 			  <label for="stdinstname">Institute Name</label>
-			  <input type="text" class="form-control" id="stdinstname" placeholder="Institite Name" >
+			  <input type="text" class="form-control" id="stdinstname" name="stdinstname" placeholder="Institite Name" >
 			</div>
 			<div class="form-group">
 			<label for="stdinst">Institute</label>
@@ -64,7 +64,7 @@
 			</div>
 			<div class="form-group">
 				<label for="address">Address</label>
-				<textarea class="form-control" rows="5" id="stdadress" placeholder="Address"></textarea>
+				<textarea class="form-control" rows="5" id="stdadress"  name="stdadress" placeholder="Address"></textarea>
 			</div> 
 			<label for="country">Country</label>
 			   <select class="selectpicker" name="stdconttype" data-style="btn" data-width="100%" title="Choose Country" data-live-search="true">
@@ -73,10 +73,10 @@
 			  </select>
 			<div class="form-group">
 				<label for="stdcontact">Contact No</label>
-				<input type="number" class="form-control" id="stdcontact" placeholder="Mobile" >
+				<input type="number" class="form-control" name="StuContact" id="stdcontact" placeholder="Mobile" >
 			</div>
 			<input type="submit" class="btn btn-primary btn-block" value="Save & Continue"/> 
-			<input type="submit" class="btn btn-secondary btn-block" value="Skip Details"/> 
+			
 			</div><br>
         </form>   
     </body>

@@ -183,6 +183,10 @@ app.get('/StudentDashboard',(req,res)=>{
 			const collection = db.collection('Students');
 			collection.findOne({"Email": email},function(err,docs){
 				data=docs;
+				req.session.user = docs;
+				req.session.user.type = "Student";
+				
+				
 				var data2=[]; //data to pass the actual test data
 				//var data3=[]; //data to pass the boolean if test can start
 				var i=0;
@@ -491,7 +495,8 @@ app.post('/RegisterTest',(req,res)=>{
 							{$push:{
 								RegisteredTests:
 								{
-									test_id:req.param('examid',null)
+									test_id:req.param('examid',null),
+									status:"NotAttempted"
 								}
 							}}
 						, function(err, result){
@@ -959,7 +964,15 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
                 Questions : Q_list
             };
             //console.log(ExamData);
-
+			var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
+			while (0 !== currentIndex) 
+			{
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex -= 1;
+				temporaryValue = ExamData.Questions[currentIndex];
+				ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
+				ExamData.Questions[randomIndex] = temporaryValue;
+			}
             res.render('exam',{data:ExamData})
         });
     });

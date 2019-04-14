@@ -34,6 +34,11 @@
             currentQuestion = number;
             Question_state[number] = 1;
             SetColors();
+			if(results[number]!=null)
+			{
+				document.getElementById(number+"_option"+results[number]).checked = true;
+			}
+			
         }
 
         function setActiveColorOfButton(question_number)
@@ -90,23 +95,21 @@
 
     </script>
     <!--Navigation bar-->
-    <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
-        <a class="navbar-brand" href="/"><img src="logo.png" height="50px;" /></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/register">Register</a>
-                </li>
-
-            </ul>
-        </div>
-    </nav>
+  <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
+    <a class="navbar-brand" href="/"><img
+        src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png"
+        height="50px;" /></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
     <title>TestRight</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -135,12 +138,12 @@
         </div>
     </div>
     <div class="row" style="margin-top:4vh">
-        <div class="col-sm-8">
+        <div class="col-sm-8 mb-1">
             <div class="card" id = "QCard">
 
             </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-4 mb-1">
             <div class="card">
                 <div class="card-block" style="padding:2vh">
                     <div class="card-title">
@@ -180,23 +183,23 @@
                 <div class="container">
                     <div class="row">
                         <div class="col">
-                            <div class="radio" style="padding:2vh">
+                            <div class="radio" style="padding:2vh" >
                                 <label>
-                                    <input type="radio" name="options" id="${number}_option1"> ${data.Questions[number].question.options.A.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option1" > ${data.Questions[number].question.options.A.value} </label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options" id="${number}_option2"> ${data.Questions[number].question.options.B.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option2" > ${data.Questions[number].question.options.B.value} </label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options" id="${number}_option3"> ${data.Questions[number].question.options.C.value}</label>
+                                    <input type="radio" name="options${number}" id="${number}_option3"> ${data.Questions[number].question.options.C.value}</label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options" id="${number}_option4"> ${data.Questions[number].question.options.D.value}</label>
+                                    <input type="radio" name="options${number}" id="${number}_option4"> ${data.Questions[number].question.options.D.value}</label>
                             </div>
                         </div>
                     </div>
@@ -219,11 +222,11 @@
                         <div class="col">
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio"  name="options" id="${number}_option1"> ${data.Questions[number].question.options.A.value} </label>
+                                    <input type="radio"  name="options${number}" id="${number}_option1"> ${data.Questions[number].question.options.A.value} </label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options" id="${number}_option2"> ${data.Questions[number].question.options.B.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option2"> ${data.Questions[number].question.options.B.value} </label>
                             </div>
                         </div>
                 </div>

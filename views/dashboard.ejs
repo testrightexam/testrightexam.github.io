@@ -60,12 +60,12 @@
   
  
   <% } else { %>
-  <button type="button" onclick="location.href = '/SaveExaminerProfile';" class="btn btn-primary float-md-left">Complete Your Profile</button>
+  <button type="button" onclick="location.href = '/SaveExaminerProfile';" class="btn btn-primary float-left">Complete Your Profile</button>
   <br><br>
   <% } %>
   </address>
   <hr>
- <h4>All Tests History <button type="button" onclick="location.href = '/TestCreate';" class="btn btn-primary float-md-right">Create Test</button>
+ <h4>All Tests History <button type="button" onclick="location.href = '/TestCreate';" class="btn btn-primary float-right">Create Test</button>
     </h4> 
     <br>
     
@@ -83,9 +83,9 @@
       Average score :
 		<br>
       
-      <% if(data1[i].Date>date_1) { %><button type="submit" class="btn btn-primary float-sm-right ">Add Questions</button><% } else { %>
-	  <button type="button" class="btn btn-primary float-sm-right">View Results</button><% } %>
-	  <button type="button" class="btn btn-primary float-sm-right mr-1">Edit Test</button>
+      <% if(data1[i].Date>date_1) { %><button type="submit" class="btn btn-primary float-right ">Add Questions</button><% } else { %>
+	  <button type="button" class="btn btn-primary float-right">View Results</button><% } %>
+	  <button type="button" class="btn btn-primary float-right mr-1">Edit Test</button>
     </div>
 	
   </div>

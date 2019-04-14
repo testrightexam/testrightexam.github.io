@@ -183,6 +183,10 @@ app.get('/StudentDashboard',(req,res)=>{
 			const collection = db.collection('Students');
 			collection.findOne({"Email": email},function(err,docs){
 				data=docs;
+				req.session.user = docs;
+				req.session.user.type = "Student";
+				
+				
 				var data2=[]; //data to pass the actual test data
 				//var data3=[]; //data to pass the boolean if test can start
 				var i=0;
@@ -434,7 +438,8 @@ app.post('/RegisterTest',(req,res)=>{
 							{$push:{
 								RegisteredTests:
 								{
-									test_id:req.param('examid',null)
+									test_id:req.param('examid',null),
+									status:"NotAttempted"
 								}
 							}}
 						, function(err, result){

@@ -141,6 +141,25 @@ app.get('/AddQuestions',checkFaculty,(req,res)=>{
 
 });
 
+function canBeginTest(testdate, testtime, testdur){
+    var date = new Date();
+	var curtime = date.getTime();
+	console.log("Current time: "+curtime+" "+date.getFullYear()+" "+date.getMonth()+" "+date.getDate()+" "+date.getHours()+" "+date.getMinutes())
+	var tdate = testdate.toString().split('-');
+	var ttime = testtime.toString().split(':');
+	//console.log(tdate[0]+" "+tdate[1]+" "+tdate[2]);
+	//console.log(ttime[0]+" "+ttime[1]);
+	var teststarttime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1])).getTime();
+	console.log("Test Start Time "+teststarttime)
+	var testendtime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1]+testdur)).getTime();
+	console.log("Test End Time "+testendtime)
+	if(curtime >= teststarttime && curtime < testendtime){
+		return true;
+	}
+	return false;
+}
+
+
 app.get('/StudentDashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
@@ -164,7 +183,8 @@ app.get('/StudentDashboard',(req,res)=>{
 			const collection = db.collection('Students');
 			collection.findOne({"Email": email},function(err,docs){
 				data=docs;
-				var data2=[];
+				var data2=[]; //data to pass the actual test data
+				//var data3=[]; //data to pass the boolean if test can start
 				var i=0;
 				console.log(data);
 				var j=0;
@@ -176,12 +196,26 @@ app.get('/StudentDashboard',(req,res)=>{
 					db.collection('tests').findOne({t_id: data.RegisteredTests[i].test_id},
 					function(err,docs)
 					{
+						var canStartTest = canBeginTest(docs.Date, docs.Time, docs.Duration);
 						delete docs.questions;
-						data2[j++]=docs
+						docs.canBegin = canStartTest;
+						console.log(docs.t_id+" "+canStartTest);
+						data2[j++]=docs;
 						console.log(data2[j-1]);
 						console.log(j);
 						if(j==(data.RegisteredTests.length))
 						{
+							data2.sort(function(a, b){
+								aFinal = 0;
+								bFinal = 0;
+								aDate = a.Date.toString().split('-');
+								aTime = a.Time.toString().split(':');
+								bDate = b.Date.toString().split('-');
+								bTime = b.Time.toString().split(':');
+								aFinal = (new Date(aDate[0], aDate[1], aDate[2], aTime[0], aTime[1]));
+								bFinal = (new Date(bDate[0], bDate[1], bDate[2], bTime[0], bTime[1]));
+								return bFinal - aFinal;
+							});
 							res.render('StudentDashboard',{data,data2,date_1});	
 						}
 						else
@@ -285,17 +319,31 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 		const db = client.db(dbName);
 		const collection = db.collection('Examiners');
-		collection.insertOne(
+		collection.find({Name: req.param('ExmUsrName', null),Email : req.param('ExmUsrEmail', null)}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
 			{
-				Name: req.param('ExmUsrName', null),
-				Email : req.param('ExmUsrEmail', null),
-				Password : req.param('ExmUsrPass', null),
-				/*EmailId : req.param('TxtEmailId', null),
-				Password : req.param('TxtPassword', null)*/
-			},function(err,result){
+				console.log("iffff");
+				collection.insertOne(
+				{
+					Name: req.param('ExmUsrName', null),
+					Email : req.param('ExmUsrEmail', null),
+					Password : req.param('ExmUsrPass', null),
+					/*EmailId : req.param('TxtEmailId', null),
+					Password : req.param('TxtPassword', null)*/
+				},function(err,result){
 
-				res.redirect('/login');
+					res.redirect('/login');
+				});
+			}	
+			else
+			{
+				res.render('register');
+			}
 		});
+		
 
 
 	});
@@ -425,14 +473,20 @@ app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
 app.post('/RegisterTest',(req,res)=>{
 	console.log("Registering Test id...");
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		
+		console.log("inside register test");
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
 		var mongo = require('mongodb');
 		var id=new mongo.ObjectID(req.session.user._id);
 		console.log(req.session.user._id);
-		
-		collection.updateOne(
+		collection.find({_id:id,RegisteredTests:{test_id:req.param('examid',null)}}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
+			{
+				console.log("iffff");
+				collection.updateOne(
 							{_id: id},
 							{$push:{
 								RegisteredTests:
@@ -442,11 +496,15 @@ app.post('/RegisterTest',(req,res)=>{
 							}}
 						, function(err, result){
 							if(err)	throw error;
+							res.redirect('/StudentDashboard');
 						});
-		
-		
-		
-		res.redirect('/StudentDashboard');
+			}
+			else
+			{
+				res.redirect('/StudentDashboard');
+			}
+		});
+		//res.redirect('/StudentDashboard');
 	});
 
 });
@@ -788,15 +846,29 @@ app.post('/RegisterStudent',(req,res)=>{
 
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
-		collection.insertOne(
+		collection.find({Name: req.param('StdUsrName', null),Email : req.param('StdUsrEmail', null)}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
 			{
-				Name: req.param('StdUsrName', null),
-				Email : req.param('StdUsrEmail', null),
-				Password : req.param('StdUsrPass', null),
+				console.log("iffff");
+				collection.insertOne(
+				{
+					Name: req.param('StdUsrName', null),
+					Email : req.param('StdUsrEmail', null),
+					Password : req.param('StdUsrPass', null),
 
-			},function(err,result){
-				res.redirect('/StudentDashboard');
+				},function(err,result){
+					res.redirect('/StudentDashboard');
+				});
+			}	
+			else
+			{
+				res.render('register');
+			}
 		});
+		
 
 
 	});

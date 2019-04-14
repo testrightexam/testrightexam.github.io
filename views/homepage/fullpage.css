@@ -112,7 +112,7 @@ html.fp-enabled,
     margin: 0 auto !important;
 }
 .fp-slidesNav.fp-bottom {
-    bottom: 280px;
+    bottom: 45%;
 }
 .section #hot .fp-slidesNav.fp-bottom {
     bottom: 0px;

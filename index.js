@@ -423,7 +423,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				function(err,docs){}
 				);
 				
-				var counter=0;
+				var counter=0,corr_counter=0;
 				for(var i=0; i<result.questions.length; i++)
 				{
 					for(var j=0; j<result.questions.length; j++)
@@ -432,7 +432,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 						{
 							//console.log(result.questions[j].question.value);
 							//console.log(Questions[i]);
-							var Correct=null,Answer=null,Student_Answer=null;
+							var Correct=null,Answer=null,Student_Answer="Not Attempted";
 							var Question_main=Questions[i];
 							
 							
@@ -441,6 +441,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 								if(result.questions[j].question.options.A.correct=="on")
 								{
 									correct=true;
+									corr_counter++;
 									Answer=result.questions[j].question.options.A.value;
 									Student_Answer=result.questions[j].question.options.A.value;
 								}
@@ -455,6 +456,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 								if(result.questions[j].question.options.B.correct=="on")
 								{
 									correct=true;
+									corr_counter++;
 									Answer=result.questions[j].question.options.B.value;
 									Student_Answer=result.questions[j].question.options.B.value;
 								}
@@ -469,6 +471,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 								if(result.questions[j].question.options.C.correct=="on")
 								{
 									correct=true;
+									corr_counter++;
 									Answer=result.questions[j].question.options.C.value;
 									Student_Answer=result.questions[j].question.options.C.value;
 								}
@@ -483,6 +486,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 								if(result.questions[j].question.options.D.correct=="on")
 								{
 									correct=true;
+									corr_counter++;
 									Answer=result.questions[j].question.options.D.value;
 									Student_Answer=result.questions[j].question.options.D.value;
 								}
@@ -549,16 +553,19 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				
 				
 				var AttemptedQuestion=result.questions.length-counter;
+				var percentage=(corr_counter/result.questions.length)*100;
 				
 				db.collection('Results').updateOne(
 				{
 					Student_Email: req.session.user.Email,
 					Test_id: TestID
 					
+					
 				},
 				
 				{$set:{
-					Attempted:AttemptedQuestion
+					Attempted:AttemptedQuestion,
+					Percentage:percentage
 				}},
 				
 				function(err,docs){}

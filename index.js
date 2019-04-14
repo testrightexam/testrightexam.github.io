@@ -249,6 +249,24 @@ app.get('/StudentDashboard',(req,res)=>{
 	}
 });
 
+function compare_date(testdate, testtime, testdur){
+    var date = new Date();
+	var curtime = date.getTime();
+	console.log("Current time: "+curtime+" "+date.getFullYear()+" "+date.getMonth()+" "+date.getDate()+" "+date.getHours()+" "+date.getMinutes())
+	var tdate = testdate.toString().split('-');
+	var ttime = testtime.toString().split(':');
+	//console.log(tdate[0]+" "+tdate[1]+" "+tdate[2]);
+	//console.log(ttime[0]+" "+ttime[1]);
+	var teststarttime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1])).getTime();
+	console.log("Test Start Time "+teststarttime)
+	var testendtime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1]+testdur)).getTime();
+	console.log("Test End Time "+testendtime)
+	if(curtime >= teststarttime && curtime < testendtime){
+		return true;
+	}
+	return false;
+}
+
 app.get('/Dashboard',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
@@ -256,19 +274,11 @@ app.get('/Dashboard',(req,res)=>{
 		res.clearCookie("id");
 		const db = client.db(dbName);
 		var email=req.session.user.Email;
+		
 			var data=[];
 			console.log(email);
-				var d = new Date(),
-					month = '' + (d.getMonth() + 1),
-					day = '' + d.getDate(),
-					year = d.getFullYear();
-			
-				if (month.length < 2) month = '0' + month;
-				if (day.length < 2) day = '0' + day;
-			
-				var date_1=[year, month, day].join('-');
-				console.log(date_1);
-			
+				var d = new Date();
+				var date_1=d.getTime();
 			db.collection('Examiners').findOne({Email: req.session.user.Email},
 				function(err,docs)
 				{
@@ -281,6 +291,7 @@ app.get('/Dashboard',(req,res)=>{
 				{
 					//console.log(docs);
 					res.render('dashboard',{data,data1:docs,date_1});
+
 					console.log(data);
 				});
 				
@@ -390,7 +401,53 @@ app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 
 });
 
+app.get('/EditExaminerProfile',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
+		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+			console.log("Edit Profile of Examiner...");
+			const db = client.db(dbName);
+			const collection = db.collection('Examiners');
+			var mongo = require('mongodb');
+			var id=new mongo.ObjectID(req.session.user._id);
+			console.log(req.session.user._id);
+			collection.findOne({_id:id},
+				function(err,docs)
+				{
+					console.log(docs);
+					res.render('EditExaminerProfile',{data:docs});
+				});
+		});
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
 
+app.post('/EditExaminerProfile',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Edit Profile of Examiner...");
+		const db = client.db(dbName);
+		const collection = db.collection('Examiners');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.session.user._id);
+		console.log(req.session.user._id);
+		collection.updateOne(
+				{_id: id},
+				{$set:{
+					InstituteName: req.param('InstName', null),
+					InstituteType: req.param('insttype', null),
+					InstituteAddress: req.param('Address', null),
+					InstituteCountry: req.param('conttype', null),
+					ExaminerContact: req.param('Contact',null)
+				}}
+			, function(err, result){
+				if(err)	throw error;
+			});
+		res.redirect('/Dashboard');
+	});
+
+});
 app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Edit Profile of Student...");
@@ -488,6 +545,66 @@ app.get('/AddEditQuestions',(req,res)=>{
 		 res.redirect('/Dashboard');
 	}
 
+
+});
+
+app.post('/EditTestRedirect',(req,res)=>{
+	res.cookie("id",req.param('test_id',null));
+	console.log(req.param('test_id',null));
+	res.redirect('/EditTestDetails');
+});
+
+
+app.get('/EditTestDetails',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
+		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Inside Display Test Details \n Editing Data to :- \n");
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.cookies["id"]);
+		collection.findOne({_id:id},
+			function(err,docs)
+			{
+				console.log(docs);
+				res.render('Edit_TestDetails',{docs});
+			});
+		client.close();
+		
+	});
+
+	}
+	else
+	{
+		 res.redirect('/Dashboard');
+	}
+
+
+});
+
+app.post('/EditTestDetails',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Edit Test Details...");
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.cookies["id"]);
+		collection.updateOne(
+				{_id: id},
+				{$set:{
+					Test_title: req.param('TestTitle', null),
+					Subject: req.param('TestSubject', null),
+					Date: req.param('TestDate', null),
+					Time: req.param('TestTime', null),
+					Duration: req.param('TestDuration',null),
+					tags: req.param('TestTags',null),
+					private: req.param('TestType',null)
+				}}
+			, function(err, result){
+				if(err)	throw error;
+			});
+		res.redirect('/Dashboard');
+	});
 
 });
 

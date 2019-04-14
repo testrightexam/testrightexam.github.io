@@ -51,7 +51,9 @@
 
   <h2>Dashboard</h2>
   <hr>
-
+  <button type="button" onclick="location.href = '/EditExaminerProfile';"  class="btn btn-primary float-right">
+    <span>&#x270f;</span>
+  </button>
   <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
 	<address>
  <% if(data.InstituteName) { %>
@@ -70,22 +72,37 @@
     <br>
     
 	  
-      <% var date=new Date(); for(var i=0; i<data1.length; i++) { if(data1[i].Date>date_1){%>
-	  <form action="/AddQuestionRedirect" method="post">
+      <% var date=new Date(); for(var i=data1.length-1; i>=0; i--) { 
+        var t_date=data1[i].Date;
+        var t_time=data1[i].Time;
+        console.log(t_date);
+        console.log(t_time);
+        var tdate = t_date.toString().split('-');
+        var ttime = t_time.toString().split(':');
+        console.log(tdate[0]+" "+tdate[1]+" "+tdate[2]);
+        console.log(ttime[0]+" "+ttime[1]);
+        var final_date = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1])).getTime();
+        console.log(final_date);
+         if(final_date>=date_1){%>
+	  <form method="post">
           <div class="card list-group-item-primary text-dark">
           <% } else { %>
           <div class="card bg-dark text-white">
           <% } %>
     <div class="card-body"><h4><%= data1[i].Test_title %></h4>
-	<input type="text" value="<%= data1[i]._id %>" name="test_id" style="display:none"/>
+  <input type="text" value="<%= data1[i]._id %>" name="test_id" style="display:none"/>
+  <input type="text" value="<%= data1[i].Date %>" name="test_date" style="display:none"/>
+  <input type="text" value="<%= data1[i].Time %>" name="test_time" style="display:none"/>
       <b >TestID :- <%= data1[i].t_id %></b> <br>
       Date : <%= data1[i].Date %><br>
       Average score :
 		<br>
       
-      <% if(data1[i].Date>date_1) { %><button type="submit" class="btn btn-primary float-right ">Add Questions</button><% } else { %>
-	  <button type="button" class="btn btn-primary float-right">View Results</button><% } %>
-	  <button type="button" class="btn btn-primary float-right mr-1">Edit Test</button>
+      <% if(final_date>=date_1) { %>
+        
+        <button type="submit" formaction="AddQuestionRedirect" class="btn btn-primary float-sm-right ">Add Questions</button>
+        <button type="submit" formaction="EditTestRedirect" class="btn btn-primary float-sm-right mr-1">Edit Test</button><% } else { %>
+	  <button type="submit" class="btn btn-primary float-sm-right">View Results</button><% } %>
     </div>
 	
   </div>

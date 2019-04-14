@@ -26,7 +26,7 @@ app.use(session({
     resave: false,
     saveUninitialized: false,
     cookie: {
-        expires: 600000
+        expires: 3600000
     }
 }));
 
@@ -392,6 +392,185 @@ app.get('/SaveStudentProfile',checkStudent,(req,res)=>{
 		 res.redirect('/login');
 	}
 });
+
+
+app.post('/SubmitTest',checkStudent,(req,res)=>{
+	
+	//Our Data :- req.body questions results TestID
+	var TestID=req.body.TestID;
+	var Questions=req.body.questions;
+	var Answers=req.body.results;
+	
+	console.log(TestID);
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Submiting Test..");
+		const db = client.db(dbName);
+		const collection = db.collection('tests');
+		collection.findOne(
+				{t_id: TestID}
+				,function(err, result){
+				if(err)	throw error;
+				
+				
+				db.collection('Results').insertOne(
+				
+				{
+					Student_Email: req.session.user.Email,
+					Test_id: TestID
+					
+				},
+				
+				function(err,docs){}
+				);
+				
+				var counter=0;
+				for(var i=0; i<result.questions.length; i++)
+				{
+					for(var j=0; j<result.questions.length; j++)
+					{
+						if(result.questions[j].question.value==Questions[i])
+						{
+							//console.log(result.questions[j].question.value);
+							//console.log(Questions[i]);
+							var Correct=null,Answer=null,Student_Answer=null;
+							var Question_main=Questions[i];
+							
+							
+							if(Answers[i]==1)
+							{
+								if(result.questions[j].question.options.A.correct=="on")
+								{
+									correct=true;
+									Answer=result.questions[j].question.options.A.value;
+									Student_Answer=result.questions[j].question.options.A.value;
+								}
+								else
+								{
+									correct=false;
+									Student_Answer=result.questions[j].question.options.A.value;
+								}
+							}
+							else if(Answers[i]==2)
+							{
+								if(result.questions[j].question.options.B.correct=="on")
+								{
+									correct=true;
+									Answer=result.questions[j].question.options.B.value;
+									Student_Answer=result.questions[j].question.options.B.value;
+								}
+								else
+								{
+									correct=false;
+									Student_Answer=result.questions[j].question.options.B.value;
+								}
+							}
+							else if(Answers[i]==3)
+							{
+								if(result.questions[j].question.options.C.correct=="on")
+								{
+									correct=true;
+									Answer=result.questions[j].question.options.C.value;
+									Student_Answer=result.questions[j].question.options.C.value;
+								}
+								else
+								{
+									correct=false;
+									Student_Answer=result.questions[j].question.options.C.value;
+								}
+							}
+							else if(Answers[i]==4)
+							{
+								if(result.questions[j].question.options.D.correct=="on")
+								{
+									correct=true;
+									Answer=result.questions[j].question.options.D.value;
+									Student_Answer=result.questions[j].question.options.D.value;
+								}
+								else
+								{
+									correct=false;
+									Student_Answer=result.questions[j].question.options.D.value;
+								}
+							}
+							else
+							{
+								correct=false;
+								counter++;
+							}
+							
+							if(correct==false)
+							{
+								if(result.questions[j].question.options.A.correct=="on")
+								{
+									Answer=result.questions[j].question.options.A.value;
+								}
+								else if(result.questions[j].question.options.B.correct=="on")
+								{
+									Answer=result.questions[j].question.options.B.value;
+								}
+								else if(result.questions[j].question.options.C.correct=="on")
+								{
+									Answer=result.questions[j].question.options.C.value;
+								}
+								else if(result.questions[j].question.options.D.correct=="on")
+								{
+									Answer=result.questions[j].question.options.D.value;
+								}
+								else
+								{
+									Answer="Nothing!"
+								}
+							}
+							
+							
+							db.collection('Results').updateOne(
+							{
+								Student_Email: req.session.user.Email,
+								Test_id: TestID
+								
+							},
+							
+							{$push:{
+								Result:
+								{
+									question:Question_main,
+									StudentAnswer: Student_Answer,
+									ActualAnswer: Answer,
+									Correct:correct
+								}
+							}},
+							
+							function(err,docs){}
+							);
+							
+						}
+					}
+				}
+				
+				
+				var AttemptedQuestion=result.questions.length-counter;
+				
+				db.collection('Results').updateOne(
+				{
+					Student_Email: req.session.user.Email,
+					Test_id: TestID
+					
+				},
+				
+				{$set:{
+					Attempted:AttemptedQuestion
+				}},
+				
+				function(err,docs){}
+				);
+				
+				res.send("Done");
+			});
+		
+	});
+
+});
+
 
 app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){

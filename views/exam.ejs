@@ -7,17 +7,20 @@
         var flag = false;
         var data = <%- JSON.stringify(data) %>;
         var Question_state = [];
-        var results = [];
+        var results = {};
+		var questions = {};
         var currentQuestion = -1;
-        for(let i = 0; i < data.Questions.length;i++)
+        for(var i = 0; i < data.Questions.length;i++)
         {
             Question_state.push(0);
-            results.push(0);
+            results[i]=0;
+			questions[i]=data.Questions[i].question.value;	
         }
         function recordResults(numer)
         {
             let  x = currentQuestion;
             console.log(x);
+			
             if(document.getElementById(`${x}_option1`).checked)results[x]=1;
             if(document.getElementById(`${x}_option2`).checked)results[x]=2;
             if(data.Questions[x].question.type === 'o4')
@@ -31,11 +34,14 @@
         function displayQuestion(number)
         {
             if(currentQuestion != -1)recordResults();
+			
             document.getElementById('QCard').innerHTML = getQcard(number);
             currentQuestion = number;
             Question_state[number] = 1;
+				
             SetColors();
-			if(results[number]!=null)
+			
+			if(results[number]!=0)
 			{
 				document.getElementById(number+"_option"+results[number]).checked = true;
 			}
@@ -89,28 +95,28 @@
             document.getElementById("ButtonBox").appendChild(col1);
             document.getElementById("ButtonBox").appendChild(col2);
             document.getElementById("ButtonBox").appendChild(col3);
-
+			
 
         }
 
+		function submit()
+		{
 
+			  console.log(data.info.t_id);
+			$.post('/SubmitTest',{questions,results,TestID:data.info.t_id},function(data,status){
+					
+					if(data=="Done")
+						window.open('/StudentDashboard', '_self');
+			}
+			);
+			
+			res.send("Done");
+			
+		}
+		
     </script>
     <!--Navigation bar-->
-  <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
-    <a class="navbar-brand" href="/"><img
-        src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png"
-        height="50px;" /></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/logout">Logout</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  
     <title>TestRight Exam</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -125,10 +131,28 @@
 
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 </head>
 
 <body onload="getButtons();displayQuestion(0)">
+
+
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
+    <a class="navbar-brand" href="/"><img
+        src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png"
+        height="50px;" /></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
 <div class="container" style="margin-top:4vh">
     <div class="row">
@@ -154,7 +178,7 @@
                         <div class="row" id="ButtonBox">
 
                         </div>
-                        <button class="btn btn-danger">Submit Test</button>
+                        <button  onclick="submit()" class="btn btn-danger">Submit Test</button>
                     </div>
                 </div>
             </div>
@@ -177,8 +201,8 @@
                     <label for="QuestionNumber" id="questionnumber">
                         <h3>Q${number+1}.</h3>
                     </label>
-                    <label for="Question" id="questiontext">
-                        <h4>${data.Questions[number].question.value}</h4>
+                    <label for="Question" >
+                        <h4 id="questiontext${number+1}">${data.Questions[number].question.value}</h4>
                     </label>
                 </div>
                 <div class="container">
@@ -186,21 +210,21 @@
                         <div class="col">
                             <div class="radio" style="padding:2vh" >
                                 <label>
-                                    <input type="radio" name="options${number}" id="${number}_option1" > ${data.Questions[number].question.options.A.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option1" onchange="recordResults()"> ${data.Questions[number].question.options.A.value} </label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options${number}" id="${number}_option2" > ${data.Questions[number].question.options.B.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option2" onchange="recordResults()" > ${data.Questions[number].question.options.B.value} </label>
                             </div>
                         </div>
                         <div class="col">
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options${number}" id="${number}_option3"> ${data.Questions[number].question.options.C.value}</label>
+                                    <input type="radio" name="options${number}" id="${number}_option3" onchange="recordResults()"> ${data.Questions[number].question.options.C.value}</label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options${number}" id="${number}_option4"> ${data.Questions[number].question.options.D.value}</label>
+                                    <input type="radio" name="options${number}" id="${number}_option4" onchange="recordResults()"> ${data.Questions[number].question.options.D.value}</label>
                             </div>
                         </div>
                     </div>
@@ -214,8 +238,8 @@
                     <label for="QuestionNumber" id="questionnumber">
                         <h3>Q${number+1}.</h3>
                     </label>
-                    <label for="Question" id="questiontext">
-                        <h4>${data.Questions[number].question.value}</h4>
+                    <label for="Question" >
+                        <h4 id="questiontext${number+1}">${data.Questions[number].question.value}</h4>
                     </label>
                 </div>
                 <div class="container">
@@ -223,11 +247,11 @@
                         <div class="col">
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio"  name="options${number}" id="${number}_option1"> ${data.Questions[number].question.options.A.value} </label>
+                                    <input type="radio"   name="options${number}" id="${number}_option1" onchange="recordResults()"> ${data.Questions[number].question.options.A.value} </label>
                             </div>
                             <div class="radio" style="padding:2vh">
                                 <label>
-                                    <input type="radio" name="options${number}" id="${number}_option2"> ${data.Questions[number].question.options.B.value} </label>
+                                    <input type="radio" name="options${number}" id="${number}_option2" onchange="recordResults()"> ${data.Questions[number].question.options.B.value} </label>
                             </div>
                         </div>
 					</div>
@@ -287,6 +311,8 @@
 </script>
 
 <script>
+
+
 
 </script>
 

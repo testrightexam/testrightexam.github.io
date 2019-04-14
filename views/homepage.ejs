@@ -2,9 +2,11 @@
 <html xmlns="https://www.w3.org/1999/xhtml">
 <head>
 <!--Orignal-->
-	<link rel="icon" sizes="192x192" href="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/icon.png">
+	<link rel="icon" sizes="192x192" href="icon.png">
     <meta http-equiv="Content-Type" content="text/html, charset=utf-8" />
 	<meta name="viewport"  content=" width=device-width initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+	<link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
 
     <title>Home Page</title>
     <meta name="author" content="Pratibha Hotwani" />
@@ -564,6 +566,19 @@ $(document).ready(function(){
 		   event.preventDefault();
 	       }
 	});
+	
+	if ('serviceWorker' in navigator) {
+		console.log("Will the service worker register?");
+		navigator.serviceWorker.register('service-worker.js')
+		  .then(function(reg){
+			console.log("Yes, it did.");
+		 }).catch(function(err) {
+			console.log("No it didn't. This happened:", err)
+		});
+		self.addEventListener('fetch', function(event) {});
+		
+	}
+	
 });
 </script>
 </html>

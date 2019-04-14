@@ -112,7 +112,10 @@ html.fp-enabled,
     margin: 0 auto !important;
 }
 .fp-slidesNav.fp-bottom {
-    bottom: 17px;
+    bottom: 280px;
+}
+.section #hot .fp-slidesNav.fp-bottom {
+    bottom: 0px;
 }
 .fp-slidesNav.fp-top {
     top: 17px;
@@ -152,7 +155,7 @@ html.fp-enabled,
     margin: -6px 0 0 -6px;
     border-radius: 100%;
  }
-#fp-nav ul li a span,
+
 .fp-slidesNav ul li a span {
     border-radius: 50%;
     position: absolute;
@@ -160,7 +163,7 @@ html.fp-enabled,
     height: 4px;
     width: 4px;
     border: 0;
-    background: transparent;
+    background: #077bff;
     left: 50%;
     top: 50%;
     margin: -2px 0 0 -2px;

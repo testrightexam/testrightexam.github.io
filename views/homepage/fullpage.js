@@ -109,7 +109,8 @@
 
             //scrolling
             css3: true,
-            scrollingSpeed: 700,
+            scrollingSpeed: 800,
+            autoScrolling: true,
             autoScrolling: true,
             fitToSection: true,
             fitToSectionDelay: 5000,

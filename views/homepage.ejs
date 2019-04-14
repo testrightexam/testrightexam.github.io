@@ -110,7 +110,6 @@ font-size:20px;
 {
 	display:none;
 }
-
 .reviews .mains
 {
 	font-family: 'East Sea Dokdo', cursive;
@@ -155,14 +154,29 @@ font-size:20px;
 
 .footerstick
 {
-	
 	font-family: 'Open Sans', sans-serif;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
 	font-family: 'Catamaran', sans-serif;
-		font-size: 18px;
+	font-size: 18px;
 	color:white;
+}
+.section1 .fp-slidesNav ul li a span {
+    border-radius: 50%;
+    position: absolute;
+    z-index: 1;
+    height: 4px;
+    width: 4px;
+    border: 0;
+    background:transparent;
+    left: 50%;
+    top: 50%;
+    margin: -2px 0 0 -2px;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -o-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 .footeralt
 {
@@ -170,7 +184,6 @@ font-size:20px;
 }
 @media screen and (max-width:450px)
 {
-
 #altre
 {
 	display: none;
@@ -291,6 +304,18 @@ font-size:20px;
 	justify-content: center;
 	font-size: 10px;
 }
+.twoalt .fp-controlArrow.fp-prev {
+    left: 15px;
+    width: 0;
+    border-width: 15.5px 34px 15.5px 0;
+    border-color: transparent #007bff transparent transparent;
+}
+.twoalt .fp-controlArrow.fp-next {
+    right: 15px;
+    border-width: 15.5px 0 15.5px 34px;
+    border-color: transparent transparent transparent #007bff;
+}
+
 }
 @import url('https://fonts.googleapis.com/css?family=East+Sea+Dokdo');
 @import url('https://fonts.googleapis.com/css?family=Catamaran');
@@ -317,7 +342,7 @@ font-size:20px;
       </nav>
 </div>
 <div id="fullpage">
-<div class="section"style="background: linear-gradient(to top,white 55%,#007bff 5% )";>
+<div class="section" style="background: linear-gradient(to top,white 55%,#007bff 5% )";>
           <div class="col-md-12">
 		  <img src="logo_final_v1_backgroundless.png" class="imgone"/>
 		  </div>
@@ -333,7 +358,8 @@ font-size:20px;
 		</div>
 		</center>
 </div>
-<div class="section" >
+<div class="section section1">
+	
 	<!--Mobile Second-->
 	<div class="twoalt">
 				<div class="slide" style="background: linear-gradient(to top,white 58%,#007bff 40% );">
@@ -423,8 +449,10 @@ font-size:20px;
 		</div>
 	</div>
 	</div>
+	
 </div>	
-<div class="section" style="background: linear-gradient(to bottom,white 60%,#007bff 40% );">
+<div class="section"  style="background: linear-gradient(to bottom,white 60%,#007bff 40% );">
+
 <div class="h-50">
 <div class="reviews slide">
 		<center>
@@ -442,6 +470,21 @@ font-size:20px;
 		
 </div>
 <div class="reviews slide">
+	<center>
+		<div class="col-md-8" >
+		<p class="mains" style="text-align: center;">
+			"Test Right provides me with the insights I need for all my social channels to build robust monthly reports and optimize my social marketing."
+		</p>
+		<img src="https://tanwanimohit.github.io/bitly/review.png"/>
+		<br/>
+		<p class="name"> Joshua	Karpf</p>
+		<p class="pos">Global Director, Social Marketing, Spotify</p>
+		
+		</div>
+	</center>
+	
+</div>
+<div class="reviews slide">
 				<center>
 		<div class="col-md-8">
 			<p class="mains" style="text-align: center;" >
@@ -456,21 +499,7 @@ font-size:20px;
 		</div>
 		</center>
 </div>
-<div class="reviews slide" >
-				<center>
-			<div class="col-md-8">
-            <p class="mains" style="text-align: center;">
-                "Test Right provides me with the insights I need for all my social channels to build robust monthly reports and optimize my social marketing."
-            </p>
-            <img src="https://tanwanimohit.github.io/bitly/review.png"/>
-            <br/>
-            <p class="name"> Joshua	Karpf</p>
-			<p class="pos">Global Director, Social Marketing, Spotify</p>
-			
-			</div>
-		</center>
-		
-</div>
+
 </div>
 <div class="footerorig col-lg-12 mt-5 mb-5 ">
 						<div class="footerstick h-25">
@@ -516,6 +545,7 @@ font-size:20px;
 		
 </div>
 </div>
+
 
 </body>
 <script>

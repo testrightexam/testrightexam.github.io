@@ -308,17 +308,31 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 		const db = client.db(dbName);
 		const collection = db.collection('Examiners');
-		collection.insertOne(
+		collection.find({Name: req.param('ExmUsrName', null),Email : req.param('ExmUsrEmail', null)}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
 			{
-				Name: req.param('ExmUsrName', null),
-				Email : req.param('ExmUsrEmail', null),
-				Password : req.param('ExmUsrPass', null),
-				/*EmailId : req.param('TxtEmailId', null),
-				Password : req.param('TxtPassword', null)*/
-			},function(err,result){
+				console.log("iffff");
+				collection.insertOne(
+				{
+					Name: req.param('ExmUsrName', null),
+					Email : req.param('ExmUsrEmail', null),
+					Password : req.param('ExmUsrPass', null),
+					/*EmailId : req.param('TxtEmailId', null),
+					Password : req.param('TxtPassword', null)*/
+				},function(err,result){
 
-				res.redirect('/login');
+					res.redirect('/login');
+				});
+			}	
+			else
+			{
+				res.render('register');
+			}
 		});
+		
 
 
 	});
@@ -402,14 +416,20 @@ app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
 app.post('/RegisterTest',(req,res)=>{
 	console.log("Registering Test id...");
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
-		
+		console.log("inside register test");
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
 		var mongo = require('mongodb');
 		var id=new mongo.ObjectID(req.session.user._id);
 		console.log(req.session.user._id);
-		
-		collection.updateOne(
+		collection.find({_id:id,RegisteredTests:{test_id:req.param('examid',null)}}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
+			{
+				console.log("iffff");
+				collection.updateOne(
 							{_id: id},
 							{$push:{
 								RegisteredTests:
@@ -419,11 +439,15 @@ app.post('/RegisterTest',(req,res)=>{
 							}}
 						, function(err, result){
 							if(err)	throw error;
+							res.redirect('/StudentDashboard');
 						});
-		
-		
-		
-		res.redirect('/StudentDashboard');
+			}
+			else
+			{
+				res.redirect('/StudentDashboard');
+			}
+		});
+		//res.redirect('/StudentDashboard');
 	});
 
 });
@@ -705,15 +729,29 @@ app.post('/RegisterStudent',(req,res)=>{
 
 		const db = client.db(dbName);
 		const collection = db.collection('Students');
-		collection.insertOne(
+		collection.find({Name: req.param('StdUsrName', null),Email : req.param('StdUsrEmail', null)}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
 			{
-				Name: req.param('StdUsrName', null),
-				Email : req.param('StdUsrEmail', null),
-				Password : req.param('StdUsrPass', null),
+				console.log("iffff");
+				collection.insertOne(
+				{
+					Name: req.param('StdUsrName', null),
+					Email : req.param('StdUsrEmail', null),
+					Password : req.param('StdUsrPass', null),
 
-			},function(err,result){
-				res.redirect('/StudentDashboard');
+				},function(err,result){
+					res.redirect('/StudentDashboard');
+				});
+			}	
+			else
+			{
+				res.render('register');
+			}
 		});
+		
 
 
 	});

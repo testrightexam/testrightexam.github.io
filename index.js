@@ -847,7 +847,15 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
                 Questions : Q_list
             };
             //console.log(ExamData);
-
+			var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
+			while (0 !== currentIndex) 
+			{
+				randomIndex = Math.floor(Math.random() * currentIndex);
+				currentIndex -= 1;
+				temporaryValue = ExamData.Questions[currentIndex];
+				ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
+				ExamData.Questions[randomIndex] = temporaryValue;
+			}
             res.render('exam',{data:ExamData})
         });
     });

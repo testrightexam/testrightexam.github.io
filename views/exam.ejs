@@ -2,6 +2,7 @@
 <html>
 
 <head>
+<link rel="icon" sizes="192x192" href="icon.png">
     <script>
         var flag = false;
         var data = <%- JSON.stringify(data) %>;
@@ -110,7 +111,7 @@
       </ul>
     </div>
   </nav>
-    <title>TestRight</title>
+    <title>TestRight Exam</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="assets/css/style.css">
@@ -174,7 +175,7 @@
             card_content = `<div class="card-block" style="padding: 2vh">
                 <div class="card-title">
                     <label for="QuestionNumber" id="questionnumber">
-                        <h3>Q${number+1}</h3>
+                        <h3>Q${number+1}.</h3>
                     </label>
                     <label for="Question" id="questiontext">
                         <h4>${data.Questions[number].question.value}</h4>
@@ -211,7 +212,7 @@
             card_content = `<div class="card-block" style="padding: 2vh">
                 <div class="card-title">
                     <label for="QuestionNumber" id="questionnumber">
-                        <h3>Q${number+1}</h3>
+                        <h3>Q${number+1}.</h3>
                     </label>
                     <label for="Question" id="questiontext">
                         <h4>${data.Questions[number].question.value}</h4>
@@ -229,7 +230,8 @@
                                     <input type="radio" name="options${number}" id="${number}_option2"> ${data.Questions[number].question.options.B.value} </label>
                             </div>
                         </div>
-                </div>
+					</div>
+				</div>
                 `;
 
         }

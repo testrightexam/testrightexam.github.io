@@ -38,12 +38,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<!--Custom css -->
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+	
         <link rel="stylesheet" href="assets/css/style.css">
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
         <!--Font awesome icons-->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <!-- Popper JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
         <!-- Latest compiled JavaScript -->
@@ -153,27 +155,14 @@ font-size:20px;
 
 .footerstick
 {
-	position : relative;
-	margin-bottom: 0px;
-	background-color:transparent;
-	margin-top: 92px;
+	
 	font-family: 'Open Sans', sans-serif;
-
-}
-.footerstick p
-{
-	font-family: 'Open Sans', sans-serif;
-	font-size: 15px;
-}
-.footerimg img
-{
-	height : 50px;
-	width: 60px;
-	margin-left:20px;
-	margin-top : 5px;
-	border: 2px solid #007bff;
-	padding: 8px;
-	margin-right: 5px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	font-family: 'Catamaran', sans-serif;
+		font-size: 18px;
+	color:white;
 }
 .footeralt
 {
@@ -181,17 +170,7 @@ font-size:20px;
 }
 @media screen and (max-width:450px)
 {
-.footerimg
-{
-	height : 60px;
-	width: 60px;
-	margin-left:0px;
-	margin-top : 8px;
-	border: 0px solid red;
-	padding:8px;
-	
 
-}
 #altre
 {
 	display: none;
@@ -276,25 +255,45 @@ font-size:20px;
 }
 .footeralt
 {
-	font-family: 'Open Sans', sans-serif;
-	margin-bottom: 0px;
+	display : flex;
+	flex-direction:column;
+	font-family: 'Catamaran', sans-serif;	
+	color:white;
+	font-size:19px;
 	
 }
-.footerstickalt
+.mail
 {
-	margin-bottom: 0px;
-	
-	
+	display:flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;	
 }
-.footerstick
+.img
+{
+	display:flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: center;
+}
+.follow
 {
 	display:flex;
 	flex-direction: column;
+	justify-content: flex-start;
+	font-size: 20px;
+}
+.end
+{
+	display:flex;
+	flex-direction: column;
+	align-content: center;
 	justify-content: center;
+	font-size: 10px;
 }
 }
 @import url('https://fonts.googleapis.com/css?family=East+Sea+Dokdo');
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+@import url('https://fonts.googleapis.com/css?family=Catamaran');
 </style>
 </head>
 <body>
@@ -426,37 +425,7 @@ font-size:20px;
 	</div>
 </div>	
 <div class="section" style="background: linear-gradient(to bottom,white 60%,#007bff 40% );">
-	
-<!--<div id="altre">
-		<div class="row thirdfooter mt-5">
-			<div class="col-md-4 ">
-					<i class="fa fa-user fa-4x"></i>
-					<h4>Individuals</h4>
-					<p class="justify-content mt-2">
-						Individuals who are required to do assessments on small level in their classess can use our system.
-					</p>
-			</div>
-			<div class="col-md-4">
-					<i class="fa fa-graduation-cap fa-4x"></i>
-					<h4>Teachers</h4>
-					<p class="justify-content mt-2">
-						Teachers can make any kind of test and do assessments based on the features in our system. It makes the grading system easy.
-					</p>
-	
-			</div>
-			<div class="col-md-4">
-					<i class="fa fa-users fa-4x"></i>
-					<h4>Businesses</h4>
-					<p class="justify-content mt-2">
-						Companies who want their employess to give feedback or any such kind of evaluation needed can use our system.
-					</p>
-			</div>
-			
-		
-		</div>
-</div>-->
-<!--for desktop-->	
-<div class="h-50" style="margin-bottom: 0px;">
+<div class="h-50">
 <div class="reviews slide">
 		<center>
 			<div class="col-md-8" >
@@ -503,60 +472,49 @@ font-size:20px;
 		
 </div>
 </div>
-<div class="footerorig">
-		<div class="footerstick col-lg-12">
-				<div class="center">
-					
-								
-						<span style="font-size:20px;color:white"> Follow Us On </span>
-								<br/>
-						<img src="https://tanwanimohit.github.io/bitly/social1.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social2.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social3.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social4.png" width="32px" height="32px"/>
-						<br/>
-						<div style="margin-top: 12px;"><span style="font-size:30px;color:white; margin-top:00px; margin-right:5px;">
-							<i class="large material-icons">phone</i></span>  <span style="font-size:20px; color:white">1213456789 </span>
-							<span style="color:white; font-size:30px;margin-left:15px; margin-right:5px;"><i class="large material-icons">email</i> </span>
-							<span style="font-size:20px;color:white;">info@testright.com </span>
-							<span style="color:white; margin-right:5px; font-size:30px;margin-left:20px"><i class="large material-icons">map</i></span>
-							<span style="font-size:20px; color:white">Ahmedabad, Gujarat </span>
-							<br/>
-							<div style="margin-top:10px; font-size: 20px"><span style="font-size:20px; color:white;">&#169;</span><span style="color:white"> 2019 TestRight<span style="color:white">™</span></div>
+<div class="footerorig col-lg-12 mt-5 mb-5 ">
+						<div class="footerstick h-25">
+						<div style="justify-content:flex-start;" class="mt-4"> Follow Us On </div>
+						<div style="justify-content: flex-start;" class="mb-4">
+								<i class="fa fa-facebook-official fa-2x px-1" aria-hidden="true"></i>
+								<i class="fa fa-github fa-2x px-1" aria-hidden="true"></i>
+								<i class="fa fa-linkedin fa-2x px-1 " aria-hidden="true"></i>
+								<i class="fa fa-twitter fa-2x px-1 " aria-hidden="true"></i>
 						</div>
-						<br/>	
-						<br/>
-						
-						
-				
+						<div class="col-sm-12 mb-3 mt-3">
+							<i class="large material-icons px-2">phone</i> 1213456789 
+							<i class="large material-icons px-2">email</i> info@testright.com 
+							<i class="large material-icons px-2">map</i> Ahmedabad, Gujarat 							
+						</div>	
+						<div  style="max-height: 50%">
+								&#169; 2019 TRIANGLE CORPORATION™
+						</div>
+						</div>
+</div>
+<div style="height:10%"></div>
+<div class="footeralt col-lg-12" style="height:27.5%">
+				<div font-size="30px" ><i><u><b>Follow Us On</b></u></i></div>
+				<div class="img col-sm-12 " >
+					<i class="fa fa-facebook-square" width="32px" height="32px">&nbsp;</i>
+					<i class="fa fa-twitter-square" width="32px" height="32px">&nbsp;</i>
+					<i class="fa fa-linkedin-square" width="32px" height="32px">&nbsp;</i>
+					<i class="fa fa-instagram" width="32px" height="32px">&nbsp;</i>
+					<i class="fa fa-github-square" width="32px" height="32px">&nbsp;</i>
 				</div>
-		</div>
-</div>
-<div class="footeralt footerstickalt footerstick footerstick">
-		
-			<center>
-						<div style="font-size:20px; color:white; align-self: flex-start"  class="center"> Follow Us On </div>
-						
-						<div class="">
-						<img src="https://tanwanimohit.github.io/bitly/social1.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social2.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social3.png" width="32px" height="32px"/>
-						<img src="https://tanwanimohit.github.io/bitly/social4.png" width="32px" height="32px"/>
-						</div>
-						<br/>
-						<div  class="" style="align-self: center;font-size:20px;color:white;"><i class="large material-icons" style="font-size:20px;color:white; ">phone</i> | 
-						
-						 <span ><i class="large material-icons" style="font-size:20px;color:white; margin-right:6px;">email</i>| </span>
-						<span style="color:white; margin-right:5px; font-size:20px;"><i class="large material-icons" style="font-size:20px;color:white; ">map</i></span> 
-	
-						</div>
-						
-						<div class="" style="align-self: flex-end;color:white; font-size: 20px;"><span style="font-size:20px; color:white;">&#169</span> 2019 Triangle Corporation<span style="color:black">™</span></div>
-			</center>
-	
-		
-</div>
+				<br />
+				<div style="height: 30%;"></div>
+				<div class="col-sm-12 mail" >
+					<i class="fa fa-phone px-3"></i> |
+					<i class="fa fa-envelope px-3"></i>  |
+					<i class="fa fa-map px-3"></i>							
+				</div>	
+				<div style="height: 50%;"></div>
 
+				<div class="end">
+						&#169; 2019 TRIANGLE CORPORATION™
+				</div>
+		
+</div>
 </div>
 
 </body>

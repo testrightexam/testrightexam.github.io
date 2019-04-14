@@ -141,18 +141,32 @@ app.get('/AddQuestions',checkFaculty,(req,res)=>{
 
 });
 
+function testStartTime(testdate, testtime){
+	var tdate = testdate.toString().split('-');
+	var ttime = testtime.toString().split(':');
+	var teststarttime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1])).getTime();
+	return teststarttime;
+}
+function testEndTime(teststarttime, testdur){
+	var offset = testdur * 60000;
+	var testendtime = teststarttime + offset;
+	return testendtime;
+}
+
+function canShowCardBlue(testdate, testtime){
+	var curtime = (new Date()).getTime();
+	var teststarttime = testStartTime(testdate, testtime);
+	console.log(curtime + " "+ testStartTime);
+	if(curtime < teststarttime)	return true;
+	return false;
+};
+
 function canBeginTest(testdate, testtime, testdur){
     var date = new Date();
 	var curtime = date.getTime();
-	console.log("Current time: "+curtime+" "+date.getFullYear()+" "+date.getMonth()+" "+date.getDate()+" "+date.getHours()+" "+date.getMinutes())
-	var tdate = testdate.toString().split('-');
-	var ttime = testtime.toString().split(':');
-	//console.log(tdate[0]+" "+tdate[1]+" "+tdate[2]);
-	//console.log(ttime[0]+" "+ttime[1]);
-	var teststarttime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1])).getTime();
-	console.log("Test Start Time "+teststarttime)
-	var testendtime = (new Date(tdate[0], tdate[1]-1, tdate[2], ttime[0], ttime[1]+testdur)).getTime();
-	console.log("Test End Time "+testendtime)
+	var teststarttime = testStartTime(testdate, testtime);
+	var testendtime = testEndTime(teststarttime, testdur);
+	console.log("Current time: "+curtime+" Test Start Time: "+teststarttime+" Test End Time: "+testendtime);
 	if(curtime >= teststarttime && curtime < testendtime){
 		return true;
 	}
@@ -201,8 +215,11 @@ app.get('/StudentDashboard',(req,res)=>{
 					function(err,docs)
 					{
 						var canStartTest = canBeginTest(docs.Date, docs.Time, docs.Duration);
+						var canTestBlue = canShowCardBlue(docs.Date, docs.Time);
 						delete docs.questions;
 						docs.canBegin = canStartTest;
+						docs.showCardBlue = canTestBlue;
+						console.log("Can show card blue "+docs.showCardBlue);
 						console.log(docs.t_id+" "+canStartTest);
 						data2[j++]=docs;
 						console.log(data2[j-1]);

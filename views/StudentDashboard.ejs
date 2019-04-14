@@ -84,12 +84,13 @@
     </h4>
     <br>
 
-    <% var date=new Date(); for(var i=0; i<data2.length; i++) {
-      if(data2[i].Date>date_1){
+    <% var date=new Date(); 
+    for(var i=0; i<data2.length; i++) {
+      if(data2[i].showCardBlue == true){
         %>
-          <form action="/ExamInAction" method="get">
-            <div class="card list-group-item-primary text-dark">
-        <% } else{ 
+          <div class="card list-group-item-primary text-dark">
+        <%
+      }else{
         if(data2[i].canBegin == true){
           %>
           <div class="card list-group-item-primary text-dark">
@@ -99,7 +100,7 @@
           <div class="card bg-dark text-white">
         <%
         }
-      } 
+      }
         %>
           <div class="card-body">
             <h4><%= data2[i].Test_title %></h4>
@@ -115,7 +116,7 @@
                   <button type="submit" class="btn btn-primary float-right">Start Test</button>
                 <%
               }else{
-                if(data2[i].Date > date_1){
+                if(data2[i].Date > date_1 || data2[i].showCardBlue == true){
                   %>
                     <button type="submit" class="btn btn-secondary float-right">Start Test</button>
                   <%

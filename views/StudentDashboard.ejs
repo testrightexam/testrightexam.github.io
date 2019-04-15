@@ -77,7 +77,11 @@
       <input type="text" placeholder="Enter Test Id" id="examid" name="examid" class="form-control w-50 ml-auto" />
       <button type="submit" class="btn btn-primary mr-auto ml-1">Enroll Yourself</button>
     </form>
-
+    <form action="/PracticeTest" class="w-100 h-100 row align-items-center" method="post">
+      <input type="text" placeholder="maths,functions,algebra" id="practicetags" name="practicetags"
+        class="form-control w-50 ml-auto" data-role="tagsinput" />
+      <button type="submit" class="btn btn-primary mr-auto ml-1">Practice</button>
+    </form>
 
     <hr>
     <h4>Your Exams
@@ -89,85 +93,86 @@
 
       if(data2[i].showCardBlue == true){
         %>
-          <div class="card list-group-item-primary text-dark">
-        <%
+    <div class="card list-group-item-primary text-dark">
+      <%
       }else{
         if(data2[i].canBegin == true){
           %>
-          <div class="card list-group-item-primary text-dark">
+      <div class="card list-group-item-primary text-dark">
         <%
         }else{
           %>
-          <div class="card bg-dark text-white">
-        <%
+        <div class="card bg-dark text-white">
+          <%
         }
       }
         %>
           <div class="card-body">
-			<form action="" method="post">
-            <h4><%= data2[i].Test_title %></h4>
-            <input type="text" value="<%= data2[i].t_id %>" name="ExamId" style="display:none" />
-            <b>TestID :- <%= data2[i].t_id %></b> 
-            <br>
-            Date : <%= data2[i].Date %>
-            <br>
-            <br>
-            <% 
+            <form action="" method="post">
+              <h4><%= data2[i].Test_title %></h4>
+              <input type="text" value="<%= data2[i].t_id %>" name="ExamId" style="display:none" />
+              <b>TestID :- <%= data2[i].t_id %></b>
+              <br>
+              Date : <%= data2[i].Date %>
+              <br>
+              <br>
+              <% 
               if(data2[i].canBegin == true){
                 %>
-                  <button type="submit" formaction="/StartTest" formmethod="post" class="btn btn-primary float-right">Start Test</button>
-                <%
+              <button type="submit" formaction="/StartTest" formmethod="post" class="btn btn-primary float-right">Start
+                Test</button>
+              <%
               }else{
                 if(data2[i].Date > date_1 || data2[i].showCardBlue == true){
                   %>
-                    <button type="submit" class="btn btn-secondary float-right">Start Test</button>
-                  <%
+              <button type="submit" class="btn btn-secondary float-right">Start Test</button>
+              <%
 				  }else if(data.RegisteredTests[i].status=="Attempted"){
                   %>
-					<button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
+              <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
 
-				  <%
+              <%
                 }else if(data.RegisteredTests[i].status=="NotAttempted"){
                   %>
-					<button type="button" class="btn btn-primary float-right" disabled>Not Attempted</button>
+              <button type="button" class="btn btn-primary float-right" disabled>Not Attempted</button>
 
-				  <%
+              <%
                 }else{
                   %>
-                    <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
-                  <%
+              <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
+              <%
                 }
               }
             %>
-			</form>
+            </form>
           </div>
         </div>
-    
-    <br>
-    <% } 
+
+        <br>
+        <% } 
     %>
-  </div>
-  <script>
+      </div>
+      <script>
 
-    function opentest() {
-      var url = 'RegisterTest';
-      location.replace(url);
-    }
+        function opentest() {
+          var url = 'RegisterTest';
+          location.replace(url);
+        }
 
-  </script>
-  <!--Start of Tawk.to Script-->
-<script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-(function(){
-var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-s1.async=true;
-s1.src='https://embed.tawk.to/5cb4620bd6e05b735b429fc4/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
-s0.parentNode.insertBefore(s1,s0);
-})();
-</script>
-<!--End of Tawk.to Script-->
+      </script>
+      <!--Start of Tawk.to Script-->
+      <script type="text/javascript">
+        var Tawk_API = Tawk_API || {}, Tawk_LoadStart = new Date();
+        (function () {
+          var s1 = document.createElement("script"), s0 = document.getElementsByTagName("script")[0];
+          s1.async = true;
+          s1.src = 'https://embed.tawk.to/5cb4620bd6e05b735b429fc4/default';
+          s1.charset = 'UTF-8';
+          s1.setAttribute('crossorigin', '*');
+          s0.parentNode.insertBefore(s1, s0);
+        })();
+      </script>
+      <!--End of Tawk.to Script-->
 </body>
 
 </html>

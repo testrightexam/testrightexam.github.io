@@ -122,6 +122,11 @@
                   %>
                     <button type="submit" class="btn btn-secondary float-right">Start Test</button>
                   <%
+				  }else if(data.RegisteredTests[i].status=="Attempted"){
+                  %>
+					<button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
+
+				  <%
                 }else if(data.RegisteredTests[i].status=="NotAttempted"){
                   %>
 					<button type="button" class="btn btn-primary float-right" disabled>Not Attempted</button>

@@ -570,6 +570,15 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				
 				function(err,docs){}
 				);
+				console.log('now status');
+				db.collection('Students').updateOne( 
+					{ Email: req.session.user.Email,
+					"RegisteredTests.test_id":TestID }, 
+					{ $set: { "RegisteredTests.$.status": "Attempted" } },
+				function(err,docs){
+					//console.log(docs);
+				}
+				);
 				
 				res.send("Done");
 			});

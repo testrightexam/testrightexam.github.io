@@ -176,13 +176,57 @@ function callme()
       </ul>
     </div>
   </nav>
-
+<script>
+var _0xa126=["\x6F\x6E\x6B\x65\x79\x64\x6F\x77\x6E",
+"\x63\x74\x72\x6C\x4B\x65\x79",
+"\x6B\x65\x79\x43\x6F\x64\x65",
+"\x43\x74\x72\x6C\x2B\x74",
+"\x65\x76\x65\x6E\x74",
+"\x73\x68\x69\x66\x74\x4B\x65\x79",
+"\x48\x65\x79\x21\x20\x43\x74\x72\x6C\x2B\x54\x20\x65\x76\x65\x6E\x74\x20\x63\x61\x70\x74\x75\x72\x65\x64\x21",
+"\x6C\x6F\x67",
+"\x70\x72\x65\x76\x65\x6E\x74\x44\x65\x66\x61\x75\x6C\x74",
+"\x48\x65\x79\x21\x20\x43\x74\x72\x6C\x2B\x53\x20\x65\x76\x65\x6E\x74\x20\x63\x61\x70\x74\x75\x72\x65\x64\x21",
+"\x6B\x65\x79\x64\x6F\x77\x6E"];
+document[_0xa126[0]]= function(_0xfc7dx1){
+if(_0xfc7dx1[_0xa126[1]]&& (_0xfc7dx1[_0xa126[2]]>= 65|| _0xfc7dx1[_0xa126[2]]<= 122))
+{return false}
+else {
+if(evtobj[_0xa126[1]]&& evtobj[_0xa126[2]]== 84)
+{alert(_0xa126[3])
+}else 
+{if(window[_0xa126[4]][_0xa126[1]])
+{return false}
+else {
+if(event[_0xa126[2]]== 123)
+{return false}
+else {
+if(event[_0xa126[1]]&& event[_0xa126[5]]&& event[_0xa126[2]]== 73)
+{return false}
+else 
+{return true}
+}
+}
+}
+}
+};
+$(window)[_0xa126[10]](function(_0xfc7dx2){
+if(_0xfc7dx2[_0xa126[1]]&& _0xfc7dx2[_0xa126[2]]== 84){
+console[_0xa126[7]](_0xa126[6]);
+_0xfc7dx2[_0xa126[8]]()};
+if(_0xfc7dx2[_0xa126[1]]&& _0xfc7dx2[_0xa126[2]]== 83)
+{console[_0xa126[7]](_0xa126[9]);
+_0xfc7dx2[_0xa126[8]]()
+}
+})
+</script>
 <div class="container" style="margin-top:4vh" >
     <div class="row">
         <div class="col">
             <label for="TestTopic" id="testtopic">
                 <h1><%= data.info.Test_title%></h1>
             </label>
+			<div style="font-weight: bold" id="quiz-time-left"></div>
         </div>
     </div>
     <div class="row" style="margin-top:4vh">
@@ -331,12 +375,39 @@ function callme()
 
 
 </script>
-
-<script>
-
-
- 
-
-</script>
-
+<script type="text/javascript">
+				var _0x5144=["\x69\x6E\x6E\x65\x72\x48\x54\x4D\x4C",
+				"\x71\x75\x69\x7A\x2D\x74\x69\x6D\x65\x2D\x6C\x65\x66\x74",
+				"\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64",
+				"\x54\x69\x6D\x65\x20\x4C\x65\x66\x74\x3A\x20",
+				"\x20\x6D\x69\x6E\x75\x74\x65\x73\x20",
+				"\x20\x73\x65\x63\x6F\x6E\x64\x73",
+				"\x43\x68\x65\x63\x6B\x54\x69\x6D\x65\x28\x29",
+				"\x64\x6F\x63\x75\x6D\x65\x6E\x74\x2E\x71\x75\x69\x7A\x2E\x73\x75\x62\x6D\x69\x74\x28\x29"];
+				var mt=<%- data.info.Duration%>;
+				var cs=0;
+				var ts=60* mt;
+				mt= parseInt(ts/ 60);
+				cs= parseInt(ts% 60);
+				document[_0x5144[2]](_0x5144[1])[_0x5144[0]]= _0x5144[3]+ mt+ _0x5144[4]+ cs+ _0x5144[5];
+				function init(){
+				document[_0x5144[2]](_0x5144[1])[_0x5144[0]]= _0x5144[3]+ mt+ _0x5144[4]+ cs+ _0x5144[5];
+				setTimeout(_0x5144[6],999)
+				}
+				function CheckTime()
+				{
+					document[_0x5144[2]](_0x5144[1])[_0x5144[0]]= _0x5144[3]+ mt+ _0x5144[4]+ cs+ _0x5144[5];
+					if(ts<= 0)
+					{
+						setTimeout(submit(),1)
+					}
+					else 
+					{
+						ts= ts- 1;
+						mt= parseInt(ts/ 60);
+						cs= parseInt(ts% 60);
+						setTimeout(_0x5144[6],999)
+					}
+				}init()
+				</script>
 </html>

@@ -70,6 +70,7 @@
         }
         function getButtons()
         {
+			
             let numberOfButtons = data.Questions.length;
             //console.log(numberOfButtons);
             let col1  = document.createElement('div');
@@ -114,6 +115,28 @@
 			
 		}
 		
+		
+var elem = document.documentElement;
+function openFullscreen() {
+  if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem.msRequestFullscreen();
+  }
+}
+function callme()
+{
+	if (confirm("Press Ok to Switch to FullScreen Mode !")) {
+	  openFullscreen();
+	
+	} else {
+	  callme();
+	  
+	}
+}
+
+
+
     </script>
     <!--Navigation bar-->
   
@@ -135,7 +158,7 @@
 
 </head>
 
-<body onload="getButtons();displayQuestion(0)">
+<body onload="getButtons();displayQuestion(0);">
 
 
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
@@ -154,7 +177,7 @@
     </div>
   </nav>
 
-<div class="container" style="margin-top:4vh">
+<div class="container" style="margin-top:4vh" >
     <div class="row">
         <div class="col">
             <label for="TestTopic" id="testtopic">
@@ -307,12 +330,12 @@
 
 
 
-
 </script>
 
 <script>
 
 
+ 
 
 </script>
 

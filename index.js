@@ -723,6 +723,45 @@ app.post('/AddQuestionRedirect',(req,res)=>{
 	res.redirect('/AddEditQuestions');
 });
 
+app.post('/ResultRedirect',checkStudent,(req,res)=>{
+	var TestID=req.param('test_id',null);
+	
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		const db = client.db(dbName);
+		db.collection('Results').findOne(
+		{
+			Student_Email: req.session.user.Email,
+			Test_id: TestID
+		},
+		
+		function(err,docs){
+			res.render('Result',{data:docs});
+		}
+		);
+		
+	});
+});
+
+
+//Will delete this later For testing perpose only...
+app.get('/Result',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		const db = client.db(dbName);
+		db.collection('Results').findOne(
+		{
+			Student_Email: req.session.user.Email,
+			Test_id: 'HT674'
+		},
+		
+		function(err,docs){
+			res.render('Result',{data:docs});
+		}
+		);
+		
+	});
+
+});
+
 
 app.get('/AddEditQuestions',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {

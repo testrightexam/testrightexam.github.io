@@ -86,6 +86,7 @@
 
     <% var date=new Date(); 
     for(var i=0; i<data2.length; i++) {
+
       if(data2[i].showCardBlue == true){
         %>
           <div class="card list-group-item-primary text-dark">
@@ -103,6 +104,7 @@
       }
         %>
           <div class="card-body">
+			<form action="" method="post">
             <h4><%= data2[i].Test_title %></h4>
             <input type="text" value="<%= data2[i].t_id %>" name="ExamId" style="display:none" />
             <b>TestID :- <%= data2[i].t_id %></b> 
@@ -113,23 +115,29 @@
             <% 
               if(data2[i].canBegin == true){
                 %>
-                  <button type="submit" class="btn btn-primary float-right">Start Test</button>
+                  <button type="submit" formaction="/StartTest" formmethod="post" class="btn btn-primary float-right">Start Test</button>
                 <%
               }else{
                 if(data2[i].Date > date_1 || data2[i].showCardBlue == true){
                   %>
                     <button type="submit" class="btn btn-secondary float-right">Start Test</button>
                   <%
+                }else if(data.RegisteredTests[i].status=="NotAttempted"){
+                  %>
+					<button type="button" class="btn btn-primary float-right" disabled>Not Attempted</button>
+
+				  <%
                 }else{
                   %>
-                    <button type="submit" class="btn btn-primary float-right">View Results</button>
+                    <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
                   <%
                 }
               }
             %>
+			</form>
           </div>
         </div>
-    </form>
+    
     <br>
     <% } 
     %>

@@ -723,9 +723,14 @@ app.post('/AddQuestionRedirect',(req,res)=>{
 	res.redirect('/AddEditQuestions');
 });
 
-app.post('/ResultRedirect',checkStudent,(req,res)=>{
-	var TestID=req.param('test_id',null);
-	
+app.post('/Result',checkStudent,(req,res)=>{
+	var TestID=req.param('ExamId',null);
+	console.log("Getting Result");
+	if(TestID==null)
+	{
+		console.log("No Result");
+		res.redirect("/StudentDashboard");
+	}
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		const db = client.db(dbName);
 		db.collection('Results').findOne(
@@ -735,7 +740,8 @@ app.post('/ResultRedirect',checkStudent,(req,res)=>{
 		},
 		
 		function(err,docs){
-			res.render('Result',{data:docs});
+			if(docs!=null) res.render('Result',{data:docs});
+			else{ res.redirect("/StudentDashboard"); }
 		}
 		);
 		
@@ -775,7 +781,7 @@ app.get('/AddEditQuestions',(req,res)=>{
 		{
 			console.log(docs);
 			res.render('AddEditQuestions',{data:docs});
-
+			
 		});	
 		client.close();
 		
@@ -822,6 +828,13 @@ app.get('/EditTestDetails',(req,res)=>{
 	}
 
 
+});
+
+app.post('/StartTest',(req,res)=>{
+	var TestID=req.param('ExamId',null);
+	
+	res.render('StartTest',{data:TestID});
+	
 });
 
 app.post('/EditTestDetails',(req,res)=>{

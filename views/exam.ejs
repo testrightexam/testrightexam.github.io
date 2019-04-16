@@ -4,6 +4,7 @@
 <head>
 <link rel="icon" sizes="192x192" href="icon.png">
     <script>
+		var elem = document.documentElement;
         var flag = false;
         var data = <%- JSON.stringify(data) %>;
         var Question_state = [];
@@ -116,7 +117,7 @@
 		}
 		
 		
-var elem = document.documentElement;
+
 function openFullscreen() {
   if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
     elem.webkitRequestFullscreen();
@@ -124,11 +125,16 @@ function openFullscreen() {
     elem.msRequestFullscreen();
   }
 }
+var t=0;
 function callme()
 {
 	if (confirm("Press Ok to Switch to FullScreen Mode !")) {
-	  openFullscreen();
-	
+	  if(t==0)
+	  {
+		
+		t=1;
+	  }
+		
 	} else {
 	  callme();
 	  
@@ -137,7 +143,7 @@ function callme()
 
 
 
-    </script>
+</script>
     <!--Navigation bar-->
   
     <title>TestRight Exam</title>
@@ -158,7 +164,7 @@ function callme()
 
 </head>
 
-<body onload="getButtons();displayQuestion(0);">
+<body onload="getButtons();displayQuestion(0);" onmousemove="openFullscreen();">
 
 
 <nav class="navbar navbar-expand-sm bg-primary navbar-dark ">
@@ -376,6 +382,21 @@ _0xfc7dx2[_0xa126[8]]()
 
 </script>
 <script type="text/javascript">
+$(document).ready(function () {
+    //Disable full page
+    $("body").on("contextmenu",function(e){
+        return false;
+    });
+    
+    //Disable part of page
+    $("#id").on("contextmenu",function(e){
+        return false;
+    });
+});
+</script>
+<script type="text/javascript">
+
+
 				var _0x5144=["\x69\x6E\x6E\x65\x72\x48\x54\x4D\x4C",
 				"\x71\x75\x69\x7A\x2D\x74\x69\x6D\x65\x2D\x6C\x65\x66\x74",
 				"\x67\x65\x74\x45\x6C\x65\x6D\x65\x6E\x74\x42\x79\x49\x64",

@@ -129,7 +129,7 @@
               <br>
               <br>
               <% 
-              if(data2[i].canBegin == true){
+              if(data2[i].canBegin == true && data.RegisteredTests[i].status=="NotAttempted"){
                 %>
               <button type="submit" formaction="/StartTest" formmethod="post" class="btn btn-primary float-right">Start
                 Test</button>
@@ -137,7 +137,7 @@
               }else{
                 if(data2[i].Date > date_1 || data2[i].showCardBlue == true){
                   %>
-              <button type="submit" class="btn btn-secondary float-right">Start Test</button>
+              <button type="submit" class="btn btn-secondary float-right" disabled>Start Test</button>
               <%
 				  }else if(data.RegisteredTests[i].status=="Attempted"){
                   %>

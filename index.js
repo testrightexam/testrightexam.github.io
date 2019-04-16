@@ -431,181 +431,178 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				{t_id: TestID}
 				,function(err, result){
 				if(err)	throw error;
-				
-				
 				db.collection('Results').insertOne(
-				
 				{
 					Student_Email: req.session.user.Email,
 					Test_id: TestID
 					
 				},
-				
-				function(err,docs){}
-				);
-				
-				var counter=0,corr_counter=0;
-				for(var i=0; i<result.questions.length; i++)
-				{
-					for(var j=0; j<result.questions.length; j++)
+				function(err,docs){
+					var counter=0,corr_counter=0;
+					for(var i=0; i<result.questions.length; i++)
 					{
-						if(result.questions[j].question.value==Questions[i])
+						for(var j=0; j<result.questions.length; j++)
 						{
-							//console.log(result.questions[j].question.value);
-							//console.log(Questions[i]);
-							var Correct=null,Answer=null,Student_Answer="Not Attempted";
-							var Question_main=Questions[i];
-							
-							
-							if(Answers[i]==1)
+							if(result.questions[j].question.value==Questions[i])
 							{
-								if(result.questions[j].question.options.A.correct=="on")
-								{
-									correct=true;
-									corr_counter++;
-									Answer=result.questions[j].question.options.A.value;
-									Student_Answer=result.questions[j].question.options.A.value;
-								}
-								else
-								{
-									correct=false;
-									Student_Answer=result.questions[j].question.options.A.value;
-								}
-							}
-							else if(Answers[i]==2)
-							{
-								if(result.questions[j].question.options.B.correct=="on")
-								{
-									correct=true;
-									corr_counter++;
-									Answer=result.questions[j].question.options.B.value;
-									Student_Answer=result.questions[j].question.options.B.value;
-								}
-								else
-								{
-									correct=false;
-									Student_Answer=result.questions[j].question.options.B.value;
-								}
-							}
-							else if(Answers[i]==3)
-							{
-								if(result.questions[j].question.options.C.correct=="on")
-								{
-									correct=true;
-									corr_counter++;
-									Answer=result.questions[j].question.options.C.value;
-									Student_Answer=result.questions[j].question.options.C.value;
-								}
-								else
-								{
-									correct=false;
-									Student_Answer=result.questions[j].question.options.C.value;
-								}
-							}
-							else if(Answers[i]==4)
-							{
-								if(result.questions[j].question.options.D.correct=="on")
-								{
-									correct=true;
-									corr_counter++;
-									Answer=result.questions[j].question.options.D.value;
-									Student_Answer=result.questions[j].question.options.D.value;
-								}
-								else
-								{
-									correct=false;
-									Student_Answer=result.questions[j].question.options.D.value;
-								}
-							}
-							else
-							{
-								correct=false;
-								counter++;
-							}
-							
-							if(correct==false)
-							{
-								if(result.questions[j].question.options.A.correct=="on")
-								{
-									Answer=result.questions[j].question.options.A.value;
-								}
-								else if(result.questions[j].question.options.B.correct=="on")
-								{
-									Answer=result.questions[j].question.options.B.value;
-								}
-								else if(result.questions[j].question.options.C.correct=="on")
-								{
-									Answer=result.questions[j].question.options.C.value;
-								}
-								else if(result.questions[j].question.options.D.correct=="on")
-								{
-									Answer=result.questions[j].question.options.D.value;
-								}
-								else
-								{
-									Answer="Nothing!"
-								}
-							}
-							
-							
-							db.collection('Results').updateOne(
-							{
-								Student_Email: req.session.user.Email,
-								Test_id: TestID
+								//console.log(result.questions[j].question.value);
+								//console.log(Questions[i]);
+								var Correct=null,Answer=null,Student_Answer="Not Attempted";
+								var Question_main=Questions[i];
 								
-							},
-							
-							{$push:{
-								Result:
+								
+								if(Answers[i]==1)
 								{
-									question:Question_main,
-									StudentAnswer: Student_Answer,
-									ActualAnswer: Answer,
-									Correct:correct
+									if(result.questions[j].question.options.A.correct=="on")
+									{
+										correct=true;
+										corr_counter++;
+										Answer=result.questions[j].question.options.A.value;
+										Student_Answer=result.questions[j].question.options.A.value;
+									}
+									else
+									{
+										correct=false;
+										Student_Answer=result.questions[j].question.options.A.value;
+									}
 								}
-							}},
-							
-							function(err,docs){}
+								else if(Answers[i]==2)
+								{
+									if(result.questions[j].question.options.B.correct=="on")
+									{
+										correct=true;
+										corr_counter++;
+										Answer=result.questions[j].question.options.B.value;
+										Student_Answer=result.questions[j].question.options.B.value;
+									}
+									else
+									{
+										correct=false;
+										Student_Answer=result.questions[j].question.options.B.value;
+									}
+								}
+								else if(Answers[i]==3)
+								{
+									if(result.questions[j].question.options.C.correct=="on")
+									{
+										correct=true;
+										corr_counter++;
+										Answer=result.questions[j].question.options.C.value;
+										Student_Answer=result.questions[j].question.options.C.value;
+									}
+									else
+									{
+										correct=false;
+										Student_Answer=result.questions[j].question.options.C.value;
+									}
+								}
+								else if(Answers[i]==4)
+								{
+									if(result.questions[j].question.options.D.correct=="on")
+									{
+										correct=true;
+										corr_counter++;
+										Answer=result.questions[j].question.options.D.value;
+										Student_Answer=result.questions[j].question.options.D.value;
+									}
+									else
+									{
+										correct=false;
+										Student_Answer=result.questions[j].question.options.D.value;
+									}
+								}
+								else
+								{
+									correct=false;
+									counter++;
+								}
+								
+								if(correct==false)
+								{
+									if(result.questions[j].question.options.A.correct=="on")
+									{
+										Answer=result.questions[j].question.options.A.value;
+									}
+									else if(result.questions[j].question.options.B.correct=="on")
+									{
+										Answer=result.questions[j].question.options.B.value;
+									}
+									else if(result.questions[j].question.options.C.correct=="on")
+									{
+										Answer=result.questions[j].question.options.C.value;
+									}
+									else if(result.questions[j].question.options.D.correct=="on")
+									{
+										Answer=result.questions[j].question.options.D.value;
+									}
+									else
+									{
+										Answer="Nothing!"
+									}
+								}
+								
+								
+								db.collection('Results').updateOne(
+								{
+									Student_Email: req.session.user.Email,
+									Test_id: TestID
+									
+								},
+								
+								{$push:{
+									Result:
+									{
+										question:Question_main,
+										StudentAnswer: Student_Answer,
+										ActualAnswer: Answer,
+										Correct:correct
+									}
+								}},
+								
+								function(err,docs){
+									var AttemptedQuestion=result.questions.length-counter;
+									var percentage=(corr_counter/result.questions.length)*100;
+									
+									db.collection('Results').updateOne(
+									{
+										Student_Email: req.session.user.Email,
+										Test_id: TestID
+									},
+									
+									{$set:{
+										Attempted:AttemptedQuestion,
+										Percentage:percentage
+									}},
+									
+									function(err,docs){
+										console.log('now status');
+										db.collection('Students').findOne({ Email: req.session.user.Email},function(err,docs1){
+											console.log("Trying to edit");
+											console.log(docs1);
+											console.log(docs1.RegisteredTests[0]);
+											for(i = 0; i<docs1.RegisteredTests.length; i++){
+												if(docs1.RegisteredTests[i].test_id == TestID && docs1.RegisteredTests[i].status == "NotAttempted"){
+													db.collection('Students').updateOne({Email: req.session.user.Email, "RegisteredTests.test_id":TestID},
+													{$set : {"RegisteredTests.$.status" : "Attempted"}, function(err, rx){
+													}}
+													);
+												}
+											}
+										});
+									}
+								);
+
+								}
 							);
-							
+								
+							}
 						}
 					}
-				}
-				
-				
-				var AttemptedQuestion=result.questions.length-counter;
-				var percentage=(corr_counter/result.questions.length)*100;
-				
-				db.collection('Results').updateOne(
-				{
-					Student_Email: req.session.user.Email,
-					Test_id: TestID
 					
 					
-				},
-				
-				{$set:{
-					Attempted:AttemptedQuestion,
-					Percentage:percentage
-				}},
-				
-				function(err,docs){}
-				);
-				console.log('now status');
-				db.collection('Students').findOne({ Email: req.session.user.Email},function(err,docs1){
-					console.log("Trying to edit");
-					console.log(docs1);
-					console.log(docs1.RegisteredTests[0]);
-					for(i = 0; i<docs1.RegisteredTests.length; i++){
-						if(docs1.RegisteredTests[i].test_id == TestID && docs1.RegisteredTests[i].status == "NotAttempted"){
-							db.collection('Students').updateOne({Email: req.session.user.Email, "RegisteredTests.test_id":TestID},
-							{$set : {"RegisteredTests.$.status" : "Attempted"}, function(err, rx){
-							}}
-							);
-						}
-					}
 				});
-			});
+				}
+			);
 			res.send("Done");
 	});
 });

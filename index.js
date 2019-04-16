@@ -374,7 +374,11 @@ app.get('/logout', (req, res) => {
     }
 });
 
-
+app.get('/contactus', (req, res) => {
+   
+        res.render('contactus');
+    
+});
 
 app.post('/RegisterExaminer',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
@@ -413,6 +417,25 @@ app.post('/RegisterExaminer',(req,res)=>{
 
 });
 
+app.post('/contactus',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Contact Us...");
+
+		const db = client.db(dbName);
+		const collection = db.collection('Contact');
+				collection.insertOne(
+				{
+					Name: req.param('name', null),
+					Email : req.param('email', null),
+					Message : req.param('message', null),
+					/*EmailId : req.param('TxtEmailId', null),
+					Password : req.param('TxtPassword', null)*/
+				},function(err,result){
+
+					res.redirect('/');
+				});
+			})
+		});	
 app.get('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		

@@ -608,7 +608,6 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 			});
 			res.send("Done");
 	});
-
 });
 
 
@@ -777,7 +776,7 @@ app.post('/ExamResult',(req,res)=>{
 app.post('/Result',(req,res)=>{
 	var TestID=req.param('ExamId',null);
 	var EmailID=req.session.user.Email;
-	if(req.session.user.type="Faculty")
+	if(req.session.user.type=="Faculty")
 	{
 		EmailID=req.param('Email',null);
 	}

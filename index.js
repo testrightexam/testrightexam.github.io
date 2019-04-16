@@ -439,6 +439,8 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				},
 				function(err,docs){
 					var counter=0,corr_counter=0;
+					console.log("Ref");
+					console.log(result);
 					for(var i=0; i<result.questions.length; i++)
 					{
 						for(var j=0; j<result.questions.length; j++)
@@ -449,7 +451,6 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 								//console.log(Questions[i]);
 								var Correct=null,Answer=null,Student_Answer="Not Attempted";
 								var Question_main=Questions[i];
-								
 								
 								if(Answers[i]==1)
 								{
@@ -594,7 +595,7 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 
 								}
 							);
-								
+								break;
 							}
 						}
 					}

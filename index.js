@@ -199,27 +199,28 @@ app.get('/StudentDashboard',(req,res)=>{
 			collection.findOne({"Email": email},function(err,docs){
 				console.log("initial");
 				console.log(docs.RegisteredTests);
-				var uselessTests = [];
-				var count = 0;
-				for(j = 0; j<docs.RegisteredTests.length;){	
-					if(docs.RegisteredTests[j].status == "Practice"){
-						console.log("Cleanup Process "+docs.RegisteredTests[j].test_id);
-						uselessTests[count++] = docs.RegisteredTests[j].test_id;
-						//delete docs.RegisteredTests[j];
-						docs.RegisteredTests.splice(j, 1);
-					}else j++;
+				if(docs.RegisteredTests != null){
+					var uselessTests = [];
+					var count = 0;
+					for(j = 0; j<docs.RegisteredTests.length;){	
+						if(docs.RegisteredTests[j].status == "Practice"){
+							console.log("Cleanup Process "+docs.RegisteredTests[j].test_id);
+							uselessTests[count++] = docs.RegisteredTests[j].test_id;
+							//delete docs.RegisteredTests[j];
+							docs.RegisteredTests.splice(j, 1);
+						}else j++;
+					}
+					console.log("Useless Tests "+uselessTests);
+					console.log("CRITICAL STAGE");
+					console.log(docs.RegisteredTests);
+					testCollection.remove({t_id : {$in : uselessTests}});
+					collection.updateOne({"Email" : email}, {$set : {RegisteredTests : docs.RegisteredTests}}, function(err, d1){
+						console.log("Database Updation Successful");
+						console.log("After Deletion");
+						console.log(docs.RegisteredTests);
+					});
 				}
-				console.log("initial 2");
-				console.log(docs.RegisteredTests);
-
-				console.log("initial length 2 "+docs.RegisteredTests.length);
-				console.log("Useless Tests "+uselessTests);
-				testCollection.remove({t_id : {$in : uselessTests}});
 				data = docs;
-				
-				console.log("initial 2");
-				console.log(docs.RegisteredTests);
-				
 				req.session.user = docs;
 				req.session.user.type = "Student";
 				var data2=[]; 
@@ -265,9 +266,6 @@ app.get('/StudentDashboard',(req,res)=>{
 						}
 						
 					});
-					
-					
-					
 				}
 				}
 				else
@@ -591,18 +589,21 @@ app.post('/SubmitTest',checkStudent,(req,res)=>{
 				function(err,docs){}
 				);
 				console.log('now status');
-				db.collection('Students').updateOne( 
-					{ Email: req.session.user.Email,
-					"RegisteredTests.test_id":TestID }, 
-					{ $set: { "RegisteredTests.$.status": "Attempted" } },
-				function(err,docs){
-					//console.log(docs);
-				}
-				);
-				
-				res.send("Done");
+				db.collection('Students').findOne({ Email: req.session.user.Email},function(err,docs1){
+					console.log("Trying to edit");
+					console.log(docs1);
+					console.log(docs1.RegisteredTests[0]);
+					for(i = 0; i<docs1.RegisteredTests.length; i++){
+						if(docs1.RegisteredTests[i].test_id == TestID && docs1.RegisteredTests[i].status == "NotAttempted"){
+							db.collection('Students').updateOne({Email: req.session.user.Email, "RegisteredTests.test_id":TestID},
+							{$set : {"RegisteredTests.$.status" : "Attempted"}, function(err, rx){
+							}}
+							);
+						}
+					}
+				});
 			});
-		
+			res.send("Done");
 	});
 
 });
@@ -1422,10 +1423,10 @@ function fetchTestsByTags(userid, testid, res, testtags, numberOfQues){
 								console.log("Registering "+tid+" for "+id);
 								studentCollection.updateOne({_id : id},
 									{$push : {
-										RegisteredTests:
+										RegisteredTests :
 										{
-											test_id:tid,
-											status:"Practice"
+											test_id : tid,
+											status : "Practice"
 										}
 									}}
 									).then(result1 => {

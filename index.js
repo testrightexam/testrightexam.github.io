@@ -195,14 +195,34 @@ app.get('/StudentDashboard',(req,res)=>{
 			var date_1=[year, month, day].join('-');
 			console.log(date_1);
 			const collection = db.collection('Students');
+			const testCollection = db.collection('tests');
 			collection.findOne({"Email": email},function(err,docs){
-				data=docs;
+				console.log("initial");
+				console.log(docs.RegisteredTests);
+				var uselessTests = [];
+				var count = 0;
+				for(j = 0; j<docs.RegisteredTests.length;){	
+					if(docs.RegisteredTests[j].status == "Practice"){
+						console.log("Cleanup Process "+docs.RegisteredTests[j].test_id);
+						uselessTests[count++] = docs.RegisteredTests[j].test_id;
+						//delete docs.RegisteredTests[j];
+						docs.RegisteredTests.splice(j, 1);
+					}else j++;
+				}
+				console.log("initial 2");
+				console.log(docs.RegisteredTests);
+
+				console.log("initial length 2 "+docs.RegisteredTests.length);
+				console.log("Useless Tests "+uselessTests);
+				testCollection.remove({t_id : {$in : uselessTests}});
+				data = docs;
+				
+				console.log("initial 2");
+				console.log(docs.RegisteredTests);
+				
 				req.session.user = docs;
 				req.session.user.type = "Student";
-				
-				
-				var data2=[]; //data to pass the actual test data
-				//var data3=[]; //data to pass the boolean if test can start
+				var data2=[]; 
 				var i=0;
 				console.log(data);
 				var j=0;
@@ -1405,7 +1425,7 @@ function fetchTestsByTags(userid, testid, res, testtags, numberOfQues){
 										RegisteredTests:
 										{
 											test_id:tid,
-											status:"NotAttempted"
+											status:"Practice"
 										}
 									}}
 									).then(result1 => {

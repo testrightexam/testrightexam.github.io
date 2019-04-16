@@ -1223,44 +1223,55 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
 		//var id = new mongo.ObjectId(ExamId);
         const db = client.db(dbName);
         const collection = db.collection('tests');
-        collection.find({"t_id": ExamId}).toArray((err,docs)=>{
-            docs[0].questions.forEach(element => {
-                if(element.question.type == "o4")
-                {
-                    delete element.question.options.A.correct;
-                    delete element.question.options.B.correct;
-                    delete element.question.options.C.correct;
-                    delete element.question.options.D.correct;
-                }
-                else if(element.question.type == "o2")
-                {
-                    delete element.question.options.A.correct;
-                    delete element.question.options.B.correct;
-                }
-            });
-            let Q_list = docs[0].questions;
-            delete docs[0].questions;
-            let exam_info = docs[0];
-            let ExamData = {
-                info : exam_info,
-                Questions : Q_list
-            };
-            //console.log(ExamData);
-			var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
-			while (0 !== currentIndex) 
+		db.collection('Students').find({Email : req.param('StdUsrEmail', null),"RegisteredTests.test_id":ExamId,"RegisteredTests.status":"Attempted"}).toArray(function(err,docs)
+		{
+			console.log("queryyyyyy");
+			console.log(docs);
+			if(docs.length==0)
 			{
-				randomIndex = Math.floor(Math.random() * currentIndex);
-				currentIndex -= 1;
-				temporaryValue = ExamData.Questions[currentIndex];
-				ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
-				ExamData.Questions[randomIndex] = temporaryValue;
+				console.log("iffff");
+				collection.find({"t_id": ExamId}).toArray((err,docs)=>{
+				docs[0].questions.forEach(element => {
+					if(element.question.type == "o4")
+					{
+						delete element.question.options.A.correct;
+						delete element.question.options.B.correct;
+						delete element.question.options.C.correct;
+						delete element.question.options.D.correct;
+					}
+					else if(element.question.type == "o2")
+					{
+						delete element.question.options.A.correct;
+						delete element.question.options.B.correct;
+					}
+				});
+				let Q_list = docs[0].questions;
+				delete docs[0].questions;
+				let exam_info = docs[0];
+				let ExamData = {
+					info : exam_info,
+					Questions : Q_list
+				};
+            //console.log(ExamData);
+					var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
+					while (0 !== currentIndex) 
+					{
+						randomIndex = Math.floor(Math.random() * currentIndex);
+						currentIndex -= 1;
+						temporaryValue = ExamData.Questions[currentIndex];
+						ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
+						ExamData.Questions[randomIndex] = temporaryValue;
+					}
+					res.render('exam',{data:ExamData})
+				});
+			}	
+			else
+			{
+				res.redirect('/StudentDashboard');
 			}
-            res.render('exam',{data:ExamData})
-        });
+		});
+        
     });
-
-
-	
 	
 });
 

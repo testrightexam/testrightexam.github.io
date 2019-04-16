@@ -195,7 +195,6 @@ app.get('/StudentDashboard',(req,res)=>{
 			var date_1=[year, month, day].join('-');
 			console.log(date_1);
 			const collection = db.collection('Students');
-			const testCollection = db.collection('tests');
 			collection.findOne({"Email": email},function(err,docs){
 				console.log("initial");
 				console.log(docs.RegisteredTests);
@@ -223,7 +222,10 @@ app.get('/StudentDashboard',(req,res)=>{
 				data = docs;
 				req.session.user = docs;
 				req.session.user.type = "Student";
-				var data2=[]; 
+				
+				
+				var data2=[]; //data to pass the actual test data
+				//var data3=[]; //data to pass the boolean if test can start
 				var i=0;
 				console.log(data);
 				var j=0;
@@ -755,8 +757,29 @@ app.post('/AddQuestionRedirect',(req,res)=>{
 	res.redirect('/AddEditQuestions');
 });
 
-app.post('/Result',checkStudent,(req,res)=>{
+app.post('/ExamResult',(req,res)=>{
 	var TestID=req.param('ExamId',null);
+	console.log("Exam Results Faculty Side..");
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		const db = client.db(dbName);
+		db.collection('Results').find({Test_id: TestID}).toArray(
+				function(err,docs)
+				{
+					console.log(docs);
+					res.render('ExamResult',{data:docs,TestId:TestID});
+				});
+		
+	});
+	
+});
+
+app.post('/Result',(req,res)=>{
+	var TestID=req.param('ExamId',null);
+	var EmailID=req.session.user.Email;
+	if(req.session.user.type="Faculty")
+	{
+		EmailID=req.param('Email',null);
+	}
 	console.log("Getting Result");
 	if(TestID==null)
 	{
@@ -767,7 +790,7 @@ app.post('/Result',checkStudent,(req,res)=>{
 		const db = client.db(dbName);
 		db.collection('Results').findOne(
 		{
-			Student_Email: req.session.user.Email,
+			Student_Email: EmailID,
 			Test_id: TestID
 		},
 		
@@ -1244,15 +1267,16 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
 		//var id = new mongo.ObjectId(ExamId);
         const db = client.db(dbName);
         const collection = db.collection('tests');
-		db.collection('Students').find({Email : req.param('StdUsrEmail', null),"RegisteredTests.test_id":ExamId,"RegisteredTests.status":"Attempted"}).toArray(function(err,docs)
+		console.log(req.session.user);
+		db.collection('Students').find({Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"Attempted"}}).toArray(function(err,docs)
 		{
 			console.log("queryyyyyy");
 			console.log(docs);
 			if(docs.length==0)
 			{
 				console.log("iffff");
-				collection.find({"t_id": ExamId}).toArray((err,docs)=>{
-				docs[0].questions.forEach(element => {
+				collection.find({"t_id": ExamId}).toArray((err,docs1)=>{
+				docs1[0].questions.forEach(element => {
 					if(element.question.type == "o4")
 					{
 						delete element.question.options.A.correct;
@@ -1266,9 +1290,9 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
 						delete element.question.options.B.correct;
 					}
 				});
-				let Q_list = docs[0].questions;
-				delete docs[0].questions;
-				let exam_info = docs[0];
+				let Q_list = docs1[0].questions;
+				delete docs1[0].questions;
+				let exam_info = docs1[0];
 				let ExamData = {
 					info : exam_info,
 					Questions : Q_list

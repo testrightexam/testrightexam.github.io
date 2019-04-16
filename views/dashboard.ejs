@@ -89,10 +89,12 @@
 	  <form method="post">
           <div class="card list-group-item-primary text-dark">
           <% } else { %>
+		  <form method="post">
           <div class="card bg-dark text-white">
           <% } %>
     <div class="card-body"><h4><%= data1[i].Test_title %></h4>
   <input type="text" value="<%= data1[i]._id %>" name="test_id" style="display:none"/>
+  <input type="text" value="<%= data1[i].t_id %>" name="ExamId" style="display:none"/>
   <input type="text" value="<%= data1[i].Date %>" name="test_date" style="display:none"/>
   <input type="text" value="<%= data1[i].Time %>" name="test_time" style="display:none"/>
       <b >TestID :- <%= data1[i].t_id %></b> <br>
@@ -104,7 +106,7 @@
         
         <button type="submit" formaction="AddQuestionRedirect" class="btn btn-primary float-right ">Add Questions</button>
         <button type="submit" formaction="EditTestRedirect" class="btn btn-primary float-right mr-1">Edit Test</button><% } else { %>
-	  <button type="submit" class="btn btn-primary float-sm-right">View Results</button><% } %>
+	  <button type="submit" formaction="ExamResult" class="btn btn-primary float-sm-right">View Results</button><% } %>
     </div>
 	
   </div>

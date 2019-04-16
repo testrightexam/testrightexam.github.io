@@ -241,6 +241,15 @@ app.get('/StudentDashboard',(req,res)=>{
 						var canStartTest = canBeginTest(docs.Date, docs.Time, docs.Duration);
 						var canTestBlue = canShowCardBlue(docs.Date, docs.Time);
 						delete docs.questions;
+						for(o = 0; o<data.RegisteredTests.length; o++){
+							if(data.RegisteredTests[o].test_id == docs.t_id){
+								if(data.RegisteredTests[o].status == "NotAttempted"){
+									docs.isAttempted = false;
+								}else{
+									docs.isAttempted = true;
+								}
+							}
+						}
 						docs.canBegin = canStartTest;
 						docs.showCardBlue = canTestBlue;
 						console.log("Can show card blue "+docs.showCardBlue);

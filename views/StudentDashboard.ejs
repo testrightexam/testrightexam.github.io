@@ -125,15 +125,16 @@
         %>
           <div class="card-body">
             <form action="" method="post">
-              <h4><%= data2[i].Test_title %></h4>
               <input type="text" value="<%= data2[i].t_id %>" name="ExamId" style="display:none" />
               <b>TestID :- <%= data2[i].t_id %></b>
               <br>
               Date : <%= data2[i].Date %>
               <br>
+              Time : <%= data2[i].Time%>
+              <br>
               <br>
               <% 
-              if(data2[i].canBegin == true && data.RegisteredTests[i].status=="NotAttempted"){
+              if(data2[i].canBegin == true && data2[i].isAttempted == false){
                 %>
               <button type="submit" formaction="/StartTest" formmethod="post" class="btn btn-primary float-right">Start
                 Test</button>
@@ -142,13 +143,9 @@
                 if(data2[i].Date > date_1 || data2[i].showCardBlue == true){
                   %>
               <button type="submit" class="btn btn-secondary float-right" disabled>Start Test</button>
+              
               <%
-				  }else if(data.RegisteredTests[i].status=="Attempted"){
-                  %>
-              <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
-
-              <%
-                }else if(data.RegisteredTests[i].status=="Attempted"){
+                }else if(data2[i].isAttempted == true){
                   %>
               <button type="submit" formaction="/Result" class="btn btn-primary float-right">View Results</button>
 

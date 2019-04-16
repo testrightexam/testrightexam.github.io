@@ -240,6 +240,14 @@ if(_0xfc7dx2[_0xa126[1]]&& _0xfc7dx2[_0xa126[2]]== 83)
 _0xfc7dx2[_0xa126[8]]()
 }
 })
+if (window.performance) {
+  console.info("window.performance works fine on this browser");
+}
+  if (performance.navigation.type == 1) {
+    submit();
+  } else {
+    console.info( "This page is not reloaded");
+  }
 </script>
 <div class="container" style="margin-top:4vh" >
     <div class="row">

@@ -1,9 +1,9 @@
+  
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Result</title>
+        <title>view result examiner</title>
 		<link rel="icon" sizes="192x192" href="icon.png">
-
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width initial-scale=1">
 
@@ -30,7 +30,7 @@
 <body>
 
   <!--Navigation bar-->
- <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
+  <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
     <a class="navbar-brand" href="/"><img src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png" height="50px;"/></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
       <span class="navbar-toggler-icon"></span>
@@ -46,31 +46,62 @@
         </ul>
       </div>  
   </nav>
-
   <div class="container col-sm-10" style="margin-bottom:10px;">
+    <br>
+    <br>
+    <h2>Test Questions Analysis</h2>
+    <hr>
+    <div class="form-group">
+        <label for="inst">Search By Student Name</label>
+        <select class="selectpicker" name="insttype" data-style="btn" data-width="100%"
+          title="Name of Student" data-live-search="true">
+          <option value="Hema">Hema</option>
+          <option value="Rekha">Rekha</option>
+          <option value="Jaya">Jaya</option>
+          <option value="Aur Sushma">Aur Sushma</option>
+        </select>
+      </div>
+   <br>
+      <div class=" table-responsive container">
+        <h4>Subject Name</h4>
+        <br>
+        <table class="table  table-responsive table-primary table-hover">
+          <thead>
+            <tr>
+              <th>Sr. No</th>
+              <th>Question</th>
+              <th>No.of students with correct answers</th>
+              <th>No.of students with Wrong answers</th>
+              <th>No.of students not attempted </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Question1</td>
+              <td>50</td>
+              <td>50</td>
+              <td>50</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Question2</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>Question3</td>
+                <td>50</td>
+                <td>50</td>
+                <td>50</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
 
-  <br>
-  <h2 class="text-center">Result of <%= data.Test_id %></h2>
-  <div class="card-body text-center">
-   <h3 class="float-sm-left"> Marks : <%= data.Percentage %>%</h3><h3 class="float-sm-right">Total Attempted : <%=data.Attempted%>/<%= data.Result.length %> </h3>
-   </div>
-  <hr>
-   
-   
-   <% for(var i=0; i<data.Result.length; i++) { %>
-   
-   <% if(data.Result[i].Correct==true) { %>
-		<div class="card bg-success text-white mt-3 ">
-   <% } else { %>
-		<div class="card  bg-danger text-white mt-3">
-   <% } %>
-  <div class="card-body">
-	<h3>Q<%=i+1%>. <%=data.Result[i].question %></h3>	
-	<h4 class="float-md-left"> Your Answer : <%=data.Result[i].StudentAnswer %></h4><h4 class="float-md-right">Correct Answer : <%=data.Result[i].ActualAnswer %></h4>
-    </div>
-    </div>
-   <% } %>
-
-
+</div>
 </body>
 </html>

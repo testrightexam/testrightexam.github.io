@@ -61,7 +61,11 @@
 
     <h2>Dashboard</h2>
     <hr>
-
+    <% if(data.InstituteName) { %>
+      <button type="button" onclick="location.href = '/EditStudentProfile';" class="btn btn-primary float-right">
+        <span>&#x270f;</span>
+      </button>
+    <% } %>
 
     <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
     <address>

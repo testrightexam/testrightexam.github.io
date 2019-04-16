@@ -686,7 +686,55 @@ app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
 	});
 
 });
+app.get('/EditStudentProfile',(req,res)=>{
+	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
+		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+			console.log("Edit Profile of Student...");
+			const db = client.db(dbName);
+			const collection = db.collection('Students');
+			var mongo = require('mongodb');
+			var id=new mongo.ObjectID(req.session.user._id);
+			console.log(req.session.user._id);
+			collection.findOne({_id:id},
+				function(err,docs)
+				{
+					console.log(docs);
+					res.render('EditStudentProfile',{data:docs});
+				});
+		});
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
 
+app.post('/EditStudentProfile',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Edit Profile of Student...");
+		const db = client.db(dbName);
+		const collection = db.collection('Students');
+		var mongo = require('mongodb');
+		var id=new mongo.ObjectID(req.session.user._id);
+		console.log(req.session.user._id);
+		collection.updateOne(
+				{_id: id},
+				{$set:{
+					Name: req.param('StdName',null),
+					InstituteName: req.param('stdinstname', null),
+					InstituteType: req.param('stdinsttype', null),
+					InstituteAddress: req.param('stdadress', null),
+					InstituteCountry: req.param('stdconttype', null),
+					ExaminerContact: req.param('StuContact',null),
+					Password: req.param('StdPass',null)
+				}}
+			, function(err, result){
+				if(err)	throw error;
+			});
+		res.redirect('/Dashboard');
+	});
+
+});
 
 app.post('/RegisterTest',(req,res)=>{
 	console.log("Registering Test id...");

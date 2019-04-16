@@ -734,8 +734,29 @@ app.post('/AddQuestionRedirect',(req,res)=>{
 	res.redirect('/AddEditQuestions');
 });
 
-app.post('/Result',checkStudent,(req,res)=>{
+app.post('/ExamResult',(req,res)=>{
 	var TestID=req.param('ExamId',null);
+	console.log("Exam Results Faculty Side..");
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		const db = client.db(dbName);
+		db.collection('Results').find({Test_id: TestID}).toArray(
+				function(err,docs)
+				{
+					console.log(docs);
+					res.render('ExamResult',{data:docs,TestId:TestID});
+				});
+		
+	});
+	
+});
+
+app.post('/Result',(req,res)=>{
+	var TestID=req.param('ExamId',null);
+	var EmailID=req.session.user.Email;
+	if(req.session.user.type="Faculty")
+	{
+		EmailID=req.param('Email',null);
+	}
 	console.log("Getting Result");
 	if(TestID==null)
 	{
@@ -746,7 +767,7 @@ app.post('/Result',checkStudent,(req,res)=>{
 		const db = client.db(dbName);
 		db.collection('Results').findOne(
 		{
-			Student_Email: req.session.user.Email,
+			Student_Email: EmailID,
 			Test_id: TestID
 		},
 		

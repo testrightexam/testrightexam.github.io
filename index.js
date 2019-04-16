@@ -195,6 +195,7 @@ app.get('/StudentDashboard',(req,res)=>{
 			var date_1=[year, month, day].join('-');
 			console.log(date_1);
 			const collection = db.collection('Students');
+			const testCollection = db.collection('tests');
 			collection.findOne({"Email": email},function(err,docs){
 				console.log("initial");
 				console.log(docs.RegisteredTests);

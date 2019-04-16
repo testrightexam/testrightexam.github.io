@@ -979,20 +979,22 @@ app.post('/AddEditQuestions',(req,res)=>{
 
 });
 
-
-
-
-
 function createTestId(testtitle){
 	var newid = testtitle.trim().substring(0,2).toUpperCase();
 	var seed = (new Date()).getTime();
 	var l = seed.toString().length;
 	var s = seed.toString().substring(l-3, l+1);
 	newid = newid + s;
-	console.log("just created "+newid);
+	//console.log("just created "+newid);
 	return newid;
 }
 
+function splitTags(tags){
+	if (tags == null)
+		return null;
+	var tags = tags.toString().split(',');
+	return tags;
+}
 
 app.post('/TestCreate',checkFaculty,(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
@@ -1000,6 +1002,7 @@ app.post('/TestCreate',checkFaculty,(req,res)=>{
 
 		const db = client.db(dbName);
 		const collection = db.collection('tests');
+		const openBankCollection = db.collection('OpenBank');
 		collection.insertOne(
 			{
 				//Name: req.param('ExmUsrName', null),
@@ -1029,10 +1032,23 @@ app.post('/TestCreate',checkFaculty,(req,res)=>{
 
 
 			},function(err,result){
-				//console.log(result.insertedId);
+				//console.log("Result "+result.insertedId+" "+result.t_id);
 				res.cookie("id",result.insertedId);
+				testtags = splitTags(req.param('TestTags', null));
+				if(testtags != null && result != null){
+					console.log("Start Pushing Tags into OpenBank");
+					for(i = 0; i<testtags.length; i++){
+						openBankCollection.updateOne({"tag" : testtags[i]},
+						{$push : {"List" : result.insertedId}},
+						{upsert : true}
+						);
+					}	
+				console.log("Closing OpenBank updation");
+				}
 				res.redirect('/AddQuestions');
 		});
+		//Insert into OpenBank Here
+		
 		collection.find({}).toArray(function(err,docs)
 		{
 			//console.log(docs);
@@ -1313,7 +1329,119 @@ app.get('/showtests',(req,res)=>{
 	});
 })
 
+function sortFewQuestions(ques, numberOfQues){
+	var questionBank = [];
+	count = 0; 
+	while(count < numberOfQues){
+		var rand = Math.floor(Math.random() * ques.length);
+		questionBank[count++] = ques[rand];
+	}
+	return questionBank;
+}
 
+function finalQuestionBank(ques){
+	var questionbank = [];
+	var count = 0;
+	for(j = 0; j<ques.length; j++){
+		for(k = 0; k<ques[j].questions.length; k++){
+			questionbank[count++] = ques[j].questions[k];
+		}
+	}
+	return questionbank;
+}
+
+function fetchTestsByTags(userid, testid, res, testtags, numberOfQues){
+	MongoClient.connect(url, {useNewUrlParser: true}, function(err, client){
+		const db = client.db(dbName);
+		const openBankCollection = db.collection('OpenBank');
+		const testCollection = db.collection('tests');
+		const studentCollection = db.collection('Students');
+		var questionBank;
+		var mongo = require('mongodb');
+		var id=userid;
+		openBankCollection.find({"tag" : { $in : testtags}}).toArray(function(err, docs){
+			console.log("Logging from fetchTestsByTags");
+			console.log(docs);
+			if(docs!=null){
+				var bankids = [];
+				var count = 0;
+				for(i = 0; i<docs.length; i++){
+					for(j = 0; j<docs[i].List.length; j++){
+						bankids[count++] = docs[i].List[j]; 
+					}
+				}
+				console.log("Successfully fetched test ids."); 
+				console.log(bankids);
+				testCollection.find({_id : {$in : bankids}}).toArray(function(err, ques){
+					console.log(ques);
+					questionBank = finalQuestionBank(ques);
+					questionBank = sortFewQuestions(questionBank, numberOfQues);
+					console.log("Final Question Bank");
+					console.log(questionBank);
+					testCollection.updateOne(
+						{_id:testid},
+						{$set : {questions : questionBank}}
+						).then(result => {
+							console.log("Practice Test Created Successfully.");
+							//Register for Test
+							testCollection.findOne({_id:testid}, function(err, foundTest){
+								var tid = foundTest.t_id;
+								console.log("Registering "+tid+" for "+id);
+								studentCollection.updateOne({_id : id},
+									{$push : {
+										RegisteredTests:
+										{
+											test_id:tid,
+											status:"NotAttempted"
+										}
+									}}
+									).then(result1 => {
+										console.log("Register successful");
+										//Start Test
+										res.render('StartTest',{data:tid});
+									});
+							});
+							
+						});
+				});
+			}
+		});
+		client.close;
+	});
+	return null;
+}
+
+app.post('/PracticeTest', checkStudent, (req, res)=>{
+	MongoClient.connect(url, {useNewUrlParser: true}, function(err, client){
+		console.log("Inside Practice Test Creation");
+		const db = client.db(dbName);
+		const testsCollection = db.collection('tests');
+		var mongo = require('mongodb');
+		var id = new mongo.ObjectID(req.session.user._id);
+		var practiceexaminerid = new mongo.ObjectID("5cb4d69b1c9d44000051e434");
+		testsCollection.insertOne({
+			Examiner_id:practiceexaminerid,
+			Test_title:req.param('practicetags',null),
+			t_id:createTestId(req.param('practicetags', "Title")),
+			Subject:req.param('practicetags',null),
+			Date:(new Date()),
+			Time:(new Date()),
+			Duration:"20",
+			tags:null,
+			private:"Close"
+		},function(err, result){
+			console.log("PracticeTest Step 1 Complete.");
+			res.cookie("id", result.insertedId);
+			var testtags = splitTags(req.param('practicetags', null));
+			console.log("Test tags: "+testtags[0]+" "+testtags[1]+" ... "+testtags);
+			if(testtags != null){
+				numberOfQues = 5;
+				fetchTestsByTags(id, result.insertedId, res, testtags, numberOfQues);
+			}
+		}
+		);
+	});
+});
 
 app.post('/AddQuestions',checkFaculty,(req,res)=>{
 

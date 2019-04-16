@@ -10,8 +10,12 @@
 
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.7/dist/css/bootstrap-select.min.css">
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
   <!--Custom css -->
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="tags/tagsinput.css">
 
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -20,6 +24,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <!-- Popper JS -->
+  <script src="tags/tagsinput.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 
   <!-- Latest compiled JavaScript -->
@@ -77,10 +82,17 @@
       <input type="text" placeholder="Enter Test Id" id="examid" name="examid" class="form-control w-50 ml-auto" />
       <button type="submit" class="btn btn-primary mr-auto ml-1">Enroll Yourself</button>
     </form>
-    <form action="/PracticeTest" class="w-100 h-100 row align-items-center" method="post">
+    <hr><br>
+    <p class="text-center">You can practice topics by searching below:</p>
+    <form action="/PracticeTest" style="margin: 0 8vw 0 8vw" method="post">
       <input type="text" placeholder="maths,functions,algebra" id="practicetags" name="practicetags"
         class="form-control w-50 ml-auto" data-role="tagsinput" />
-      <button type="submit" class="btn btn-primary mr-auto ml-1">Practice</button>
+        <br><br>
+      <div class="container">
+        <div class="row">
+          <div class="col text-center"><button type="submit" class="btn btn-primary mr-auto ml-1">Practice</button></div>
+        </div>
+      </div>
     </form>
 
     <hr>

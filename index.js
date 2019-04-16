@@ -1329,6 +1329,16 @@ app.get('/showtests',(req,res)=>{
 	});
 })
 
+function sortFewQuestions(ques, numberOfQues){
+	var questionBank = [];
+	count = 0; 
+	while(count < numberOfQues){
+		var rand = Math.floor(Math.random() * ques.length);
+		questionBank[count++] = ques[rand];
+	}
+	return questionBank;
+}
+
 function finalQuestionBank(ques){
 	var questionbank = [];
 	var count = 0;
@@ -1340,12 +1350,15 @@ function finalQuestionBank(ques){
 	return questionbank;
 }
 
-function fetchTestsByTags(testid, testtags, numberOfQues){
+function fetchTestsByTags(userid, testid, res, testtags, numberOfQues){
 	MongoClient.connect(url, {useNewUrlParser: true}, function(err, client){
 		const db = client.db(dbName);
 		const openBankCollection = db.collection('OpenBank');
 		const testCollection = db.collection('tests');
+		const studentCollection = db.collection('Students');
 		var questionBank;
+		var mongo = require('mongodb');
+		var id=userid;
 		openBankCollection.find({"tag" : { $in : testtags}}).toArray(function(err, docs){
 			console.log("Logging from fetchTestsByTags");
 			console.log(docs);
@@ -1362,17 +1375,34 @@ function fetchTestsByTags(testid, testtags, numberOfQues){
 				testCollection.find({_id : {$in : bankids}}).toArray(function(err, ques){
 					console.log(ques);
 					questionBank = finalQuestionBank(ques);
+					questionBank = sortFewQuestions(questionBank, numberOfQues);
 					console.log("Final Question Bank");
 					console.log(questionBank);
 					testCollection.updateOne(
 						{_id:testid},
-						{$push : {questions : questionBank}},
-						function(err, result){
-							console.log(result);
-							//To-do
-							//Start Test
-						}
-						);
+						{$set : {questions : questionBank}}
+						).then(result => {
+							console.log("Practice Test Created Successfully.");
+							//Register for Test
+							testCollection.findOne({_id:testid}, function(err, foundTest){
+								var tid = foundTest.t_id;
+								console.log("Registering "+tid+" for "+id);
+								studentCollection.updateOne({_id : id},
+									{$push : {
+										RegisteredTests:
+										{
+											test_id:tid,
+											status:"NotAttempted"
+										}
+									}}
+									).then(result1 => {
+										console.log("Register successful");
+										//Start Test
+										res.render('StartTest',{data:tid});
+									});
+							});
+							
+						});
 				});
 			}
 		});
@@ -1385,9 +1415,9 @@ app.post('/PracticeTest', checkStudent, (req, res)=>{
 	MongoClient.connect(url, {useNewUrlParser: true}, function(err, client){
 		console.log("Inside Practice Test Creation");
 		const db = client.db(dbName);
-		const openBankCollection = db.collection('OpenBank');
 		const testsCollection = db.collection('tests');
 		var mongo = require('mongodb');
+		var id = new mongo.ObjectID(req.session.user._id);
 		var practiceexaminerid = new mongo.ObjectID("5cb4d69b1c9d44000051e434");
 		testsCollection.insertOne({
 			Examiner_id:practiceexaminerid,
@@ -1406,7 +1436,7 @@ app.post('/PracticeTest', checkStudent, (req, res)=>{
 			console.log("Test tags: "+testtags[0]+" "+testtags[1]+" ... "+testtags);
 			if(testtags != null){
 				numberOfQues = 5;
-				fetchTestsByTags(result.insertedId, testtags, numberOfQues);
+				fetchTestsByTags(id, result.insertedId, res, testtags, numberOfQues);
 			}
 		}
 		);

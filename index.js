@@ -195,34 +195,14 @@ app.get('/StudentDashboard',(req,res)=>{
 			var date_1=[year, month, day].join('-');
 			console.log(date_1);
 			const collection = db.collection('Students');
-			const testCollection = db.collection('tests');
 			collection.findOne({"Email": email},function(err,docs){
-				console.log("initial");
-				console.log(docs.RegisteredTests);
-				var uselessTests = [];
-				var count = 0;
-				for(j = 0; j<docs.RegisteredTests.length;){	
-					if(docs.RegisteredTests[j].status == "Practice"){
-						console.log("Cleanup Process "+docs.RegisteredTests[j].test_id);
-						uselessTests[count++] = docs.RegisteredTests[j].test_id;
-						//delete docs.RegisteredTests[j];
-						docs.RegisteredTests.splice(j, 1);
-					}else j++;
-				}
-				console.log("initial 2");
-				console.log(docs.RegisteredTests);
-
-				console.log("initial length 2 "+docs.RegisteredTests.length);
-				console.log("Useless Tests "+uselessTests);
-				testCollection.remove({t_id : {$in : uselessTests}});
-				data = docs;
-				
-				console.log("initial 2");
-				console.log(docs.RegisteredTests);
-				
+				data=docs;
 				req.session.user = docs;
 				req.session.user.type = "Student";
-				var data2=[]; 
+				
+				
+				var data2=[]; //data to pass the actual test data
+				//var data3=[]; //data to pass the boolean if test can start
 				var i=0;
 				console.log(data);
 				var j=0;
@@ -1243,15 +1223,16 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
 		//var id = new mongo.ObjectId(ExamId);
         const db = client.db(dbName);
         const collection = db.collection('tests');
-		db.collection('Students').find({Email : req.param('StdUsrEmail', null),"RegisteredTests.test_id":ExamId,"RegisteredTests.status":"Attempted"}).toArray(function(err,docs)
+		console.log(req.session.user);
+		db.collection('Students').find({Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"Attempted"}}).toArray(function(err,docs)
 		{
 			console.log("queryyyyyy");
 			console.log(docs);
 			if(docs.length==0)
 			{
 				console.log("iffff");
-				collection.find({"t_id": ExamId}).toArray((err,docs)=>{
-				docs[0].questions.forEach(element => {
+				collection.find({"t_id": ExamId}).toArray((err,docs1)=>{
+				docs1[0].questions.forEach(element => {
 					if(element.question.type == "o4")
 					{
 						delete element.question.options.A.correct;
@@ -1265,9 +1246,9 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
 						delete element.question.options.B.correct;
 					}
 				});
-				let Q_list = docs[0].questions;
-				delete docs[0].questions;
-				let exam_info = docs[0];
+				let Q_list = docs1[0].questions;
+				delete docs1[0].questions;
+				let exam_info = docs1[0];
 				let ExamData = {
 					info : exam_info,
 					Questions : Q_list
@@ -1425,7 +1406,7 @@ function fetchTestsByTags(userid, testid, res, testtags, numberOfQues){
 										RegisteredTests:
 										{
 											test_id:tid,
-											status:"Practice"
+											status:"NotAttempted"
 										}
 									}}
 									).then(result1 => {

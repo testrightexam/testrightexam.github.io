@@ -103,7 +103,7 @@
 
 		function submit()
 		{
-
+            console.log("Submit 1");
 			  console.log(data.info.t_id);
 			$.post('/SubmitTest',{questions,results,TestID:data.info.t_id},function(data,status){
 					
@@ -118,7 +118,7 @@
         
         function submit2()
 		{
-
+              console.log("Submit 2");
 			  console.log(data.info.t_id);
 			$.post('/SubmitTest',{questions,results,TestID:data.info.t_id},function(data,status){
 					

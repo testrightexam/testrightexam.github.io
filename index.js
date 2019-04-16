@@ -105,6 +105,18 @@ app.get('/TestCreate', checkFaculty ,(req,res)=>{
 		 res.redirect('/login');
 	}
 });
+
+app.get('/feedback', checkFaculty ,(req,res)=>{
+	if (req.session.user && req.cookies.user_sid) {
+		res.render('feedback');
+	}
+	else
+	{
+		 res.redirect('/login');
+	}
+});
+
+
 app.get('/exam',(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {
 		res.render('exam');
@@ -643,7 +655,7 @@ app.post('/SaveExaminerProfile',checkFaculty,(req,res)=>{
 
 });
 
-app.get('/EditExaminerProfile',(req,res)=>{
+app.get('/EditExaminerProfile',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 			console.log("Edit Profile of Examiner...");
@@ -716,7 +728,7 @@ app.post('/SaveStudentProfile',checkStudent,(req,res)=>{
 	});
 
 });
-app.get('/EditStudentProfile',(req,res)=>{
+app.get('/EditStudentProfile',checkStudent,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.session.user.type=="Student") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 			console.log("Edit Profile of Student...");
@@ -766,7 +778,7 @@ app.post('/EditStudentProfile',(req,res)=>{
 
 });
 
-app.post('/RegisterTest',(req,res)=>{
+app.post('/RegisterTestRegisterTest',(req,res)=>{
 	console.log("Registering Test id...");
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("inside register test");
@@ -883,7 +895,7 @@ app.get('/Result',(req,res)=>{
 });
 
 
-app.get('/AddEditQuestions',(req,res)=>{
+app.get('/AddEditQuestions',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Add Edit Questions \n Editing Data to :- \n");
@@ -894,7 +906,7 @@ app.get('/AddEditQuestions',(req,res)=>{
 		collection.find({_id:id}).toArray(function(err,docs)
 		{
 			console.log(docs);
-			res.render('AddEditQuestions',{data:docs});
+		res.render('AddEditQuestions',{data:docs});
 			
 		});	
 		client.close();
@@ -917,7 +929,7 @@ app.post('/EditTestRedirect',(req,res)=>{
 });
 
 
-app.get('/EditTestDetails',(req,res)=>{
+app.get('/EditTestDetails',checkFaculty,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid && req.cookies["id"] && req.session.user.type=="Faculty") {
 		MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("Inside Display Test Details \n Editing Data to :- \n");
@@ -1264,6 +1276,28 @@ app.post('/RegisterStudent',(req,res)=>{
 	});
 
 });
+
+app.post('/sendFeedBack',(req,res)=>{
+	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
+		console.log("Inside Registration of Student..");
+
+		const db = client.db(dbName);
+		const collection = db.collection('feedback');
+		
+				collection.insertOne(
+				{
+					Name: req.param('name', null),
+					Email : req.param('email', null),
+					Message : req.param('message', null),
+					Ratting: req.param('rate', null)
+
+				},function(err,result){
+					res.redirect('/login');
+				});
+	});
+
+});
+
 app.get('/LoginStudent',(req,res)=>{
 	res.render('login');
 });
@@ -1327,54 +1361,67 @@ app.get('/ExamInAction',checkStudent,(req,res)=>{
         const db = client.db(dbName);
         const collection = db.collection('tests');
 		console.log(req.session.user);
-		db.collection('Students').find({Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"Attempted"}}).toArray(function(err,docs)
-		{
+		console.log("yoyoyooy");
+		db.collection('Students').find({$or:[{Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"NotAttempted"}},{Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"Practice"}}]}).toArray(function(err,docs1)
+		{   
 			console.log("queryyyyyy");
-			console.log(docs);
-			if(docs.length==0)
+			console.log(docs1);
+			if(docs1.length!=0)
 			{
-				console.log("iffff");
-				collection.find({"t_id": ExamId}).toArray((err,docs1)=>{
-				docs1[0].questions.forEach(element => {
-					if(element.question.type == "o4")
+				db.collection('Students').find({Email : req.session.user.Email,RegisteredTests:{test_id:ExamId,status:"Attempted"}}).toArray(function(err,docs)
+				{
+					console.log("queryyyyyy");
+					console.log(docs);
+					if(docs.length==0)
 					{
-						delete element.question.options.A.correct;
-						delete element.question.options.B.correct;
-						delete element.question.options.C.correct;
-						delete element.question.options.D.correct;
-					}
-					else if(element.question.type == "o2")
+						console.log("iffff");
+						collection.find({"t_id": ExamId}).toArray((err,docs1)=>{
+						docs1[0].questions.forEach(element => {
+							if(element.question.type == "o4")
+							{
+								delete element.question.options.A.correct;
+								delete element.question.options.B.correct;
+								delete element.question.options.C.correct;
+								delete element.question.options.D.correct;
+							}
+							else if(element.question.type == "o2")
+							{
+								delete element.question.options.A.correct;
+								delete element.question.options.B.correct;
+							}
+						});
+						let Q_list = docs1[0].questions;
+						delete docs1[0].questions;
+						let exam_info = docs1[0];
+						let ExamData = {
+							info : exam_info,
+							Questions : Q_list
+						};
+					//console.log(ExamData);
+							var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
+							while (0 !== currentIndex) 
+							{
+								randomIndex = Math.floor(Math.random() * currentIndex);
+								currentIndex -= 1;
+								temporaryValue = ExamData.Questions[currentIndex];
+								ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
+								ExamData.Questions[randomIndex] = temporaryValue;
+							}
+							res.render('exam',{data:ExamData})
+						});
+					}	
+					else
 					{
-						delete element.question.options.A.correct;
-						delete element.question.options.B.correct;
+						res.redirect('/StudentDashboard');
 					}
 				});
-				let Q_list = docs1[0].questions;
-				delete docs1[0].questions;
-				let exam_info = docs1[0];
-				let ExamData = {
-					info : exam_info,
-					Questions : Q_list
-				};
-            //console.log(ExamData);
-					var currentIndex = ExamData.Questions.length, temporaryValue, randomIndex;
-					while (0 !== currentIndex) 
-					{
-						randomIndex = Math.floor(Math.random() * currentIndex);
-						currentIndex -= 1;
-						temporaryValue = ExamData.Questions[currentIndex];
-						ExamData.Questions[currentIndex] = ExamData.Questions[randomIndex];
-						ExamData.Questions[randomIndex] = temporaryValue;
-					}
-					res.render('exam',{data:ExamData})
-				});
-			}	
+        
+			}
 			else
 			{
 				res.redirect('/StudentDashboard');
 			}
 		});
-        
     });
 	
 });

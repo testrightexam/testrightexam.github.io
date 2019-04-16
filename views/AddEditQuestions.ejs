@@ -1,0 +1,245 @@
+<html>
+<head>
+		<script>
+			let Qno = <%=data[0].questions.length%>;
+		</script>
+		<link rel="icon" sizes="192x192" href="icon.png">
+		<title>Test Creation</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+	<link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="tags/tagsinput.css">
+
+   <!--Custom css -->
+        <link rel="stylesheet" href="assets/css/style.css">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        
+        <!--Font awesome icons-->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+        
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+        <!-- Popper JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+</head>
+<body onload="gett()">
+<!--Navigation bar-->
+  <nav class="navbar navbar-expand-sm bg-primary navbar-dark " >
+    <a class="navbar-brand" href="/"><img src="https://raw.githubusercontent.com/testrightexam/testrightexam.github.io/master/views/logo.png" height="50px;"/></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav ml-auto">
+		 <li class="nav-item">
+            <a class="nav-link" href="/feedback" >Feedback</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/logout" >Logout</a>
+          </li>
+        </ul>
+      </div>  
+  </nav>
+<center>
+
+<h1 style="margin:20px; color:red;"><%= data[0].Test_title %></h1>
+
+
+
+	
+<form action="" method="post" id="addques">
+<div id = "BigBox">
+	<% if(data[0].questions) { %>
+	<% for(var i=0; i<data[0].questions.length; i++) { %>
+	
+	<div id="Equestion<%=i%>">
+	
+    <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
+        <div class="card-header" style="background:#4FC3F7; border:0px solid white;">
+		<select  id = "EopSelect<%=i%>" name="Eselect_<%=i%>" class="form-control" onchange="statechange(<%=i%>)">
+            <option value="4" id= "E4o<%=i%>" <% if(data[0].questions[i].question.type=="o4") { %> selected <% } %> >4-options</option>
+            <option value="2" id="E2o<%=i%>" <% if(data[0].questions[i].question.type=="o2") { %> selected <% } %> >2-options</option>
+        </select></div>
+		
+		
+        <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
+            <div class="input-group mb-3">
+                
+                <textarea name = "Equestion_<%=i%>"  class="form-control" placeholder="Write the Question here..." required><%= data[0].questions[i].question.value %></textarea>
+            </div>
+            <div id = "Eoptions_<%=i%>">
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="EACorrect_<%=i%>"  aria-label="Checkbox for following text input" <% if(data[0].questions[i].question.options.A.correct=="on") { %> checked <% } %> >
+                            <b style="margin-left: 5px ">A</b>
+                        </div>
+                    </div>
+                    <input type="text" name="Eoption_1_<%=i%>" value="<%= data[0].questions[i].question.options.A.value %>" class="form-control" placeholder="Option A">
+                </div>
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="EBCorrect_<%=i%>" aria-label="Checkbox for following text input" <% if(data[0].questions[i].question.options.B.correct=="on") { %> checked <% } %>>
+                            <b style="margin-left: 5px">B</b>
+                        </div>
+                    </div>
+                    <input type="text" name="Eoption_2_<%=i%>" value="<%= data[0].questions[i].question.options.B.value %>"  class="form-control" placeholder="Option B">
+                </div>
+        </div>
+		
+            <div id = "Eextra_options<%=i%>" <% if(data[0].questions[i].question.type=="o2") { %> style="display:none" <% } %>>
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="ECCorrect_<%=i%>"  aria-label="Checkbox for following text input" <% if(data[0].questions[i].question.type=="o4" && data[0].questions[i].question.options.C.correct=="on") { %> checked <% } %>>
+                            <b style="margin-left: 5px">C</b>
+                        </div>
+                    </div>
+                    <input type="text" name="Eoption_3_<%=i%>"<% if(data[0].questions[i].question.type=="o4") { %> value="<%= data[0].questions[i].question.options.C.value %>" <% } %> class="form-control" placeholder="Option C">
+                </div>
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name="EDCorrect_<%=i%>"  aria-label="Checkbox for following text input" <% if(data[0].questions[i].question.type=="o4" && data[0].questions[i].question.options.D.correct=="on") { %> checked <% } %>>
+                            <b style="margin-left: 5px">D</b>
+                        </div>
+                    </div>
+                    <input type="text" <% if(data[0].questions[i].question.type=="o4") { %> value="<%= data[0].questions[i].question.options.D.value %>" <% } %>name="Eoption_4_<%=i%>" class="form-control" placeholder="Option D">
+                </div>
+            </div>
+        </div>
+	</div>
+	</div>
+	
+	<% } %>
+	<% } %>
+</div>
+<button type="button" class="btn btn-warning" onclick="addbox()" style="color:white; font-weight:bold; margin-bottom:10px;"/>Add New Question<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
+    <br>
+	
+<button  class="btn btn-warning" style="color:white; font-weight:bold; margin-bottom:10px;"/>Make test<i class="fa fa-plus" aria-hidden="true" style="margin-left:5px; color:white;"></i></button>
+</form>
+	</center>
+        <script>
+		
+			
+           function opsf(id)
+           {
+               if(document.getElementById(`2o${id}`).selected)
+               {
+                   document.getElementById(`Eextra_options${id}`).style.display = "none";
+               }
+               else if(document.getElementById("4o"+id).selected)
+               {
+                   document.getElementById(`Eextra_options${id}`).style.display = "";
+               }
+           }
+		   
+		   function statechange(id)
+           {
+               if(document.getElementById(`E2o${id}`).selected)
+               {
+                   document.getElementById(`Eextra_options${id}`).style.display = "none";
+               }
+               else if(document.getElementById("E4o"+id).selected)
+               {
+                   document.getElementById(`Eextra_options${id}`).style.display = "";
+               }
+           }
+		   
+		   function gett()
+		   {
+				document.getElementById("addques").action = "/AddEditQuestions?qns="+Qno;
+		   }
+           function addbox()
+           {
+               Qno++;
+			   gett();
+               let selectid= "EopSelect"+Qno;
+               let functioncall ="opsf("+Qno+")";
+               let op2 = "2o"+Qno;
+               let op4 = "4o"+Qno;
+			   let qname = "Equestion_"+Qno;
+			   let sname = "Eselect_"+Qno;
+			   let opchk1 = "EACorrect_"+Qno;
+			   let opchk2 = "EBCorrect_"+Qno;
+			   let opchk3 = "ECCorrect_"+Qno;
+			   let opchk4 = "EDCorrect_"+Qno;
+			   let opvalu1 = "Eoption_1_"+Qno;
+			   let opvalu2 = "Eoption_2_"+Qno;
+			   let opvalu3 = "Eoption_3_"+Qno;
+			   let opvalu4 = "Eoption_4_"+Qno;
+               let options ="Eextra_options"+Qno;
+               let card = `  <div class="card text-white  mb-3" style="padding:5px; width: 70%; min-width:350px;height: auto; align-self: center ; border:0px; background:#4FC3F7; ">
+				 <button  class="btn btn-warning"  onclick="this.parentElement.remove();" style=" width: 200px; font-weight:bold; border-width:0px; color:white;">Remove X</button>
+		<div class="card-header" style="background:#4FC3F7; border:0px solid white;"><select name=${sname} id = ${selectid} class="form-control" onchange=${functioncall}>
+            <option value="4" id= ${op4} selected>4-options</option>
+            <option value="2" id= ${op2}>2-options</option>
+        </select></div>
+        
+        <div class="card-body" style="background:#4FC3F7; border-color:#4FC3F7; border:0px solid white;">
+            <div class="input-group mb-3">
+                
+                <textarea name = ${qname} class="form-control" placeholder="Write the Question here..." required></textarea>
+            </div>
+            <div id = "options">
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name=${opchk1} aria-label="Checkbox for following text input">
+                            <b style="margin-left: 5px ">A</b>
+                        </div>
+                    </div>
+                    <input type="text" name=${opvalu1} class="form-control" placeholder="Option A">
+                </div>
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name=${opchk2} aria-label="Checkbox for following text input">
+                            <b style="margin-left: 5px">B</b>
+                        </div>
+                    </div>
+                    <input type="text" name=${opvalu2} class="form-control" placeholder="Option B">
+                </div>
+        </div>
+            <div id = "${options}">
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name=${opchk3} aria-label="Checkbox for following text input">
+                            <b style="margin-left: 5px">C</b>
+                        </div>
+                    </div>
+                    <input type="text" name=${opvalu3} class="form-control" placeholder="Option C">
+                </div>
+                <div class="input-group mb-3" style="width:48%; float:left; margin:1%;">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text">
+                            <input type="checkbox" name=${opchk4} aria-label="Checkbox for following text input">
+                            <b style="margin-left: 5px">D</b>
+                        </div>
+                    </div>
+                    <input type="text" name=${opvalu4} class="form-control" placeholder="Option D">
+                </div>
+            </div>
+            
+        </div>
+</div>`;
+               let  div = document.createElement("div");
+               div.setAttribute("id", "question"+Qno);
+               div.innerHTML = card;
+               document.getElementById("BigBox").appendChild(div);
+           }
+        </script>
+</body>
+</html>

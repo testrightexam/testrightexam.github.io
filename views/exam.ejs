@@ -114,6 +114,21 @@
 			
 			res.send("Done");
 			
+        }
+        
+        function submit2()
+		{
+
+			  console.log(data.info.t_id);
+			$.post('/SubmitTest',{questions,results,TestID:data.info.t_id},function(data,status){
+					
+					if(data=="Done")
+                    document.getElementById("ViewResult").click();
+			}
+			);
+			
+			res.send("Done");
+			
 		}
 		
 		
@@ -251,7 +266,13 @@ _0xfc7dx2[_0xa126[8]]()
                         <div class="row" id="ButtonBox">
 
                         </div>
-                        <button  onclick="submit()" class="btn btn-danger">Submit Test</button>
+                        
+                        <% if(data.info.Examiner_id!="5cb4d69b1c9d44000051e434") { %><button  onclick="submit()" class="btn btn-danger">Submit Test</button>
+                        <% } else { %><form action="/Result" method="post">
+                            <input type="text" name="ExamId" value="<%= data.info.t_id %>" hidden />
+                            <button  type="submit" id="ViewResult" class="btn btn-danger" hidden >View Result</button>
+                            <button  onclick="submit2()" class="btn btn-danger" >View Result</button>
+                        </form> <% } %>
                     </div>
                 </div>
             </div>

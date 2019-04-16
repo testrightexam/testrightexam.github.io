@@ -804,6 +804,10 @@ app.post('/Result',(req,res)=>{
 });
 
 
+
+
+
+
 //Will delete this later For testing perpose only...
 app.get('/Result',(req,res)=>{
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){

@@ -51,15 +51,16 @@
 
   <h2>Dashboard</h2>
   <hr>
-  <button type="button" onclick="location.href = '/EditExaminerProfile';"  class="btn btn-primary float-right">
-    <span>&#x270f;</span>
-  </button>
+  
   <br>
   <h4 style="max-width:100%;"><%= data.Name %> ( <%= data.Email %> )</h4>
 	<address>
  <% if(data.InstituteName) { %>
    <%=  data.InstituteName %>, <br><b>Address: </b><%= data.InstituteAddress  %>, <%= data.InstituteCountry %>
     <br><b>Contact: </b><%= data.ExaminerContact %>
+    <button type="button" onclick="location.href = '/EditExaminerProfile';" style="margin-top:-90px"  class="btn btn-primary float-right">
+      <span>&#x270f;</span>
+    </button>
   
  
   <% } else { %>

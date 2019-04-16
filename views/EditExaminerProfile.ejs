@@ -56,6 +56,10 @@
       <h4>Additional Information</h4>
       <hr>
       <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="ExmName" class="form-control" id="exmname" value="<%= data.Name %>" placeholder="Name">
+      </div>
+      <div class="form-group">
         <label for="instname">Institute Name</label>
         <input type="text" name="InstName" class="form-control" id="instname" value="<%= data.InstituteName %>" placeholder="Institite Name">
       </div>
@@ -80,6 +84,10 @@
       <div class="form-group">
         <label for="contact">Contact No</label>
         <input type="number" name="Contact" class="form-control" id="contact" value="<%= data.ExaminerContact %>" placeholder="Mobile">
+      </div>
+      <div class="form-group">
+        <label for="name">Password</label>
+        <input type="password" class="form-control" id="usrpass" name="ExmPass" value="<%= data.Password %>" placeholder="Password" required>
       </div>
       <input type="submit" class="btn btn-primary btn-block" value="Save" />
     </div><br>

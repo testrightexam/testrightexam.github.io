@@ -647,11 +647,13 @@ app.post('/EditExaminerProfile',(req,res)=>{
 		collection.updateOne(
 				{_id: id},
 				{$set:{
+					Name: req.param('ExmName',null),
 					InstituteName: req.param('InstName', null),
 					InstituteType: req.param('insttype', null),
 					InstituteAddress: req.param('Address', null),
 					InstituteCountry: req.param('conttype', null),
-					ExaminerContact: req.param('Contact',null)
+					ExaminerContact: req.param('Contact',null),
+					Password: req.param('ExmPass',null)
 				}}
 			, function(err, result){
 				if(err)	throw error;

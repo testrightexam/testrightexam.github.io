@@ -106,7 +106,7 @@ app.get('/TestCreate', checkFaculty ,(req,res)=>{
 	}
 });
 
-app.get('/feedback', checkFaculty ,(req,res)=>{
+app.get('/feedback' ,(req,res)=>{
 	if (req.session.user && req.cookies.user_sid) {
 		res.render('feedback');
 	}

@@ -801,7 +801,7 @@ app.post('/EditStudentProfile',(req,res)=>{
 
 });
 
-app.post('/RegisterTestRegisterTest',(req,res)=>{
+app.post('/RegisterTest',(req,res)=>{
 	console.log("Registering Test id...");
 	MongoClient.connect(url,{ useNewUrlParser: true },function(err,client){
 		console.log("inside register test");
